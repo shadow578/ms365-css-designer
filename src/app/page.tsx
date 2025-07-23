@@ -1,12 +1,9 @@
-import { api } from "~/trpc/server";
-import { HydrateClient } from "~/trpc/server";
+"use client";
 
-export default async function Home() {
-  const hi = await api.helloWorld.hello({ text: "World" });
+import { api } from "~/trpc/react";
 
-  return (
-    <HydrateClient>
-      <h1>{hi.greeting ?? "Loading..."}</h1>
-    </HydrateClient>
-  );
+export default function Home() {
+  const hi = api.helloWorld.hello.useQuery({ text: "World" });
+
+  return <h1>{hi.data?.greeting ?? "Loading..."}</h1>;
 }
