@@ -40,6 +40,7 @@ function SignInOptions() {
 
 function UsernamePage(props: {
   username: string;
+  boilerplateText?: string;
   onUsernameChange?: InputHandler;
   onSubmit?: ClickHandler;
 }) {
@@ -79,7 +80,7 @@ function UsernamePage(props: {
                 </div>
               </div>
             </div>
-            <div className="position-buttons password-reset-links-container ext-password-reset-links-container">
+            <div className="password-reset-links-container ext-password-reset-links-container">
               <div className="row">
                 <div className="col-md-24">
                   <div className="text-13">
@@ -102,8 +103,8 @@ function UsernamePage(props: {
                 </div>
               </div>
             </div>
-            <div className="win-button-pin-bottom">
-              <div className="row">
+            <div className="win-button-pin-bottom boilerplate-button-bottom">
+              <div className="row move-buttons">
                 <div>
                   <div className="col-xs-24 no-padding-left-right button-container button-field-container ext-button-field-container">
                     <div className="inline-block button-item ext-button-item">
@@ -119,6 +120,13 @@ function UsernamePage(props: {
                 </div>
               </div>
             </div>
+            <div
+              id="idBoilerPlateText"
+              className="wrap-content boilerplate-text ext-boilerplate-text"
+              hidden={!props.boilerplateText}
+            >
+              <p>{props.boilerplateText}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -129,6 +137,7 @@ function UsernamePage(props: {
 function PasswordPage(props: {
   username: string;
   password: string;
+  boilerplateText?: string;
   onPasswordChange?: InputHandler;
   onBack?: ClickHandler;
   onSubmit?: ClickHandler;
@@ -188,7 +197,7 @@ function PasswordPage(props: {
                 </div>
               </div>
             </div>
-            <div className="position-buttons password-reset-links-container ext-password-reset-links-container">
+            <div className="password-reset-links-container ext-password-reset-links-container">
               <div>
                 <div className="row">
                   <div className="col-md-24">
@@ -209,8 +218,8 @@ function PasswordPage(props: {
                 </div>
               </div>
             </div>
-            <div className="win-button-pin-bottom">
-              <div className="row">
+            <div className="win-button-pin-bottom boilerplate-button-bottom">
+              <div className="row move-buttons">
                 <div>
                   <div className="col-xs-24 no-padding-left-right button-container button-field-container ext-button-field-container">
                     <div className="inline-block button-item ext-button-item">
@@ -225,6 +234,13 @@ function PasswordPage(props: {
                   </div>
                 </div>
               </div>
+            </div>
+            <div
+              id="idBoilerPlateText"
+              className="wrap-content boilerplate-text ext-boilerplate-text"
+              hidden={!props.boilerplateText}
+            >
+              <p>{props.boilerplateText}</p>
             </div>
           </div>
         </div>
@@ -352,10 +368,7 @@ export default function MSConvergedSignInPage() {
   const [page, setPage] = useState<"username" | "password">("username");
 
   return (
-    <LightboxTemplateContainer
-      signInOptions={page === "username"}
-      footer
-    >
+    <LightboxTemplateContainer signInOptions={page === "username"} footer>
       {page === "username" ? (
         <UsernamePage
           username={username}
@@ -367,6 +380,7 @@ export default function MSConvergedSignInPage() {
         <PasswordPage
           username={username}
           password={password}
+          boilerplateText="BoilerPlateText here"
           onPasswordChange={setPassword}
           onBack={() => setPage("username")}
           onSubmit={() => {
