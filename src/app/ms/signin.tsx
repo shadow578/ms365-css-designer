@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import "./signin.css";
+import { api } from "~/trpc/react";
 
 type ClickHandler = () => void;
 type InputHandler = (newValue: string) => void;
@@ -367,13 +368,25 @@ export default function MSConvergedSignInPage() {
   const [password, setPassword] = useState("");
   const [page, setPage] = useState<"username" | "password">("username");
 
+  const branding = api.msBranding.getBranding.useQuery(
+    { username },
+    {
+      enabled: false, // Disable automatic query execution
+    },
+  );
+
+  const onUsernameSubmit = async () => {
+    await branding.refetch();
+    setPage("password");
+  };
+
   return (
     <LightboxTemplateContainer signInOptions={page === "username"} footer>
       {page === "username" ? (
         <UsernamePage
           username={username}
           onUsernameChange={setUsername}
-          onSubmit={() => setPage("password")}
+          onSubmit={onUsernameSubmit}
         />
       ) : null}
       {page === "password" ? (

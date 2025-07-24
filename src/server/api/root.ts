@@ -1,4 +1,5 @@
 import { helloWorldRouter } from "~/server/api/routers/helloworld";
+import { msBrandingRouter } from "~/server/api/routers/msbranding";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   helloWorld: helloWorldRouter,
+  msBranding: msBrandingRouter,
 });
 
 // export type definition of API
