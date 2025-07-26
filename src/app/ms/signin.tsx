@@ -411,6 +411,12 @@ export default function MSConvergedSignInPage() {
     setPasswordInvalid(true);
   };
 
+  const onReturnToUsername = () => {
+    branding.reset();
+    setPasswordInvalid(false);
+    setPage("username");
+  }
+
   return (
     <LightboxTemplateContainer
       signInOptions={page === "username"}
@@ -432,7 +438,7 @@ export default function MSConvergedSignInPage() {
           boilerplateText={branding.data?.boilerplateText}
           passwordInvalid={passwordInvalid}
           onPasswordChange={setPassword}
-          onBack={() => setPage("username")}
+          onBack={onReturnToUsername}
           onSubmit={onPasswordSubmit}
         />
       ) : null}
