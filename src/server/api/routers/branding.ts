@@ -31,7 +31,7 @@ const credentialTypeSchema = z.object({
 
 export const brandingRouter = createTRPCRouter({
   getBranding: publicProcedure
-    .input(z.object({ username: z.string() }))
+    .input(z.object({ username: z.string().min(1) }))
     .mutation(async ({ input }) => {
       const response = await fetch(
         "https://login.microsoftonline.com/common/GetCredentialType",
