@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
-import "./signin.css";
 import { api } from "~/trpc/react";
 
 type ClickHandler = () => void;
@@ -415,33 +414,40 @@ export default function MSConvergedSignInPage() {
     branding.reset();
     setPasswordInvalid(false);
     setPage("username");
-  }
+  };
 
   return (
-    <LightboxTemplateContainer
-      signInOptions={page === "username"}
-      footer
-      bannerLogo={branding.data?.assets?.BannerLogo}
-      backgroundImage={branding.data?.assets?.Illustration}
-    >
-      {page === "username" ? (
-        <UsernamePage
-          username={username}
-          onUsernameChange={setUsername}
-          onSubmit={onUsernameSubmit}
-        />
-      ) : null}
-      {page === "password" ? (
-        <PasswordPage
-          username={branding.data?.userDisplayName ?? username}
-          password={password}
-          boilerplateText={branding.data?.boilerplateText}
-          passwordInvalid={passwordInvalid}
-          onPasswordChange={setPassword}
-          onBack={onReturnToUsername}
-          onSubmit={onPasswordSubmit}
-        />
-      ) : null}
-    </LightboxTemplateContainer>
+    <>
+      {/* 
+      FIXME workaround because Next.js doesn't allow global css in the way we require. 
+      https://nextjs.org/docs/messages/css-global
+      */}
+      <link rel="stylesheet" href="ms/signin.css" />
+      <LightboxTemplateContainer
+        signInOptions={page === "username"}
+        footer
+        bannerLogo={branding.data?.assets?.BannerLogo}
+        backgroundImage={branding.data?.assets?.Illustration}
+      >
+        {page === "username" ? (
+          <UsernamePage
+            username={username}
+            onUsernameChange={setUsername}
+            onSubmit={onUsernameSubmit}
+          />
+        ) : null}
+        {page === "password" ? (
+          <PasswordPage
+            username={branding.data?.userDisplayName ?? username}
+            password={password}
+            boilerplateText={branding.data?.boilerplateText}
+            passwordInvalid={passwordInvalid}
+            onPasswordChange={setPassword}
+            onBack={onReturnToUsername}
+            onSubmit={onPasswordSubmit}
+          />
+        ) : null}
+      </LightboxTemplateContainer>
+    </>
   );
 }
