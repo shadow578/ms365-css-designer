@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { Provider } from "~/components/ui/provider";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -10,9 +11,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Provider>{children}</Provider>
+        </TRPCReactProvider>
       </body>
     </html>
   );
