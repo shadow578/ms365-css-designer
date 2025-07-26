@@ -15,6 +15,7 @@ import {
   parseColor,
   type Color,
   Button,
+  Slider,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { MdStyle } from "react-icons/md";
@@ -40,11 +41,12 @@ export default function Home() {
   }
 
   const [editorOpen, setEditorOpen] = useState(false);
-  const [css, setCSS] = useState<Record<string, string>>({});
+  const [css, setCSS] = useState<Record<string, string | number>>({});
   useEffect(() => {
     const cssString = `
     .ext-button {
       background-color: ${css.primaryColor ?? "blue"} !important;
+      border-radius: ${css.borderRadius ?? 0}% !important;
     }
     `;
 
@@ -111,16 +113,11 @@ function MainLayout(props: {
 function EditorDrawer(props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  css: Record<string, string>;
-  setCSS: (css: Record<string, string>) => void;
+  css: Record<string, string | number>;
+  setCSS: (css: Record<string, string | number>) => void;
 }) {
   return (
-    <Box
-      width="40%"
-      hidden={!props.open}
-      padding="4"
-      backgroundColor="gray.100"
-    >
+    <Box width="40%" hidden={!props.open} padding="4">
       <p>drawer.body</p>
 
       <Button
@@ -135,7 +132,7 @@ function EditorDrawer(props: {
       </Button>
 
       <ColorSelection
-        value={parseColor(props.css.primaryColor ?? "blue")}
+        value={parseColor((props.css.primaryColor as string) ?? "blue")}
         onChange={(_, c) =>
           props.setCSS({
             ...props.css,
@@ -143,6 +140,22 @@ function EditorDrawer(props: {
           })
         }
       />
+      <Slider.Root
+        value={[(props.css.borderRadius as number) ?? 4]}
+        onValueChange={(e) => {
+          props.setCSS({
+            ...props.css,
+            borderRadius: e.value[0] ?? 4,
+          });
+        }}
+      >
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Range />
+          </Slider.Track>
+          <Slider.Thumbs />
+        </Slider.Control>
+      </Slider.Root>
     </Box>
   );
 }
