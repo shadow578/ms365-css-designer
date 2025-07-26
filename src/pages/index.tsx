@@ -115,47 +115,35 @@ function EditorDrawer(props: {
   setCSS: (css: Record<string, string>) => void;
 }) {
   return (
-    <Drawer.Root
-      placement="start"
-      size="xl"
-      open={props.open}
-      onOpenChange={(e) => props.onOpenChange(e.open)}
+    <Box
+      width="40%"
+      hidden={!props.open}
+      padding="4"
+      backgroundColor="gray.100"
     >
-      <Drawer.Backdrop />
-      <Drawer.Content>
-        <Drawer.Header>
-          <Drawer.Title>Drawer Title</Drawer.Title>
-        </Drawer.Header>
-        <Drawer.Body>
-          <p>drawer.body</p>
+      <p>drawer.body</p>
 
-          <Button
-            onClick={() =>
-              props.setCSS({
-                ...props.css,
-                primaryColor: "green",
-              })
-            }
-          >
-            Set CSS
-          </Button>
+      <Button
+        onClick={() =>
+          props.setCSS({
+            ...props.css,
+            primaryColor: "green",
+          })
+        }
+      >
+        Set CSS
+      </Button>
 
-          <ColorSelection
-            value={parseColor(props.css.primaryColor ?? "blue")}
-            onChange={(_, c) =>
-              props.setCSS({
-                ...props.css,
-                primaryColor: c,
-              })
-            }
-          />
-        </Drawer.Body>
-
-        <Drawer.CloseTrigger asChild>
-          <CloseButton size="sm" />
-        </Drawer.CloseTrigger>
-      </Drawer.Content>
-    </Drawer.Root>
+      <ColorSelection
+        value={parseColor(props.css.primaryColor ?? "blue")}
+        onChange={(_, c) =>
+          props.setCSS({
+            ...props.css,
+            primaryColor: c,
+          })
+        }
+      />
+    </Box>
   );
 }
 
