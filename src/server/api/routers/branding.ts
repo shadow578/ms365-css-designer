@@ -1,59 +1,55 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { getBaseHeaders } from "~/util/msHeaders";
 
+/**
+ * simplified response schema for /common/GetCredentialType endpoint response.
+ * a lot of properties not relevant to branding are omitted.
+ */
 const credentialTypeSchema = z.object({
-  // note: many things not relevant to branding are omitted
   Username: z.string(),
   Display: z.string(),
   EstsProperties: z.object({
-    UserTenantBranding: z.array(
-      z.object({
-        BannerLogo: z.string(),
-        TileLogo: z.string(),
-        TileDarkLogo: z.string(),
-        Illustration: z.string(), // Background image
-        BackgroundColor: z.string(),
-        BoilerPlateText: z.string(),
-        UserIdLabel: z.string(),
-        Favicon: z.string(),
-      }),
-    ),
+    UserTenantBranding: z
+      .array(
+        z.object({
+          BannerLogo: z.string().optional(),
+          TileLogo: z.string().optional(),
+          TileDarkLogo: z.string().optional(),
+          Illustration: z.string().optional(), // background image
+          BackgroundColor: z.string().optional(),
+          BoilerPlateText: z.string().optional(),
+          UserIdLabel: z.string().optional(),
+          Favicon: z.string().optional(),
+        }),
+      )
+      .optional(),
   }),
 });
 
 export const brandingRouter = createTRPCRouter({
   getBranding: publicProcedure
     .input(z.object({ username: z.string() }))
-    .query(async ({ input }) => {
-      const credentialTypeRaw: unknown = await fetch(
+    .mutation(async ({ input }) => {
+      const response = await fetch(
         "https://login.microsoftonline.com/common/GetCredentialType",
         {
           method: "POST",
           headers: {
-            // mirror "normal" headers as best as possible
-            // user-agent matches Chrome 134 on Windows 11
-            Accept: "application/json",
             "Content-Type": "application/json; charset=utf-8",
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-            Host: "login.microsoftonline.com",
-            Origin: "https://login.microsoftonline.com",
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.166 Safari/537.36",
+            Accept: "application/json",
+            ...getBaseHeaders("api"),
           },
           body: JSON.stringify({
             username: input.username,
           }),
         },
-      ).then((r) => r.json());
+      );
 
-      const credentialType = credentialTypeSchema.parse(credentialTypeRaw);
-
-      console.log("Credential Type Response:", credentialType);
-
+      const credentialType = credentialTypeSchema.parse(await response.json());
       const brandingData =
-        credentialType.EstsProperties.UserTenantBranding.at(0);
+        credentialType.EstsProperties.UserTenantBranding?.at(0);
 
       return {
         userDisplayName: credentialType.Display,
@@ -63,7 +59,7 @@ export const brandingRouter = createTRPCRouter({
               backgroundImage: brandingData.Illustration,
               boilerplateText: brandingData.BoilerPlateText,
             }
-          : {},
+          : undefined,
       };
     }),
 });

