@@ -22,7 +22,7 @@ const credentialTypeSchema = z.object({
   }),
 });
 
-export const msBrandingRouter = createTRPCRouter({
+export const brandingRouter = createTRPCRouter({
   getBranding: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ input }) => {

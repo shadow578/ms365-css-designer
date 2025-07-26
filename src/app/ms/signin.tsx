@@ -368,7 +368,7 @@ export default function MSConvergedSignInPage() {
   const [password, setPassword] = useState("");
   const [page, setPage] = useState<"username" | "password">("username");
 
-  const branding = api.msBranding.getBranding.useQuery(
+  const branding = api.branding.getBranding.useQuery(
     { username },
     {
       enabled: false, // Disable automatic query execution
