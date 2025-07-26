@@ -1,9 +1,38 @@
+import { pbkdf2Sync } from "crypto";
 import type { NextApiRequest, NextApiResponse } from "next";
 import z from "zod";
+import { env } from "~/env";
+import { getBaseUrl } from "~/util/baseUrl";
 import { getBaseHeaders } from "~/util/msHeaders";
 
+function getResourceHash(resource: string): string {
+  return pbkdf2Sync(resource, env.NODE_ENV, 1000, 64, "sha256").toString(
+    "base64url",
+  );
+}
+
+export function getResourceUrls<T extends Record<string, string | undefined>>(
+  assets: T,
+): Record<keyof T, string | undefined> {
+  const urls: Record<string, string | undefined> = {};
+  for (const [name, targetUrl] of Object.entries(assets)) {
+    if (!targetUrl) {
+      urls[name] = undefined;
+      continue;
+    }
+
+    const proxyUrl = new URL("/api/assetProxy", getBaseUrl());
+    proxyUrl.searchParams.set("resource", targetUrl);
+    proxyUrl.searchParams.set("hash", getResourceHash(targetUrl));
+    urls[name] = proxyUrl.toString();
+  }
+
+  return urls as Record<keyof T, string | undefined>;
+}
+
 const requestQuerySchema = z.object({
-  url: z.string().url(),
+  resource: z.string(),
+  hash: z.string(),
 });
 
 export default async function handler(
@@ -11,9 +40,16 @@ export default async function handler(
   res: NextApiResponse<Buffer | { error?: string }>,
 ) {
   try {
-    const { url } = requestQuerySchema.parse(req.query);
+    const { resource, hash } = requestQuerySchema.parse(req.query);
+    if (!resource || !hash) {
+      return res.status(400).send({ error: "Invalid request parameters." });
+    }
 
-    const response = await fetch(url, {
+    if (hash !== getResourceHash(resource)) {
+      return res.status(400).send({});
+    }
+
+    const response = await fetch(resource, {
       method: "GET",
       headers: {
         Accept:

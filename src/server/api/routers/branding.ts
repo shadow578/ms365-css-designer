@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getResourceUrls } from "~/pages/api/assetProxy";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { getBaseHeaders } from "~/util/msHeaders";
@@ -53,13 +54,11 @@ export const brandingRouter = createTRPCRouter({
 
       return {
         userDisplayName: credentialType.Display,
-        branding: brandingData
-          ? {
-              bannerLogo: brandingData.BannerLogo,
-              backgroundImage: brandingData.Illustration,
-              boilerplateText: brandingData.BoilerPlateText,
-            }
-          : undefined,
+        boilerplateText: brandingData?.BoilerPlateText,
+        assets: getResourceUrls({
+          BannerLogo: brandingData?.BannerLogo,
+          Illustration: brandingData?.Illustration,
+        }),
       };
     }),
 });
