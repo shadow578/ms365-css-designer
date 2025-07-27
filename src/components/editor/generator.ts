@@ -8,30 +8,37 @@ import PROPERTIES from "./properties";
 function generateCSSProperty<Tprop extends CSSPropertyName>(
   prop: Tprop,
   value: CSSPropertyValueTypeForProperty<Tprop>,
+  important: boolean,
 ) {
   const gen = PROPERTIES[prop].generateCSS as (
     value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => string;
-  return gen(value);
+  return `${prop}: ${gen(value)}${important ? " !important" : ""};`;
 }
 
 function generateClassCSS(
   className: string,
   properties: CSSClassPropertyDefinition,
+  important: boolean,
 ) {
   return `.${className} {
   ${Object.entries(properties)
-    .map(([prop, value]) => generateCSSProperty(prop as CSSPropertyName, value))
+    .map(([prop, value]) =>
+      generateCSSProperty(prop as CSSPropertyName, value, important),
+    )
     .join("\n  ")}
 }`;
 }
 
-export default function generateCSS(style: CSSStyleDefinition) {
+export default function generateCSS(
+  style: CSSStyleDefinition,
+  important = true,
+) {
   return (
     Object.entries(style)
-      .map(([className, properties]) => {
-        return generateClassCSS(className, properties);
-      })
+      .map(([className, properties]) =>
+        generateClassCSS(className, properties, important),
+      )
       .join("\n") + "\n"
   );
 }

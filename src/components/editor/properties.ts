@@ -8,6 +8,11 @@ interface CSSBaseProperty<T> {
   kind: T;
   displayName: string;
   defaultValue: CSSPropertyValueTypeByKind<T>;
+
+  /**
+   * generateCSS only generates the value part of the CSS property.
+   * property name and semicolon are handled by the generator.
+   */
   generateCSS: (value: CSSPropertyValueTypeByKind<T>) => string;
 }
 
@@ -27,13 +32,13 @@ const PROPERTIES = {
     kind: "color",
     displayName: "Background Color",
     defaultValue: "#ffffff",
-    generateCSS: (value) => `background-color: ${value};`,
+    generateCSS: (value) => `${value}`,
   },
   "border-radius": {
     kind: "slider",
     displayName: "Border Radius",
     defaultValue: 0,
-    generateCSS: (value) => `border-radius: ${value}%;`,
+    generateCSS: (value) => `${value}%`,
     options: {
       min: 0,
       max: 100,
