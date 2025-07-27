@@ -1,7 +1,12 @@
 "use client";
 
+import CSSEditorContextProvider from "~/components/editor/context";
 import CSSEditor from "~/components/editor/CSSEditor";
 
 export default function ConvergedSignInPage() {
-  return <CSSEditor />;
+  return (
+    <CSSEditorContextProvider>
+      <CSSEditor />;
+    </CSSEditorContextProvider>
+  );
 }

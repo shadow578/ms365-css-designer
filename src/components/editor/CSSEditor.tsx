@@ -7,32 +7,19 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import {
-  Box,
-  Button,
-  Code,
-  Flex,
-  For,
-  Heading,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Code, Flex, For, Heading, IconButton } from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
-import type { CSSClassPropertyDefinition, CSSStyleDefinition } from ".";
-import generateCSS from "./generator";
+import type { CSSClassPropertyDefinition } from ".";
 import DeleteButton from "./editor/DeleteButton";
 import AddButton from "./editor/AddButton";
 import { MdBugReport, MdOutlineBugReport } from "react-icons/md";
-
-interface CSSEditorState {
-  style: CSSStyleDefinition;
-}
+import { useCSSEditorState, useGeneratedCSS } from "./context";
 
 export default function CSSEditor() {
   const [debugMode, setDebugMode] = useState(false);
-  const [state, setState] = useState<CSSEditorState>({
-    style: {},
-  });
+  const [state, setState] = useCSSEditorState();
+  const generatedCss = useGeneratedCSS();
 
   const addClass = (cls: CSSClassName) => {
     if (cls in state.style) {
@@ -158,7 +145,7 @@ export default function CSSEditor() {
           <Box>
             <Heading size="md">Generated CSS</Heading>
             <Code asChild>
-              <pre>{generateCSS(state.style)}</pre>
+              <pre>{generatedCss}</pre>
             </Code>
           </Box>
         </Box>
