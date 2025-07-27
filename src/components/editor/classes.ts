@@ -10,9 +10,13 @@ const CLASSES = {
     displayName: "UI Buttons",
     properties: ["background-color", "border-radius"],
   },
+  "ext-foo": {
+    displayName: "Testing",
+    properties: ["background-color"],
+  },
 } satisfies Record<string, CSSClass>;
 export default CLASSES;
 
 export const ALL_CLASSES = Object.keys(CLASSES) as CSSProperties[];
 
-export type CSSClasses = keyof typeof CLASSES;
+export type CSSClassName = keyof typeof CLASSES;
