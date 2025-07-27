@@ -17,6 +17,7 @@ const createContext = cache(async () => {
   heads.set("x-trpc-source", "rsc");
 
   return createTRPCContext({
+    // @ts-expect-error -- FIXME still somehow not quite right after porting from T3 app to page router
     headers: heads,
   });
 });
@@ -26,5 +27,5 @@ const caller = createCaller(createContext);
 
 export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
   caller,
-  getQueryClient
+  getQueryClient,
 );
