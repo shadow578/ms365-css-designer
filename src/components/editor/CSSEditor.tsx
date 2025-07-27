@@ -54,14 +54,15 @@ export default function CSSEditor() {
       return;
     }
 
+    //@ts-expect-error -- FIXME figure this out some day
     state.classes[cls][prop] = PROPERTIES[prop].defaultValue;
     setState({ ...state });
   };
 
-  const setClassProperty = (
+  const setClassProperty = <Tprop extends CSSPropertyName>(
     cls: CSSClassName,
-    prop: CSSPropertyName,
-    value: unknown,
+    prop: Tprop,
+    value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => {
     if (!state.classes[cls]) {
       console.warn(`class ${cls} does not exist.`);
@@ -72,9 +73,8 @@ export default function CSSEditor() {
       return;
     }
 
-    state.classes[cls][prop] = value as CSSPropertyValueTypeForProperty<
-      typeof prop
-    >;
+    //@ts-expect-error -- FIXME figure this out some day
+    state.classes[cls][prop] = value;
     setState({ ...state });
   };
 
@@ -115,7 +115,11 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   cssProps: CSSClassState;
   onRemove?: (cls: CSSClassName) => void;
   addProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
-  setProperty?: (cls: Tcls, prop: CSSPropertyName, value: unknown) => void;
+  setProperty?: <TsetProp extends CSSPropertyName>(
+    cls: Tcls,
+    prop: TsetProp,
+    value: CSSPropertyValueTypeForProperty<TsetProp>,
+  ) => void;
 }) {
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
     (CLASSES[props.targetClass].properties as string[]).includes(cssProp),
