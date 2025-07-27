@@ -7,6 +7,7 @@ import ColorControl from "./Color";
 import SliderControl from "./Slider";
 
 export type PropsFor<T extends CSSPropertyKind> = {
+  label: string;
   value: CSSPropertyValueTypeByKind<T>;
   onChange: (value: CSSPropertyValueTypeByKind<T>) => void;
 };
@@ -30,6 +31,7 @@ const CONTROLS: ControlRecord = {
   percent: {
     component: (props) => (
       <SliderControl
+        label={props.label}
         value={props.value}
         onChange={props.onChange}
         min={0}

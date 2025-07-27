@@ -1,6 +1,7 @@
 import { Slider } from "@chakra-ui/react";
 
 export default function SliderControl(props: {
+  label: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -15,6 +16,7 @@ export default function SliderControl(props: {
       min={props.min}
       max={props.max}
     >
+      <Slider.Label>{props.label}</Slider.Label>
       <Slider.Control>
         <Slider.Track>
           <Slider.Range />

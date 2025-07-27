@@ -203,7 +203,8 @@ function PropertyEditor<
   remove?: () => void;
 }) {
   // FIXME fix type wonkyness
-  const ControlFn = CONTROLS[PROPERTIES[props.targetProperty].kind]
+  const prop = PROPERTIES[props.targetProperty];
+  const ControlFn = CONTROLS[prop.kind]
     .component as unknown as ComponentFor<Tkind>;
 
   return (
@@ -211,7 +212,11 @@ function PropertyEditor<
       <Heading>Property {props.targetProperty}</Heading>
       <Button onClick={props.remove}>Remove</Button>
 
-      <ControlFn value={props.value} onChange={props.setValue}></ControlFn>
+      <ControlFn
+        label={prop.displayName}
+        value={props.value}
+        onChange={props.setValue}
+      ></ControlFn>
     </Box>
   );
 }
