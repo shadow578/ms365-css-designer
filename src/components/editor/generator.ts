@@ -21,8 +21,13 @@ function generateClassCSS(
   properties: CSSClassPropertyDefinition,
   important: boolean,
 ) {
+  const propertieEntries = Object.entries(properties);
+  if (propertieEntries.length === 0) {
+    return "";
+  }
+
   return `.${className} {
-  ${Object.entries(properties)
+  ${propertieEntries
     .map(([prop, value]) =>
       generateCSSProperty(prop as CSSPropertyName, value, important),
     )
