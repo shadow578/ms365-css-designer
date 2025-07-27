@@ -59,6 +59,20 @@ export default function CSSEditor() {
     setState({ ...state });
   };
 
+  const removeClassProperty = (cls: CSSClassName, prop: CSSPropertyName) => {
+    if (!state.classes[cls]) {
+      console.warn(`class ${cls} does not exist.`);
+      return;
+    }
+    if (!(prop in state.classes[cls])) {
+      console.warn(`property ${prop} does not exist in class ${cls}.`);
+      return;
+    }
+
+    delete state.classes[cls][prop];
+    setState({ ...state });
+  };
+
   const setClassProperty = <Tprop extends CSSPropertyName>(
     cls: CSSClassName,
     prop: Tprop,
@@ -100,6 +114,7 @@ export default function CSSEditor() {
             cssProps={state.classes[cls as CSSClassName]!}
             onRemove={removeClass}
             addProperty={addClassProperty}
+            removeProperty={removeClassProperty}
             setProperty={setClassProperty}
           ></ClassEditor>
         )}
@@ -115,6 +130,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   cssProps: CSSClassState;
   onRemove?: (cls: CSSClassName) => void;
   addProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
+  removeProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
   setProperty?: <TsetProp extends CSSPropertyName>(
     cls: Tcls,
     prop: TsetProp,
@@ -159,6 +175,12 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
                 newValue,
               );
             }}
+            remove={() => {
+              props.removeProperty?.(
+                props.targetClass,
+                prop as CSSPropertyName,
+              );
+            }}
           ></PropertyEditor>
         )}
       </For>
@@ -173,6 +195,7 @@ function PropertyEditor<
   targetProperty: Tprop;
   value: CSSPropertyValueTypeForProperty<Tprop>;
   setValue: (value: CSSPropertyValueTypeForProperty<Tprop>) => void;
+  remove?: () => void;
 }) {
   const ControlFn = CONTROLS[PROPERTIES[props.targetProperty].kind]
     .component as ComponentFor<Tkind>;
@@ -180,6 +203,8 @@ function PropertyEditor<
   return (
     <Box margin={4} borderWidth={2} borderColor="black">
       <Heading>Property {props.targetProperty}</Heading>
+      <Button onClick={props.remove}>Remove</Button>
+
       <ControlFn value={props.value} onChange={props.setValue}></ControlFn>
     </Box>
   );
