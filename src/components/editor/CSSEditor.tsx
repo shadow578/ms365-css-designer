@@ -84,7 +84,7 @@ export default function CSSEditor() {
   );
 
   return (
-    <>
+    <Box width="50%">
       <SelectNewButton
         options={mapRecord(selectableClasses, (info) => info.displayName)}
         onSelect={addClass}
@@ -106,7 +106,7 @@ export default function CSSEditor() {
       </For>
 
       <pre>{JSON.stringify(state, null, 2)}</pre>
-    </>
+    </Box>
   );
 }
 
