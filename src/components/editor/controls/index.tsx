@@ -27,8 +27,21 @@ const CONTROLS: ControlRecord = {
   color: {
     component: ColorControl,
   },
-  slider: {
-    component: SliderControl,
+  percent: {
+    component: (props) => (
+      <SliderControl
+        value={props.value}
+        onChange={props.onChange}
+        min={0}
+        max={100}
+        marks={[
+          { value: 0, label: "0%" },
+          { value: 50, label: "50%" },
+          { value: 100, label: "100%" },
+        ]}
+        valueDisplay={(value) => `${value}%`}
+      />
+    ),
   },
 };
 export default CONTROLS;

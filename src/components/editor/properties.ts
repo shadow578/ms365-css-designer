@@ -3,7 +3,7 @@ import zx from "~/util/zodExtras";
 
 const PROP_SCHEMA_BY_KIND = {
   color: zx.hexColorRGBA(),
-  slider: z.number(),
+  percent: z.number().min(0).max(100),
 } satisfies Record<string, ZodSchema>;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
@@ -25,15 +25,9 @@ interface CSSBaseProperty<T extends CSSPropertyKind> {
 }
 
 type ColorProperty = CSSBaseProperty<"color">;
+type PercentProperty = CSSBaseProperty<"percent">;
 
-interface SliderProperty extends CSSBaseProperty<"slider"> {
-  options: {
-    min: number;
-    max: number;
-  };
-}
-
-type CSSPropertyKinds = ColorProperty | SliderProperty;
+type CSSPropertyKinds = ColorProperty | PercentProperty;
 
 const PROPERTIES = {
   "background-color": {
@@ -43,14 +37,10 @@ const PROPERTIES = {
     generateCSS: (value) => `${value}`,
   },
   "border-radius": {
-    kind: "slider",
+    kind: "percent",
     displayName: "Border Radius",
     defaultValue: 0,
     generateCSS: (value) => `${value}%`,
-    options: {
-      min: 0,
-      max: 100,
-    },
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;
