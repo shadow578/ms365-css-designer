@@ -1,4 +1,4 @@
-import { Button, For, Menu, Portal } from "@chakra-ui/react";
+import { Box, Button, For, Menu, Portal } from "@chakra-ui/react";
 import type { SelectionDetails } from "node_modules/@chakra-ui/react/dist/types/components/menu/namespace";
 
 export default function SelectNewButton<T extends string>(props: {
@@ -19,9 +19,9 @@ export default function SelectNewButton<T extends string>(props: {
   return (
     <Menu.Root onSelect={onMenuSelect}>
       <Menu.Trigger asChild>
-        <Button variant="outline" size="sm">
+        <Box>
           {props.children}
-        </Button>
+        </Box>
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>

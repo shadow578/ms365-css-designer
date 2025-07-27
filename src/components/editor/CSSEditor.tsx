@@ -7,17 +7,29 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Button, For, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Code,
+  Flex,
+  For,
+  Heading,
+  IconButton,
+} from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition, CSSStyleDefinition } from ".";
 import generateCSS from "./generator";
+import DeleteButton from "./editor/DeleteButton";
+import AddButton from "./editor/AddButton";
+import { MdBugReport, MdOutlineBugReport } from "react-icons/md";
 
 interface CSSEditorState {
   style: CSSStyleDefinition;
 }
 
 export default function CSSEditor() {
+  const [debugMode, setDebugMode] = useState(false);
   const [state, setState] = useState<CSSEditorState>({
     style: {},
   });
@@ -101,31 +113,56 @@ export default function CSSEditor() {
   );
 
   return (
-    <Box width="50%">
-      <SelectNewButton
-        options={mapRecord(selectableClasses, (info) => info.displayName)}
-        onSelect={addClass}
-      >
-        Add Class
-      </SelectNewButton>
+    <Box padding={4} backgroundColor="green.100">
+      <Box>
+        <Flex>
+          <Heading flex={1}>CSS Editor</Heading>
 
-      <For each={Object.entries(state.style)}>
-        {([cls, _]) => (
-          <ClassEditor
-            key={cls}
-            targetClass={cls as CSSClassName}
-            cssProps={state.style[cls as CSSClassName]!}
-            onRemove={removeClass}
-            addProperty={addClassProperty}
-            removeProperty={removeClassProperty}
-            setProperty={setClassProperty}
-          ></ClassEditor>
-        )}
-      </For>
+          <IconButton variant="ghost" onClick={() => setDebugMode(!debugMode)}>
+            {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
+          </IconButton>
 
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+          <SelectNewButton
+            options={mapRecord(selectableClasses, (info) => info.displayName)}
+            onSelect={addClass}
+          >
+            <AddButton />
+          </SelectNewButton>
+        </Flex>
 
-      <pre>{generateCSS(state.style)}</pre>
+        <For each={Object.entries(state.style)}>
+          {([cls, _]) => (
+            <ClassEditor
+              key={cls}
+              targetClass={cls as CSSClassName}
+              cssProps={state.style[cls as CSSClassName]!}
+              onRemove={removeClass}
+              addProperty={addClassProperty}
+              removeProperty={removeClassProperty}
+              setProperty={setClassProperty}
+            ></ClassEditor>
+          )}
+        </For>
+      </Box>
+
+      {debugMode && (
+        <Box backgroundColor="red.100">
+          <Heading>Debug View</Heading>
+          <Box>
+            <Heading size="md">State</Heading>
+            <Code asChild>
+              <pre>{JSON.stringify(state, null, 2)}</pre>
+            </Code>
+          </Box>
+
+          <Box>
+            <Heading size="md">Generated CSS</Heading>
+            <Code asChild>
+              <pre>{generateCSS(state.style)}</pre>
+            </Code>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }
@@ -142,8 +179,9 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
     value: CSSPropertyValueTypeForProperty<TsetProp>,
   ) => void;
 }) {
+  const cls = CLASSES[props.targetClass];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
-    (CLASSES[props.targetClass].properties as string[]).includes(cssProp),
+    (cls.properties as string[]).includes(cssProp),
   );
 
   const selectableProperties = filterRecord(
@@ -152,20 +190,21 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   );
 
   return (
-    <Box margin={4} borderWidth={2} borderColor="black">
-      <Heading>Class {props.targetClass}</Heading>
-      <Button onClick={() => props.onRemove?.(props.targetClass)}>
-        Remove
-      </Button>
+    <Box backgroundColor="yellow.100" padding={2}>
+      <Flex>
+        <Heading flex={1}>{cls.displayName}</Heading>
 
-      <SelectNewButton
-        options={mapRecord(selectableProperties, (info) => info.displayName)}
-        onSelect={(cssProp) => {
-          props.addProperty?.(props.targetClass, cssProp);
-        }}
-      >
-        Add Property
-      </SelectNewButton>
+        <SelectNewButton
+          options={mapRecord(selectableProperties, (info) => info.displayName)}
+          onSelect={(cssProp) => {
+            props.addProperty?.(props.targetClass, cssProp);
+          }}
+        >
+          <AddButton />
+        </SelectNewButton>
+
+        <DeleteButton onClick={() => props.onRemove?.(props.targetClass)} />
+      </Flex>
 
       <For each={Object.entries(props.cssProps)}>
         {([prop, value]) => (
@@ -208,15 +247,15 @@ function PropertyEditor<
     .component as unknown as ComponentFor<Tkind>;
 
   return (
-    <Box margin={4} borderWidth={2} borderColor="black">
-      <Heading>Property {props.targetProperty}</Heading>
-      <Button onClick={props.remove}>Remove</Button>
-
-      <ControlFn
-        label={prop.displayName}
-        value={props.value}
-        onChange={props.setValue}
-      ></ControlFn>
-    </Box>
+    <Flex backgroundColor="blue.100" gap={2}>
+      <Box flex={1} padding={2}>
+        <ControlFn
+          label={prop.displayName}
+          value={props.value}
+          onChange={props.setValue}
+        />
+      </Box>
+      <DeleteButton onClick={props.remove} />
+    </Flex>
   );
 }
