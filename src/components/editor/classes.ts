@@ -1,8 +1,8 @@
-import type { CSSProperties } from "./properties";
+import type { CSSPropertyName } from "./properties";
 
 export interface CSSClass {
   displayName: string;
-  properties: CSSProperties[];
+  properties: CSSPropertyName[];
 }
 
 const CLASSES = {
@@ -17,6 +17,6 @@ const CLASSES = {
 } satisfies Record<string, CSSClass>;
 export default CLASSES;
 
-export const ALL_CLASSES = Object.keys(CLASSES) as CSSProperties[];
+export const ALL_CLASSES = Object.keys(CLASSES) as CSSPropertyName[];
 
 export type CSSClassName = keyof typeof CLASSES;

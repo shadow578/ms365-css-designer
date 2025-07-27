@@ -11,8 +11,12 @@ export type PropsFor<T extends CSSPropertyKind> = {
   onChange: (value: CSSPropertyValueTypeByKind<T>) => void;
 };
 
+export type ComponentFor<T extends CSSPropertyKind> = (
+  props: PropsFor<T>,
+) => React.JSX.Element;
+
 interface Control<T extends CSSPropertyKind> {
-  component: (props: PropsFor<T>) => React.JSX.Element;
+  component: ComponentFor<T>;
 }
 
 type ControlRecord = {

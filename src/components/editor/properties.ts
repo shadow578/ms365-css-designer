@@ -7,6 +7,7 @@ export type CSSPropertyValueTypeByKind<T> = T extends "color"
 interface CSSBaseProperty<T> {
   kind: T;
   displayName: string;
+  defaultValue: CSSPropertyValueTypeByKind<T>;
   generateCSS: (value: CSSPropertyValueTypeByKind<T>) => string;
 }
 
@@ -25,11 +26,13 @@ const PROPERTIES = {
   "background-color": {
     kind: "color",
     displayName: "Background Color",
+    defaultValue: "#ffffff",
     generateCSS: (value) => `background-color: ${value};`,
   },
   "border-radius": {
     kind: "slider",
     displayName: "Border Radius",
+    defaultValue: 0,
     generateCSS: (value) => `border-radius: ${value}%;`,
     options: {
       min: 0,
@@ -39,10 +42,13 @@ const PROPERTIES = {
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;
 
-export type CSSProperties = keyof typeof PROPERTIES;
+export type CSSPropertyName = keyof typeof PROPERTIES;
 
 export type CSSPropertyKind =
   (typeof PROPERTIES)[keyof typeof PROPERTIES]["kind"];
 
-export type CSSPropertyValueTypeForProperty<P extends CSSProperties> =
+export type CSSPropertyKindFor<P extends CSSPropertyName> =
+  (typeof PROPERTIES)[P]["kind"];
+
+export type CSSPropertyValueTypeForProperty<P extends CSSPropertyName> =
   CSSPropertyValueTypeByKind<(typeof PROPERTIES)[P]["kind"]>;
