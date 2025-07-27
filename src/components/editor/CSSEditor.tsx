@@ -8,7 +8,7 @@ import type {
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
 import { Box, Button, For, Heading } from "@chakra-ui/react";
-import PROPERTIES from "./properties";
+import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition, CSSStyleDefinition } from ".";
 import generateCSS from "./generator";
@@ -52,8 +52,11 @@ export default function CSSEditor() {
       return;
     }
 
+    const value = PROPERTIES[prop].defaultValue;
+    assertCSSPropertyValue(prop, value);
+
     //@ts-expect-error -- FIXME figure this out some day
-    state.style[cls][prop] = PROPERTIES[prop].defaultValue;
+    state.style[cls][prop] = value;
     setState({ ...state });
   };
 
@@ -84,6 +87,8 @@ export default function CSSEditor() {
       console.warn(`property ${prop} does not exist in class ${cls}.`);
       return;
     }
+
+    assertCSSPropertyValue(prop, value);
 
     //@ts-expect-error -- FIXME figure this out some day
     state.style[cls][prop] = value;
@@ -197,8 +202,9 @@ function PropertyEditor<
   setValue: (value: CSSPropertyValueTypeForProperty<Tprop>) => void;
   remove?: () => void;
 }) {
+  // FIXME fix type wonkyness
   const ControlFn = CONTROLS[PROPERTIES[props.targetProperty].kind]
-    .component as ComponentFor<Tkind>;
+    .component as unknown as ComponentFor<Tkind>;
 
   return (
     <Box margin={4} borderWidth={2} borderColor="black">

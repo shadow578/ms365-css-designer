@@ -3,7 +3,7 @@ import type {
   CSSPropertyName,
   CSSPropertyValueTypeForProperty,
 } from "./properties";
-import PROPERTIES from "./properties";
+import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 
 function generateCSSProperty<Tprop extends CSSPropertyName>(
   prop: Tprop,
@@ -13,6 +13,8 @@ function generateCSSProperty<Tprop extends CSSPropertyName>(
   const gen = PROPERTIES[prop].generateCSS as (
     value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => string;
+
+  assertCSSPropertyValue(prop, value);
   return `${prop}: ${gen(value)}${important ? " !important" : ""};`;
 }
 
