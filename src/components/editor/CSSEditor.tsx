@@ -10,66 +10,64 @@ import { filterRecord, mapRecord } from "~/util/util";
 import { Box, Button, For, Heading } from "@chakra-ui/react";
 import PROPERTIES from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
-
-type CSSClassState = {
-  [K in CSSPropertyName]?: CSSPropertyValueTypeForProperty<K>;
-};
+import type { CSSClassPropertyDefinition, CSSStyleDefinition } from ".";
+import generateCSS from "./generator";
 
 interface CSSEditorState {
-  classes: Partial<Record<CSSClassName, CSSClassState>>;
+  style: CSSStyleDefinition;
 }
 
 export default function CSSEditor() {
   const [state, setState] = useState<CSSEditorState>({
-    classes: {},
+    style: {},
   });
 
   const addClass = (cls: CSSClassName) => {
-    if (cls in state.classes) {
+    if (cls in state.style) {
       console.warn(`class ${cls} already exists.`);
       return;
     }
 
-    state.classes[cls] = {};
+    state.style[cls] = {};
     setState({ ...state });
   };
 
   const removeClass = (cls: CSSClassName) => {
-    if (!(cls in state.classes)) {
+    if (!(cls in state.style)) {
       console.warn(`class ${cls} does not exist.`);
       return;
     }
 
-    delete state.classes[cls];
+    delete state.style[cls];
     setState({ ...state });
   };
 
   const addClassProperty = (cls: CSSClassName, prop: CSSPropertyName) => {
-    if (!state.classes[cls]) {
+    if (!state.style[cls]) {
       console.warn(`class ${cls} does not exist.`);
       return;
     }
-    if (prop in state.classes[cls]) {
+    if (prop in state.style[cls]) {
       console.warn(`property ${prop} already exists in class ${cls}.`);
       return;
     }
 
     //@ts-expect-error -- FIXME figure this out some day
-    state.classes[cls][prop] = PROPERTIES[prop].defaultValue;
+    state.style[cls][prop] = PROPERTIES[prop].defaultValue;
     setState({ ...state });
   };
 
   const removeClassProperty = (cls: CSSClassName, prop: CSSPropertyName) => {
-    if (!state.classes[cls]) {
+    if (!state.style[cls]) {
       console.warn(`class ${cls} does not exist.`);
       return;
     }
-    if (!(prop in state.classes[cls])) {
+    if (!(prop in state.style[cls])) {
       console.warn(`property ${prop} does not exist in class ${cls}.`);
       return;
     }
 
-    delete state.classes[cls][prop];
+    delete state.style[cls][prop];
     setState({ ...state });
   };
 
@@ -78,23 +76,23 @@ export default function CSSEditor() {
     prop: Tprop,
     value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => {
-    if (!state.classes[cls]) {
+    if (!state.style[cls]) {
       console.warn(`class ${cls} does not exist.`);
       return;
     }
-    if (!(prop in state.classes[cls])) {
+    if (!(prop in state.style[cls])) {
       console.warn(`property ${prop} does not exist in class ${cls}.`);
       return;
     }
 
     //@ts-expect-error -- FIXME figure this out some day
-    state.classes[cls][prop] = value;
+    state.style[cls][prop] = value;
     setState({ ...state });
   };
 
   const selectableClasses = filterRecord(
     CLASSES,
-    (_, cls) => !(cls in state.classes),
+    (_, cls) => !(cls in state.style),
   );
 
   return (
@@ -106,12 +104,12 @@ export default function CSSEditor() {
         Add Class
       </SelectNewButton>
 
-      <For each={Object.entries(state.classes)}>
+      <For each={Object.entries(state.style)}>
         {([cls, _]) => (
           <ClassEditor
             key={cls}
             targetClass={cls as CSSClassName}
-            cssProps={state.classes[cls as CSSClassName]!}
+            cssProps={state.style[cls as CSSClassName]!}
             onRemove={removeClass}
             addProperty={addClassProperty}
             removeProperty={removeClassProperty}
@@ -121,13 +119,15 @@ export default function CSSEditor() {
       </For>
 
       <pre>{JSON.stringify(state, null, 2)}</pre>
+
+      <pre>{generateCSS(state.style)}</pre>
     </Box>
   );
 }
 
 function ClassEditor<Tcls extends CSSClassName>(props: {
   targetClass: Tcls;
-  cssProps: CSSClassState;
+  cssProps: CSSClassPropertyDefinition;
   onRemove?: (cls: CSSClassName) => void;
   addProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
   removeProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
