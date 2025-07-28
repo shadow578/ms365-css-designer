@@ -5,6 +5,7 @@ import {
   Center,
   Flex,
   Heading,
+  Highlight,
   HStack,
   IconButton,
   Presence,
@@ -69,8 +70,10 @@ function MainLayout() {
         <Box backgroundColor="red.600">
           <Center>
             <Text>
-              This page is <strong>not</strong> a real sign-in page. Do not
-              enter any real credentials.
+              <Highlight query="not" styles={{ fontWeight: "bold" }}>
+                This page is not a real sign-in page. Do not enter any real
+                credentials.
+              </Highlight>
             </Text>
           </Center>
         </Box>
