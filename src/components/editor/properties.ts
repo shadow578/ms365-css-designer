@@ -3,7 +3,10 @@ import zx from "~/util/zodExtras";
 
 const PROP_SCHEMA_BY_KIND = {
   color: zx.hexColorRGBA(),
-  percent: z.number().min(0).max(100),
+  dimension: z.object({
+    value: z.number().min(0),
+    unit: z.enum(["px", "em", "rem", "%"]),
+  }),
 } satisfies Record<string, ZodSchema>;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
@@ -25,9 +28,9 @@ interface CSSBaseProperty<T extends CSSPropertyKind> {
 }
 
 type ColorProperty = CSSBaseProperty<"color">;
-type PercentProperty = CSSBaseProperty<"percent">;
+type DimensionProperty = CSSBaseProperty<"dimension">;
 
-type CSSPropertyKinds = ColorProperty | PercentProperty;
+type CSSPropertyKinds = ColorProperty | DimensionProperty;
 
 const PROPERTIES = {
   "background-color": {
@@ -37,10 +40,10 @@ const PROPERTIES = {
     generateCSS: (value) => `${value}`,
   },
   "border-radius": {
-    kind: "percent",
+    kind: "dimension",
     displayName: "Border Radius",
-    defaultValue: 0,
-    generateCSS: (value) => `${value}%`,
+    defaultValue: { value: 0, unit: "px" },
+    generateCSS: (value) => `${value.value}${value.unit}`,
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;
