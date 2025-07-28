@@ -84,7 +84,6 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
           max={currentUnitConfig.max}
           step={step}
         >
-          <Slider.Label>{props.label}</Slider.Label>
           <Slider.Control>
             <Slider.Track>
               <Slider.Range />

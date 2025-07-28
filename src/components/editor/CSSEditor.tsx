@@ -7,7 +7,15 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Code, Flex, For, Heading, IconButton } from "@chakra-ui/react";
+import {
+  Box,
+  Code,
+  Flex,
+  For,
+  Heading,
+  IconButton,
+  Text,
+} from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition } from ".";
@@ -234,15 +242,15 @@ function PropertyEditor<
     .component as unknown as ComponentFor<Tkind>;
 
   return (
-    <Flex backgroundColor="blue.100" gap={2}>
-      <Box flex={1} padding={2}>
-        <ControlFn
-          label={prop.displayName}
-          value={props.value}
-          onChange={props.setValue}
-        />
-      </Box>
-      <DeleteButton onClick={props.remove} />
-    </Flex>
+    <>
+      <Text>{prop.displayName}</Text>
+
+      <Flex backgroundColor="blue.100" gap={2}>
+        <Box flex={1} padding={2}>
+          <ControlFn value={props.value} onChange={props.setValue} />
+        </Box>
+        <DeleteButton onClick={props.remove} />
+      </Flex>
+    </>
   );
 }

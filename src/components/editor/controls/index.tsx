@@ -7,7 +7,6 @@ import ColorControl from "./Color";
 import DimensionControl from "./Dimension";
 
 export type PropsFor<T extends CSSPropertyKind> = {
-  label: string;
   value: CSSPropertyValueTypeByKind<T>;
   onChange: (value: CSSPropertyValueTypeByKind<T>) => void;
 };

@@ -16,7 +16,6 @@ export default function ColorControl(props: PropsFor<"color">) {
       onValueChange={(e) => props.onChange(formatColor(e.value))}
       width="fit-content"
     >
-      <ColorPicker.Label>{props.label}</ColorPicker.Label>
       <ColorPicker.Control>
         <ColorPicker.Input />
         <ColorPicker.Trigger />

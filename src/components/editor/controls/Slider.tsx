@@ -16,7 +16,6 @@ export default function SliderControl(props: {
       min={props.min}
       max={props.max}
     >
-      <Slider.Label>{props.label}</Slider.Label>
       <Slider.Control>
         <Slider.Track>
           <Slider.Range />
