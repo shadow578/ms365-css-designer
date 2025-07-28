@@ -7,24 +7,19 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import {
-  Box,
-  Code,
-  Flex,
-  For,
-  Heading,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition } from ".";
-import DeleteButton from "./editor/DeleteButton";
-import AddButton from "./editor/AddButton";
-import { MdBugReport, MdOutlineBugReport } from "react-icons/md";
+import {
+  MdAdd,
+  MdBugReport,
+  MdDelete,
+  MdOutlineBugReport,
+} from "react-icons/md";
 import { useCSSEditorState, useGeneratedCSS } from "./context";
 import EmptyState from "./editor/EmptyState";
-import { PropsProvider } from "node_modules/@chakra-ui/react/dist/types/components/accordion/namespace";
+import IconButton from "./editor/IconButton";
 
 export default function CSSEditor() {
   const [debugMode, setDebugMode] = useState(false);
@@ -115,7 +110,10 @@ export default function CSSEditor() {
         <Flex>
           <Heading flex={1}>CSS Editor</Heading>
 
-          <IconButton variant="ghost" onClick={() => setDebugMode(!debugMode)}>
+          <IconButton
+            label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
+            onClick={() => setDebugMode(!debugMode)}
+          >
             {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
           </IconButton>
 
@@ -123,7 +121,9 @@ export default function CSSEditor() {
             options={mapRecord(selectableClasses, (info) => info.displayName)}
             onSelect={addClass}
           >
-            <AddButton />
+            <IconButton label="Add CSS Class">
+              <MdAdd />
+            </IconButton>
           </SelectNewButton>
         </Flex>
 
@@ -204,10 +204,17 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
             props.addProperty?.(props.targetClass, cssProp);
           }}
         >
-          <AddButton />
+          <IconButton label="Add Property">
+            <MdAdd />
+          </IconButton>
         </SelectNewButton>
 
-        <DeleteButton onClick={() => props.onRemove?.(props.targetClass)} />
+        <IconButton
+          label="Remove this Class"
+          onClick={() => props.onRemove?.(props.targetClass)}
+        >
+          <MdDelete />
+        </IconButton>
       </Flex>
 
       <For
@@ -265,7 +272,10 @@ function PropertyEditor<
         <Box flex={1} padding={2}>
           <ControlFn value={props.value} onChange={props.setValue} />
         </Box>
-        <DeleteButton onClick={props.remove} />
+
+        <IconButton label="Remove this Property" onClick={props.remove}>
+          <MdDelete />
+        </IconButton>
       </Flex>
     </>
   );
