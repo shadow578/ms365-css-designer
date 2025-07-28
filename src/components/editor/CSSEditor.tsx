@@ -24,6 +24,7 @@ import AddButton from "./editor/AddButton";
 import { MdBugReport, MdOutlineBugReport } from "react-icons/md";
 import { useCSSEditorState, useGeneratedCSS } from "./context";
 import EmptyState from "./editor/EmptyState";
+import { PropsProvider } from "node_modules/@chakra-ui/react/dist/types/components/accordion/namespace";
 
 export default function CSSEditor() {
   const [debugMode, setDebugMode] = useState(false);
@@ -139,6 +140,7 @@ export default function CSSEditor() {
               addProperty={addClassProperty}
               removeProperty={removeClassProperty}
               setProperty={setClassProperty}
+              debug={debugMode}
             ></ClassEditor>
           )}
         </For>
@@ -177,6 +179,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
     prop: TsetProp,
     value: CSSPropertyValueTypeForProperty<TsetProp>,
   ) => void;
+  debug: boolean;
 }) {
   const cls = CLASSES[props.targetClass];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
@@ -191,7 +194,9 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   return (
     <Box backgroundColor="yellow.100" padding={2}>
       <Flex>
-        <Heading flex={1}>{cls.displayName}</Heading>
+        <Heading flex={1}>
+          {props.debug ? `.${props.targetClass}` : cls.displayName}
+        </Heading>
 
         <SelectNewButton
           options={mapRecord(selectableProperties, (info) => info.displayName)}
@@ -227,6 +232,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
                 prop as CSSPropertyName,
               );
             }}
+            debug={props.debug}
           />
         )}
       </For>
@@ -242,6 +248,7 @@ function PropertyEditor<
   value: CSSPropertyValueTypeForProperty<Tprop>;
   setValue: (value: CSSPropertyValueTypeForProperty<Tprop>) => void;
   remove?: () => void;
+  debug: boolean;
 }) {
   // FIXME fix type wonkyness
   const prop = PROPERTIES[props.targetProperty];
@@ -250,7 +257,9 @@ function PropertyEditor<
 
   return (
     <>
-      <Text fontSize="sm">{prop.displayName}</Text>
+      <Text fontSize="sm">
+        {props.debug ? props.targetProperty : prop.displayName}
+      </Text>
 
       <Flex backgroundColor="blue.100" gap={2}>
         <Box flex={1} padding={2}>
