@@ -7,7 +7,15 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Code,
+  Flex,
+  For,
+  Heading,
+  Separator,
+  Text,
+} from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition } from ".";
@@ -105,7 +113,7 @@ export default function CSSEditor() {
   );
 
   return (
-    <Box padding={4} backgroundColor="green.100">
+    <Box padding={4}>
       <Box>
         <Flex>
           <Heading flex={1}>CSS Editor</Heading>
@@ -147,22 +155,22 @@ export default function CSSEditor() {
       </Box>
 
       {debugMode && (
-        <Box backgroundColor="red.100">
+        <ContentBox>
           <Heading>Debug View</Heading>
-          <Box>
+          <ContentBox>
             <Heading size="md">State</Heading>
             <Code asChild>
               <pre>{JSON.stringify(state, null, 2)}</pre>
             </Code>
-          </Box>
+          </ContentBox>
 
-          <Box>
+          <ContentBox>
             <Heading size="md">Generated CSS</Heading>
             <Code asChild>
               <pre>{generatedCss}</pre>
             </Code>
-          </Box>
-        </Box>
+          </ContentBox>
+        </ContentBox>
       )}
     </Box>
   );
@@ -192,7 +200,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   );
 
   return (
-    <Box backgroundColor="yellow.100" padding={2}>
+    <ContentBox>
       <Flex>
         <Heading flex={1}>
           {props.debug ? `.${props.targetClass}` : cls.displayName}
@@ -211,6 +219,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
 
         <IconButton
           label="Remove this Class"
+          color="red.500"
           onClick={() => props.onRemove?.(props.targetClass)}
         >
           <MdDelete />
@@ -243,7 +252,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
           />
         )}
       </For>
-    </Box>
+    </ContentBox>
   );
 }
 
@@ -263,20 +272,32 @@ function PropertyEditor<
     .component as unknown as ComponentFor<Tkind>;
 
   return (
-    <>
+    <ContentBox>
       <Text fontSize="sm">
         {props.debug ? props.targetProperty : prop.displayName}
       </Text>
 
-      <Flex backgroundColor="blue.100" gap={2}>
+      <Flex gap={2}>
         <Box flex={1} padding={2}>
           <ControlFn value={props.value} onChange={props.setValue} />
         </Box>
 
-        <IconButton label="Remove this Property" onClick={props.remove}>
+        <IconButton
+          label="Remove this Property"
+          color="red.500"
+          onClick={props.remove}
+        >
           <MdDelete />
         </IconButton>
       </Flex>
-    </>
+    </ContentBox>
+  );
+}
+
+function ContentBox(props: { children: React.ReactNode }) {
+  return (
+    <Box p={2} borderWidth={1} borderRadius={5} marginBottom={1}>
+      {props.children}
+    </Box>
   );
 }
