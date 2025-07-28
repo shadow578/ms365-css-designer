@@ -23,6 +23,7 @@ import DeleteButton from "./editor/DeleteButton";
 import AddButton from "./editor/AddButton";
 import { MdBugReport, MdOutlineBugReport } from "react-icons/md";
 import { useCSSEditorState, useGeneratedCSS } from "./context";
+import EmptyState from "./editor/EmptyState";
 
 export default function CSSEditor() {
   const [debugMode, setDebugMode] = useState(false);
@@ -125,7 +126,10 @@ export default function CSSEditor() {
           </SelectNewButton>
         </Flex>
 
-        <For each={Object.entries(state.style)}>
+        <For
+          each={Object.entries(state.style)}
+          fallback={<EmptyState>No Classes Selected</EmptyState>}
+        >
           {([cls, _]) => (
             <ClassEditor
               key={cls}
@@ -201,7 +205,10 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
         <DeleteButton onClick={() => props.onRemove?.(props.targetClass)} />
       </Flex>
 
-      <For each={Object.entries(props.cssProps)}>
+      <For
+        each={Object.entries(props.cssProps)}
+        fallback={<EmptyState>No Properties Selected</EmptyState>}
+      >
         {([prop, value]) => (
           <PropertyEditor
             key={prop}
@@ -220,7 +227,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
                 prop as CSSPropertyName,
               );
             }}
-          ></PropertyEditor>
+          />
         )}
       </For>
     </Box>
@@ -243,7 +250,7 @@ function PropertyEditor<
 
   return (
     <>
-      <Text>{prop.displayName}</Text>
+      <Text fontSize="sm">{prop.displayName}</Text>
 
       <Flex backgroundColor="blue.100" gap={2}>
         <Box flex={1} padding={2}>
