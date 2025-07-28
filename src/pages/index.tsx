@@ -2,23 +2,16 @@
 
 import {
   Box,
-  ColorPicker,
   Center,
-  CloseButton,
-  Drawer,
   Flex,
   Heading,
   HStack,
   IconButton,
+  Presence,
   Text,
-  Portal,
-  parseColor,
-  type Color,
-  Button,
-  Slider,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
-import { MdStyle } from "react-icons/md";
+import { useRef, useState } from "react";
+import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
 import CSSEditorContextProvider, {
   useGeneratedCSS,
 } from "~/components/editor/context";
@@ -43,45 +36,61 @@ function MainLayout() {
     css,
   );
 
-  const [editorOpen, setEditorOpen] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(true);
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
-      <Box width="40%" hidden={!editorOpen} padding="4">
+      <Presence
+        width="40%"
+        present={editorOpen}
+        animationName={{
+          _open: "slide-from-left-full",
+          _closed: "slide-to-left-full",
+        }}
+        animationDuration="moderate"
+      >
         <CSSEditor />
-      </Box>
+      </Presence>
+
       <Flex direction="column" flexGrow={1} height="100%">
-        <>
-          <Box>
-            <HStack>
-              <IconButton
-                variant="ghost"
-                rounded="full"
-                size="xl"
-                onClick={() => setEditorOpen(!editorOpen)}
-              >
-                <MdStyle />
-              </IconButton>
-              <Heading>M365 CSS Designer</Heading>
-            </HStack>
-          </Box>
-          <Box flexGrow={1}>
-            <iframe
-              ref={signinFrame}
-              src="/converged-signin-page"
-              style={{ width: "100%", height: "100%", border: "none" }}
-            />
-          </Box>
-          <Box backgroundColor="red.600">
-            <Center>
-              <Text>
-                This page is <strong>not</strong> a real sign-in page. Do not
-                enter any real credentials.
-              </Text>
-            </Center>
-          </Box>
-        </>
+        <Box>
+          <HStack>
+            <EditorButton open={editorOpen} onClick={setEditorOpen} />
+            <Heading>M365 CSS Designer</Heading>
+          </HStack>
+        </Box>
+        <Box flexGrow={1}>
+          <iframe
+            ref={signinFrame}
+            src="/converged-signin-page"
+            style={{ width: "100%", height: "100%", border: "none" }}
+          />
+        </Box>
+        <Box backgroundColor="red.600">
+          <Center>
+            <Text>
+              This page is <strong>not</strong> a real sign-in page. Do not
+              enter any real credentials.
+            </Text>
+          </Center>
+        </Box>
       </Flex>
     </Flex>
+  );
+}
+
+function EditorButton(props: {
+  open: boolean;
+  onClick: (open: boolean) => void;
+}) {
+  return (
+    <IconButton
+      variant="ghost"
+      rounded="full"
+      size="xl"
+      onClick={() => props.onClick(!props.open)}
+    >
+      {props.open ? <MdOutlineArrowLeft /> : <MdStyle />}
+    </IconButton>
   );
 }
