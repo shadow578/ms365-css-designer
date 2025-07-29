@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import CLASSES, { type CSSClassName } from "./classes";
 import type {
   CSSPropertyKindFor,
@@ -7,15 +7,7 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import {
-  Box,
-  Code,
-  Flex,
-  For,
-  Heading,
-  Separator,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition } from ".";
@@ -28,6 +20,7 @@ import {
 import { useCSSEditorState, useGeneratedCSS } from "./context";
 import EmptyState from "./editor/EmptyState";
 import IconButton from "./editor/IconButton";
+import ContentBox from "./editor/ContentBox";
 
 export default function CSSEditor() {
   const [debugMode, setDebugMode] = useState(false);
@@ -114,27 +107,28 @@ export default function CSSEditor() {
 
   return (
     <Box padding={4}>
-      <Box>
-        <Flex>
-          <Heading flex={1}>CSS Editor</Heading>
-
-          <IconButton
-            label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
-            onClick={() => setDebugMode(!debugMode)}
-          >
-            {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
-          </IconButton>
-
-          <SelectNewButton
-            options={mapRecord(selectableClasses, (info) => info.displayName)}
-            onSelect={addClass}
-          >
-            <IconButton label="Add CSS Class">
-              <MdAdd />
+      <ContentBox
+        header={<Heading>CSS Editor</Heading>}
+        buttons={
+          <>
+            <IconButton
+              label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
+              onClick={() => setDebugMode(!debugMode)}
+            >
+              {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
             </IconButton>
-          </SelectNewButton>
-        </Flex>
 
+            <SelectNewButton
+              options={mapRecord(selectableClasses, (info) => info.displayName)}
+              onSelect={addClass}
+            >
+              <IconButton label="Add CSS Class">
+                <MdAdd />
+              </IconButton>
+            </SelectNewButton>
+          </>
+        }
+      >
         <For
           each={Object.entries(state.style)}
           fallback={<EmptyState>No Classes Selected</EmptyState>}
@@ -152,21 +146,18 @@ export default function CSSEditor() {
             ></ClassEditor>
           )}
         </For>
-      </Box>
+      </ContentBox>
 
       {debugMode && (
-        <ContentBox>
-          <Heading>Debug View</Heading>
-          <ContentBox>
-            <Heading size="md">State</Heading>
-            <Code asChild>
+        <ContentBox header={"Debug View"} outline>
+          <ContentBox header={"State"} outline>
+            <Code asChild width="100%">
               <pre>{JSON.stringify(state, null, 2)}</pre>
             </Code>
           </ContentBox>
 
-          <ContentBox>
-            <Heading size="md">Generated CSS</Heading>
-            <Code asChild>
+          <ContentBox header={"Generated CSS"} outline>
+            <Code asChild width="100%">
               <pre>{generatedCss}</pre>
             </Code>
           </ContentBox>
@@ -200,32 +191,39 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
   );
 
   return (
-    <ContentBox>
-      <Flex>
-        <Heading flex={1}>
+    <ContentBox
+      outline
+      header={
+        <Text fontSize="lg" fontWeight="bold">
           {props.debug ? `.${props.targetClass}` : cls.displayName}
-        </Heading>
+        </Text>
+      }
+      buttons={
+        <>
+          <SelectNewButton
+            options={mapRecord(
+              selectableProperties,
+              (info) => info.displayName,
+            )}
+            onSelect={(cssProp) => {
+              props.addProperty?.(props.targetClass, cssProp);
+            }}
+          >
+            <IconButton label="Add Property">
+              <MdAdd />
+            </IconButton>
+          </SelectNewButton>
 
-        <SelectNewButton
-          options={mapRecord(selectableProperties, (info) => info.displayName)}
-          onSelect={(cssProp) => {
-            props.addProperty?.(props.targetClass, cssProp);
-          }}
-        >
-          <IconButton label="Add Property">
-            <MdAdd />
+          <IconButton
+            label="Remove this Class"
+            color="red.500"
+            onClick={() => props.onRemove?.(props.targetClass)}
+          >
+            <MdDelete />
           </IconButton>
-        </SelectNewButton>
-
-        <IconButton
-          label="Remove this Class"
-          color="red.500"
-          onClick={() => props.onRemove?.(props.targetClass)}
-        >
-          <MdDelete />
-        </IconButton>
-      </Flex>
-
+        </>
+      }
+    >
       <For
         each={Object.entries(props.cssProps)}
         fallback={<EmptyState>No Properties Selected</EmptyState>}
@@ -272,16 +270,14 @@ function PropertyEditor<
     .component as unknown as ComponentFor<Tkind>;
 
   return (
-    <ContentBox>
-      <Text fontSize="sm">
-        {props.debug ? props.targetProperty : prop.displayName}
-      </Text>
-
-      <Flex gap={2}>
-        <Box flex={1} padding={2}>
-          <ControlFn value={props.value} onChange={props.setValue} />
-        </Box>
-
+    <ContentBox
+      outline
+      header={
+        <Text fontSize="md">
+          {props.debug ? props.targetProperty : prop.displayName}
+        </Text>
+      }
+      buttons={
         <IconButton
           label="Remove this Property"
           color="red.500"
@@ -289,15 +285,13 @@ function PropertyEditor<
         >
           <MdDelete />
         </IconButton>
+      }
+    >
+      <Flex gap={2}>
+        <Box flex={1} padding={2}>
+          <ControlFn value={props.value} onChange={props.setValue} />
+        </Box>
       </Flex>
     </ContentBox>
-  );
-}
-
-function ContentBox(props: { children: React.ReactNode }) {
-  return (
-    <Box p={2} borderWidth={1} borderRadius={5} marginBottom={1}>
-      {props.children}
-    </Box>
   );
 }

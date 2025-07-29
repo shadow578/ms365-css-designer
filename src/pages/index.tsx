@@ -43,6 +43,9 @@ function MainLayout() {
     <Flex direction="row" width="100vw" height="100vh">
       <Presence
         width="40%"
+        height="100vh"
+        overflow="scroll"
+        scrollBehavior="smooth"
         present={editorOpen}
         animationName={{
           _open: "slide-from-left-full",
