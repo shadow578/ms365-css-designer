@@ -1,4 +1,4 @@
-import z, { type ZodSchema } from "zod";
+import z, { type infer, type ZodSchema } from "zod";
 import zx from "~/util/zodExtras";
 
 const PROP_SCHEMA_BY_KIND = {
@@ -28,7 +28,16 @@ interface CSSBaseProperty<T extends CSSPropertyKind> {
 }
 
 type ColorProperty = CSSBaseProperty<"color">;
-type DimensionProperty = CSSBaseProperty<"dimension">;
+interface DimensionProperty extends CSSBaseProperty<"dimension"> {
+  allowedUnits?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["dimension"]>["unit"][];
+}
+
+export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
+  T extends "color"
+    ? ColorProperty
+    : T extends "dimension"
+      ? DimensionProperty
+      : never;
 
 type CSSPropertyKinds = ColorProperty | DimensionProperty;
 
@@ -42,6 +51,7 @@ const PROPERTIES = {
   "border-radius": {
     kind: "dimension",
     displayName: "Border Radius",
+    allowedUnits: ["px", "%"],
     defaultValue: { value: 0, unit: "px" },
     generateCSS: (value) => `${value.value}${value.unit}`,
   },

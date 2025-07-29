@@ -310,7 +310,7 @@ function PropertyEditor<
     >
       <Flex gap={2}>
         <Box flex={1} padding={2}>
-          <ControlFn value={props.value} onChange={props.setValue} />
+          <ControlFn options={prop} value={props.value} onChange={props.setValue} />
         </Box>
       </Flex>
     </ContentBox>

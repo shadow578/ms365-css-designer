@@ -53,7 +53,9 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
       valueFormatter: (value) => `${value}%`,
     },
   } satisfies Record<typeof props.value.unit, DimensionStyleSettings>;
-  const units = Object.keys(unitConfig) as Array<keyof typeof unitConfig>;
+  const units = (
+    Object.keys(unitConfig) as Array<keyof typeof unitConfig>
+  ).filter((u) => props.options.allowedUnits?.includes(u) ?? true);
   const currentUnitConfig = unitConfig[props.value.unit];
 
   const step = Math.pow(10, -currentUnitConfig.decimals);
