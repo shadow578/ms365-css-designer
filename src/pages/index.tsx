@@ -17,6 +17,7 @@ import CSSEditorContextProvider, {
   useGeneratedCSS,
 } from "~/components/editor/context";
 import CSSEditor from "~/components/editor/CSSEditor";
+import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/injectCssHook";
 
 export default function Index() {
@@ -58,10 +59,11 @@ function MainLayout() {
 
       <Flex direction="column" flexGrow={1} height="100%">
         <Box>
-          <HStack>
+          <Flex alignItems="center" gap={2}>
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
-            <Heading>M365 CSS Designer</Heading>
-          </HStack>
+            <Heading flex={1}>M365 CSS Designer</Heading>
+            <ColorModeButton />
+          </Flex>
         </Box>
         <Box flexGrow={1}>
           <iframe
