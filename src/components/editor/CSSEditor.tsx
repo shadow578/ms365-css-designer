@@ -7,7 +7,15 @@ import type {
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Code,
+  DownloadTrigger,
+  Flex,
+  For,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
 import type { CSSClassPropertyDefinition } from ".";
@@ -15,6 +23,7 @@ import {
   MdAdd,
   MdBugReport,
   MdDelete,
+  MdDownload,
   MdOutlineBugReport,
 } from "react-icons/md";
 import { useCSSEditorState, useGeneratedCSS } from "./context";
@@ -117,6 +126,8 @@ export default function CSSEditor() {
             >
               {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
             </IconButton>
+
+            <DownloadButton />
 
             <SelectNewButton
               options={mapRecord(selectableClasses, (info) => info.displayName)}
@@ -293,5 +304,22 @@ function PropertyEditor<
         </Box>
       </Flex>
     </ContentBox>
+  );
+}
+
+function DownloadButton() {
+  const css = useGeneratedCSS();
+
+  return (
+    <DownloadTrigger
+      data={css}
+      fileName="style.css"
+      mimeType="text/css"
+      asChild
+    >
+      <IconButton label="Download CSS">
+        <MdDownload />
+      </IconButton>
+    </DownloadTrigger>
   );
 }
