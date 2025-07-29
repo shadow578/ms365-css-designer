@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Highlight,
-  HStack,
   IconButton,
   Presence,
   Text,
@@ -18,7 +17,7 @@ import CSSEditorContextProvider, {
 } from "~/components/editor/context";
 import CSSEditor from "~/components/editor/CSSEditor";
 import { ColorModeButton } from "~/components/ui/color-mode";
-import useInjectedCss from "~/util/injectCssHook";
+import useInjectedCss from "~/util/useInjectedCss";
 
 export default function Index() {
   return (
