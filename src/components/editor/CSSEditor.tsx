@@ -30,9 +30,12 @@ import { useCSSEditorState, useGeneratedCSS } from "./context";
 import EmptyState from "./editor/EmptyState";
 import IconButton from "./editor/IconButton";
 import ContentBox from "./editor/ContentBox";
+import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 
 export default function CSSEditor() {
+  const showDebugButton = useKeycode(KONAMI_CODE);
   const [debugMode, setDebugMode] = useState(false);
+
   const [state, setState] = useCSSEditorState();
   const generatedCss = useGeneratedCSS();
 
@@ -120,12 +123,14 @@ export default function CSSEditor() {
         header={<Heading>CSS Editor</Heading>}
         buttons={
           <>
-            <IconButton
-              label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
-              onClick={() => setDebugMode(!debugMode)}
-            >
-              {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
-            </IconButton>
+            {showDebugButton && (
+              <IconButton
+                label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
+                onClick={() => setDebugMode(!debugMode)}
+              >
+                {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
+              </IconButton>
+            )}
 
             <DownloadButton />
 
