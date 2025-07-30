@@ -1,4 +1,4 @@
-import z, { type infer, type ZodSchema } from "zod";
+import z, { type ZodSchema } from "zod";
 import zx from "~/util/zodExtras";
 
 const PROP_SCHEMA_BY_KIND = {

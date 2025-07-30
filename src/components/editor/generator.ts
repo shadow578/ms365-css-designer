@@ -1,4 +1,4 @@
-import type { CSSClassPropertyDefinition, CSSStyleDefinition } from ".";
+import type { CSSSelectorPropertyDefinition, CSSStyleDefinition } from ".";
 import type {
   CSSPropertyName,
   CSSPropertyValueTypeForProperty,
@@ -18,9 +18,9 @@ function generateCSSProperty<Tprop extends CSSPropertyName>(
   return `${prop}: ${gen(value)}${important ? " !important" : ""};`;
 }
 
-function generateClassCSS(
-  className: string,
-  properties: CSSClassPropertyDefinition,
+function generateSelectorCSS(
+  selector: string,
+  properties: CSSSelectorPropertyDefinition,
   important: boolean,
 ) {
   const propertieEntries = Object.entries(properties);
@@ -28,7 +28,7 @@ function generateClassCSS(
     return "";
   }
 
-  return `.${className} {
+  return `${selector} {
   ${propertieEntries
     .map(([prop, value]) =>
       generateCSSProperty(prop as CSSPropertyName, value, important),
@@ -43,8 +43,8 @@ export default function generateCSS(
 ) {
   return (
     Object.entries(style)
-      .map(([className, properties]) =>
-        generateClassCSS(className, properties, important),
+      .map(([selector, properties]) =>
+        generateSelectorCSS(selector, properties, important),
       )
       .join("\n") + "\n"
   );

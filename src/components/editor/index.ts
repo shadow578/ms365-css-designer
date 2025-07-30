@@ -1,13 +1,13 @@
-import { type CSSClassName } from "./classes";
+import { type CSSSelectorName } from "./selectors";
 import type {
   CSSPropertyName,
   CSSPropertyValueTypeForProperty,
 } from "./properties";
 
-export type CSSClassPropertyDefinition = {
+export type CSSSelectorPropertyDefinition = {
   [K in CSSPropertyName]?: CSSPropertyValueTypeForProperty<K>;
 };
 
 export type CSSStyleDefinition = Partial<
-  Record<CSSClassName, CSSClassPropertyDefinition>
+  Record<CSSSelectorName, CSSSelectorPropertyDefinition>
 >;

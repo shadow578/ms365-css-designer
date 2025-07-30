@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CLASSES, { type CSSClassName } from "./classes";
+import SELECTORS, { type CSSSelectorName } from "./selectors";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import PROPERTIES, { assertCSSPropertyValue } from "./properties";
 import CONTROLS, { type ComponentFor } from "./controls";
-import type { CSSClassPropertyDefinition } from ".";
+import type { CSSSelectorPropertyDefinition } from ".";
 import {
   MdAdd,
   MdBugReport,
@@ -44,33 +44,36 @@ export default function CSSEditor() {
     state: JSON.stringify(state.style),
   });
 
-  const addClass = (cls: CSSClassName) => {
-    if (cls in state.style) {
-      console.warn(`class ${cls} already exists.`);
+  const addSelector = (selector: CSSSelectorName) => {
+    if (selector in state.style) {
+      console.warn(`selector ${selector} already exists.`);
       return;
     }
 
-    state.style[cls] = {};
+    state.style[selector] = {};
     setState({ ...state });
   };
 
-  const removeClass = (cls: CSSClassName) => {
-    if (!(cls in state.style)) {
-      console.warn(`class ${cls} does not exist.`);
+  const removeSelector = (selector: CSSSelectorName) => {
+    if (!(selector in state.style)) {
+      console.warn(`selector ${selector} does not exist.`);
       return;
     }
 
-    delete state.style[cls];
+    delete state.style[selector];
     setState({ ...state });
   };
 
-  const addClassProperty = (cls: CSSClassName, prop: CSSPropertyName) => {
-    if (!state.style[cls]) {
-      console.warn(`class ${cls} does not exist.`);
+  const addSelectorProperty = (
+    selector: CSSSelectorName,
+    prop: CSSPropertyName,
+  ) => {
+    if (!state.style[selector]) {
+      console.warn(`selector ${selector} does not exist.`);
       return;
     }
-    if (prop in state.style[cls]) {
-      console.warn(`property ${prop} already exists in class ${cls}.`);
+    if (prop in state.style[selector]) {
+      console.warn(`property ${prop} already exists in selector ${selector}.`);
       return;
     }
 
@@ -78,48 +81,51 @@ export default function CSSEditor() {
     assertCSSPropertyValue(prop, value);
 
     //@ts-expect-error -- FIXME figure this out some day
-    state.style[cls][prop] = value;
+    state.style[selector][prop] = value;
     setState({ ...state });
   };
 
-  const removeClassProperty = (cls: CSSClassName, prop: CSSPropertyName) => {
-    if (!state.style[cls]) {
-      console.warn(`class ${cls} does not exist.`);
+  const removeSelectorProperty = (
+    selector: CSSSelectorName,
+    prop: CSSPropertyName,
+  ) => {
+    if (!state.style[selector]) {
+      console.warn(`selector ${selector} does not exist.`);
       return;
     }
-    if (!(prop in state.style[cls])) {
-      console.warn(`property ${prop} does not exist in class ${cls}.`);
+    if (!(prop in state.style[selector])) {
+      console.warn(`property ${prop} does not exist in selector ${selector}.`);
       return;
     }
 
-    delete state.style[cls][prop];
+    delete state.style[selector][prop];
     setState({ ...state });
   };
 
-  const setClassProperty = <Tprop extends CSSPropertyName>(
-    cls: CSSClassName,
+  const setSelectorProperty = <Tprop extends CSSPropertyName>(
+    selector: CSSSelectorName,
     prop: Tprop,
     value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => {
-    if (!state.style[cls]) {
-      console.warn(`class ${cls} does not exist.`);
+    if (!state.style[selector]) {
+      console.warn(`selector ${selector} does not exist.`);
       return;
     }
-    if (!(prop in state.style[cls])) {
-      console.warn(`property ${prop} does not exist in class ${cls}.`);
+    if (!(prop in state.style[selector])) {
+      console.warn(`property ${prop} does not exist in selector ${selector}.`);
       return;
     }
 
     assertCSSPropertyValue(prop, value);
 
     //@ts-expect-error -- FIXME figure this out some day
-    state.style[cls][prop] = value;
+    state.style[selector][prop] = value;
     setState({ ...state });
   };
 
-  const selectableClasses = filterRecord(
-    CLASSES,
-    (_, cls) => !(cls in state.style),
+  const selectableSelectors = filterRecord(
+    SELECTORS,
+    (_, s) => !(s in state.style),
   );
 
   return (
@@ -140,10 +146,13 @@ export default function CSSEditor() {
             <DownloadButton />
 
             <SelectNewButton
-              options={mapRecord(selectableClasses, (info) => info.displayName)}
-              onSelect={addClass}
+              options={mapRecord(
+                selectableSelectors,
+                (info) => info.displayName,
+              )}
+              onSelect={addSelector}
             >
-              <IconButton label="Add CSS Class">
+              <IconButton label="Add CSS Selector">
                 <MdAdd />
               </IconButton>
             </SelectNewButton>
@@ -152,19 +161,19 @@ export default function CSSEditor() {
       >
         <For
           each={Object.entries(state.style)}
-          fallback={<EmptyState>No Classes Selected</EmptyState>}
+          fallback={<EmptyState>No Selector Selected</EmptyState>}
         >
-          {([cls, _]) => (
-            <ClassEditor
-              key={cls}
-              targetClass={cls as CSSClassName}
-              cssProps={state.style[cls as CSSClassName]!}
-              onRemove={removeClass}
-              addProperty={addClassProperty}
-              removeProperty={removeClassProperty}
-              setProperty={setClassProperty}
+          {([selector, _]) => (
+            <SelectorEditor
+              key={selector}
+              targetSelector={selector as CSSSelectorName}
+              cssProps={state.style[selector as CSSSelectorName]!}
+              onRemove={removeSelector}
+              addProperty={addSelectorProperty}
+              removeProperty={removeSelectorProperty}
+              setProperty={setSelectorProperty}
               debug={debugMode}
-            ></ClassEditor>
+            ></SelectorEditor>
           )}
         </For>
       </ContentBox>
@@ -188,22 +197,22 @@ export default function CSSEditor() {
   );
 }
 
-function ClassEditor<Tcls extends CSSClassName>(props: {
-  targetClass: Tcls;
-  cssProps: CSSClassPropertyDefinition;
-  onRemove?: (cls: CSSClassName) => void;
-  addProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
-  removeProperty?: (cls: Tcls, prop: CSSPropertyName) => void;
+function SelectorEditor<Tsel extends CSSSelectorName>(props: {
+  targetSelector: Tsel;
+  cssProps: CSSSelectorPropertyDefinition;
+  onRemove?: (selector: CSSSelectorName) => void;
+  addProperty?: (selector: Tsel, prop: CSSPropertyName) => void;
+  removeProperty?: (selector: Tsel, prop: CSSPropertyName) => void;
   setProperty?: <TsetProp extends CSSPropertyName>(
-    cls: Tcls,
+    selector: Tsel,
     prop: TsetProp,
     value: CSSPropertyValueTypeForProperty<TsetProp>,
   ) => void;
   debug: boolean;
 }) {
-  const cls = CLASSES[props.targetClass];
+  const selector = SELECTORS[props.targetSelector];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
-    (cls.properties as string[]).includes(cssProp),
+    (selector.properties as string[]).includes(cssProp),
   );
 
   const selectableProperties = filterRecord(
@@ -216,7 +225,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
       outline
       header={
         <Text fontSize="lg" fontWeight="bold">
-          {props.debug ? `.${props.targetClass}` : cls.displayName}
+          {props.debug ? `.${props.targetSelector}` : selector.displayName}
         </Text>
       }
       buttons={
@@ -227,7 +236,7 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
               (info) => info.displayName,
             )}
             onSelect={(cssProp) => {
-              props.addProperty?.(props.targetClass, cssProp);
+              props.addProperty?.(props.targetSelector, cssProp);
             }}
           >
             <IconButton label="Add Property">
@@ -236,9 +245,9 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
           </SelectNewButton>
 
           <IconButton
-            label="Remove this Class"
+            label="Remove this Selector"
             color="red.500"
-            onClick={() => props.onRemove?.(props.targetClass)}
+            onClick={() => props.onRemove?.(props.targetSelector)}
           >
             <MdDelete />
           </IconButton>
@@ -256,14 +265,14 @@ function ClassEditor<Tcls extends CSSClassName>(props: {
             value={value}
             setValue={(newValue) => {
               props.setProperty?.(
-                props.targetClass,
+                props.targetSelector,
                 prop as CSSPropertyName,
                 newValue,
               );
             }}
             remove={() => {
               props.removeProperty?.(
-                props.targetClass,
+                props.targetSelector,
                 prop as CSSPropertyName,
               );
             }}
@@ -310,7 +319,11 @@ function PropertyEditor<
     >
       <Flex gap={2}>
         <Box flex={1} padding={2}>
-          <ControlFn options={prop} value={props.value} onChange={props.setValue} />
+          <ControlFn
+            options={prop}
+            value={props.value}
+            onChange={props.setValue}
+          />
         </Box>
       </Flex>
     </ContentBox>
