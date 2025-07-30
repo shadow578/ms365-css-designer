@@ -3,6 +3,7 @@ import SELECTORS, { type CSSSelectorName } from "./selectors";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
+  CSSPropertyOptionsForKind,
   CSSPropertyValueTypeForProperty,
 } from "./properties";
 import SelectNewButton from "./editor/SelectNewButton";
@@ -284,20 +285,18 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
   );
 }
 
-function PropertyEditor<
-  Tprop extends CSSPropertyName,
-  Tkind extends CSSPropertyKindFor<Tprop>,
->(props: {
+function PropertyEditor<Tprop extends CSSPropertyName>(props: {
   targetProperty: Tprop;
   value: CSSPropertyValueTypeForProperty<Tprop>;
   setValue: (value: CSSPropertyValueTypeForProperty<Tprop>) => void;
   remove?: () => void;
   debug: boolean;
 }) {
-  // FIXME fix type wonkyness
+  // FIXME fix type wonkyness in this function
   const prop = PROPERTIES[props.targetProperty];
-  const ControlFn = CONTROLS[prop.kind]
-    .component as unknown as ComponentFor<Tkind>;
+  const ControlFn = CONTROLS[prop.kind].component as unknown as ComponentFor<
+    CSSPropertyKindFor<Tprop>
+  >;
 
   return (
     <ContentBox
@@ -320,7 +319,11 @@ function PropertyEditor<
       <Flex gap={2}>
         <Box flex={1} padding={2}>
           <ControlFn
-            options={prop}
+            options={
+              prop as unknown as CSSPropertyOptionsForKind<
+                CSSPropertyKindFor<Tprop>
+              >
+            }
             value={props.value}
             onChange={props.setValue}
           />
