@@ -2,12 +2,13 @@ import {
   Flex,
   HStack,
   IconButton,
+  InputGroup,
   NumberInput,
   SegmentGroup,
   Slider,
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
-import { MdAdd, MdRemove } from "react-icons/md";
+import { MdAdd, MdOutlineSwipe, MdRemove } from "react-icons/md";
 
 interface DimensionCommonSettings {
   max: number;
@@ -49,21 +50,27 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
       max: 100,
       decimals: 0, // 1.0
       style: "slider",
-      marks: [0, 50, 100],
+      marks: [0, 50, 100, ...(props.options.negative ? [-50, -100] : [])],
       valueFormatter: (value) => `${value}%`,
     },
   } satisfies Record<typeof props.value.unit, DimensionStyleSettings>;
   const units = (
     Object.keys(unitConfig) as Array<keyof typeof unitConfig>
-  ).filter((u) => props.options.allowedUnits?.includes(u) ?? true);
+  ).filter((u) => props.options.units?.includes(u) ?? true);
   const currentUnitConfig = unitConfig[props.value.unit];
-
+  
+  const min = props.options.negative ? -currentUnitConfig.max : 0;
   const step = Math.pow(10, -currentUnitConfig.decimals);
 
   // ensure value has correct number of decimals
-  const currentValue =
+  let currentValue =
     Math.round(props.value.value * Math.pow(10, currentUnitConfig.decimals)) /
     Math.pow(10, currentUnitConfig.decimals);
+
+  currentValue = Math.max(
+    min,
+    Math.min(currentValue, currentUnitConfig.max),
+  )
 
   const onChange = (changed: {
     value?: number;
@@ -82,7 +89,7 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
           flex={1}
           value={[currentValue]}
           onValueChange={(e) => onChange({ value: e.value[0] })}
-          min={0}
+          min={min}
           max={currentUnitConfig.max}
           step={step}
         >
@@ -117,7 +124,7 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
           flex={1}
           value={currentValue.toString()}
           onValueChange={(e) => onChange({ value: e.valueAsNumber })}
-          min={0}
+          min={min}
           max={currentUnitConfig.max}
           step={step}
           allowMouseWheel
@@ -129,7 +136,16 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
               </IconButton>
             </NumberInput.DecrementTrigger>
 
-            <NumberInput.Input />
+            <InputGroup
+              startElementProps={{ pointerEvents: "auto" }}
+              startElement={
+                <NumberInput.Scrubber>
+                  <MdOutlineSwipe />
+                </NumberInput.Scrubber>
+              }
+            >
+              <NumberInput.Input />
+            </InputGroup>
 
             <NumberInput.IncrementTrigger asChild>
               <IconButton variant="ghost" size="sm">
