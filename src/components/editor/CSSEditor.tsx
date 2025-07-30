@@ -294,9 +294,12 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
 }) {
   // FIXME fix type wonkyness in this function
   const prop = PROPERTIES[props.targetProperty];
-  const ControlFn = CONTROLS[prop.kind].component as unknown as ComponentFor<
+  const ControlFn = CONTROLS[prop.kind]?.component as unknown as ComponentFor<
     CSSPropertyKindFor<Tprop>
   >;
+  if (!ControlFn) {
+    throw new Error(`don't know how to render control for kind '${prop.kind}'`);
+  }
 
   return (
     <ContentBox

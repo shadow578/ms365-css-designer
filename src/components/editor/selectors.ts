@@ -8,11 +8,15 @@ export interface CSSSelector {
 const SELECTORS = {
   ".ext-button": {
     displayName: "UI Buttons",
-    properties: ["background-color", "border-radius"],
+    properties: ["color", "background-color", "border-radius"],
   },
-  ".ext-foo": {
-    displayName: "Testing",
-    properties: ["background-color"],
+  ".ext-boilerplate-text": {
+    displayName: "Boilerplate Text",
+    properties: ["color", "background-color", "text-align"],
+  },
+  ".ext-title": {
+    displayName: "Title",
+    properties: ["color", "text-align"],
   },
 } satisfies Record<string, CSSSelector>;
 export default SELECTORS;

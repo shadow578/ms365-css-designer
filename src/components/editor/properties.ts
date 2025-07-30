@@ -7,6 +7,7 @@ const PROP_SCHEMA_BY_KIND = {
     value: z.number().min(0),
     unit: z.enum(["px", "em", "rem", "%"]),
   }),
+  alignment: z.enum(["left", "right", "center", "justify", "inherit"]),
 } satisfies Record<string, ZodSchema>;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
@@ -31,17 +32,28 @@ type ColorProperty = CSSBaseProperty<"color">;
 interface DimensionProperty extends CSSBaseProperty<"dimension"> {
   allowedUnits?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["dimension"]>["unit"][];
 }
+interface AlignmentProperty extends CSSBaseProperty<"alignment"> {
+  allowed?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["alignment"]>[];
+}
 
 export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
   T extends "color"
     ? ColorProperty
     : T extends "dimension"
       ? DimensionProperty
-      : never;
+      : T extends "alignment"
+        ? AlignmentProperty
+        : never;
 
-type CSSPropertyKinds = ColorProperty | DimensionProperty;
+type CSSPropertyKinds = ColorProperty | DimensionProperty | AlignmentProperty;
 
 const PROPERTIES = {
+  color: {
+    kind: "color",
+    displayName: "Color",
+    defaultValue: "#000000",
+    generateCSS: (value) => `${value}`,
+  },
   "background-color": {
     kind: "color",
     displayName: "Background Color",
@@ -54,6 +66,13 @@ const PROPERTIES = {
     allowedUnits: ["px", "%"],
     defaultValue: { value: 0, unit: "px" },
     generateCSS: (value) => `${value.value}${value.unit}`,
+  },
+  "text-align": {
+    kind: "alignment",
+    displayName: "Text Alignment",
+    defaultValue: "left",
+    allowed: ["left", "right", "center"],
+    generateCSS: (value) => `${value}`,
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;
