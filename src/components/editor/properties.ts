@@ -4,7 +4,7 @@ import zx from "~/util/zodExtras";
 const PROP_SCHEMA_BY_KIND = {
   color: zx.hexColorRGBA(),
   dimension: z.object({
-    value: z.number().min(0),
+    value: z.number(),
     unit: z.enum(["px", "em", "rem", "%"]),
   }),
   alignment: z.enum(["left", "right", "center", "justify", "inherit"]),
@@ -30,7 +30,8 @@ interface CSSBaseProperty<T extends CSSPropertyKind> {
 
 type ColorProperty = CSSBaseProperty<"color">;
 interface DimensionProperty extends CSSBaseProperty<"dimension"> {
-  allowedUnits?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["dimension"]>["unit"][];
+  units?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["dimension"]>["unit"][];
+  negative?: boolean;
 }
 interface AlignmentProperty extends CSSBaseProperty<"alignment"> {
   allowed?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["alignment"]>[];
@@ -63,7 +64,7 @@ const PROPERTIES = {
   "border-radius": {
     kind: "dimension",
     displayName: "Border Radius",
-    allowedUnits: ["px", "%"],
+    units: ["px", "%"],
     defaultValue: { value: 0, unit: "px" },
     generateCSS: (value) => `${value.value}${value.unit}`,
   },
@@ -73,6 +74,38 @@ const PROPERTIES = {
     defaultValue: "left",
     allowed: ["left", "right", "center"],
     generateCSS: (value) => `${value}`,
+  },
+  "margin-top": {
+    kind: "dimension",
+    displayName: "Margin Top",
+    units: ["px", "em", "rem"],
+    negative: true,
+    defaultValue: { value: 0, unit: "px" },
+    generateCSS: (value) => `${value.value}${value.unit}`,
+  },
+  "margin-bottom": {
+    kind: "dimension",
+    displayName: "Margin Bottom",
+    units: ["px", "em", "rem"],
+    negative: true,
+    defaultValue: { value: 0, unit: "px" },
+    generateCSS: (value) => `${value.value}${value.unit}`,
+  },
+  "margin-right": {
+    kind: "dimension",
+    displayName: "Margin Right",
+    units: ["px", "em", "rem"],
+    negative: true,
+    defaultValue: { value: 0, unit: "px" },
+    generateCSS: (value) => `${value.value}${value.unit}`,
+  },
+  "margin-left": {
+    kind: "dimension",
+    displayName: "Margin Left",
+    units: ["px", "em", "rem"],
+    negative: true,
+    defaultValue: { value: 0, unit: "px" },
+    generateCSS: (value) => `${value.value}${value.unit}`,
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;

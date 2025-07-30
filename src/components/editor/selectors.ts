@@ -5,6 +5,13 @@ export interface CSSSelector {
   properties: CSSPropertyName[];
 }
 
+const margins = [
+  "margin-top",
+  "margin-bottom",
+  "margin-right",
+  "margin-left",
+] as const;
+
 const SELECTORS = {
   ".ext-button": {
     displayName: "UI Buttons",
@@ -16,7 +23,7 @@ const SELECTORS = {
   },
   ".ext-title": {
     displayName: "Title",
-    properties: ["color", "text-align"],
+    properties: ["color", "text-align", ...margins],
   },
 } satisfies Record<string, CSSSelector>;
 export default SELECTORS;
