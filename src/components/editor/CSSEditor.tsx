@@ -226,7 +226,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
       outline
       header={
         <Text fontSize="lg" fontWeight="bold">
-          {props.debug ? `.${props.targetSelector}` : selector.displayName}
+          {props.debug ? `${props.targetSelector}` : selector.displayName}
         </Text>
       }
       buttons={
@@ -303,7 +303,9 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
       outline
       header={
         <Text fontSize="md">
-          {props.debug ? props.targetProperty : prop.displayName}
+          {props.debug
+            ? `${props.targetProperty} (${prop.kind})`
+            : prop.displayName}
         </Text>
       }
       buttons={
