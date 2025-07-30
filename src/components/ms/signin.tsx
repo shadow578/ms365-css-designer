@@ -399,6 +399,8 @@ export default function MSConvergedSignInPage() {
   const branding = api.branding.getBranding.useMutation();
 
   const onUsernameSubmit = async () => {
+    if (!username) return;
+
     console.log("Username submitted:", username);
     const data = await branding.mutateAsync({ username });
     console.log("Branding Data:", data);
