@@ -7,6 +7,7 @@ import type {
 import ColorControl from "./Color";
 import DimensionControl from "./Dimension";
 import AlignmentControl from "./Alignment";
+import FontWeightControl from "./FontWeight";
 
 export type PropsFor<T extends CSSPropertyKind> = {
   options: CSSPropertyOptionsForKind<T>;
@@ -35,6 +36,9 @@ const CONTROLS: ControlRecord = {
   },
   alignment: {
     component: AlignmentControl,
+  },
+  fontWeight: {
+    component: FontWeightControl,
   },
 };
 export default CONTROLS;

@@ -8,6 +8,10 @@ const PROP_SCHEMA_BY_KIND = {
     unit: z.enum(["px", "em", "rem", "%"]),
   }),
   alignment: z.enum(["left", "right", "center", "justify", "inherit"]),
+  fontWeight: z.union([
+    z.enum(["bolder", "lighter", "inherit"]),
+    z.number().int().min(100).max(900),
+  ]),
 } satisfies Record<string, ZodSchema>;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
@@ -36,6 +40,7 @@ interface DimensionProperty extends CSSBaseProperty<"dimension"> {
 interface AlignmentProperty extends CSSBaseProperty<"alignment"> {
   allowed?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["alignment"]>[];
 }
+type FontWeightProperty = CSSBaseProperty<"fontWeight">;
 
 export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
   T extends "color"
@@ -44,9 +49,15 @@ export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
       ? DimensionProperty
       : T extends "alignment"
         ? AlignmentProperty
-        : never;
+        : T extends "fontWeight"
+          ? FontWeightProperty
+          : never;
 
-type CSSPropertyKinds = ColorProperty | DimensionProperty | AlignmentProperty;
+type CSSPropertyKinds =
+  | ColorProperty
+  | DimensionProperty
+  | AlignmentProperty
+  | FontWeightProperty;
 
 const PROPERTIES = {
   color: {
@@ -73,6 +84,12 @@ const PROPERTIES = {
     displayName: "Text Alignment",
     defaultValue: "left",
     allowed: ["left", "right", "center"],
+    generateCSS: (value) => `${value}`,
+  },
+  "font-weight": {
+    kind: "fontWeight",
+    displayName: "Font Weight",
+    defaultValue: "inherit",
     generateCSS: (value) => `${value}`,
   },
   "margin-top": {

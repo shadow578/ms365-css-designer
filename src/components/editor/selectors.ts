@@ -23,7 +23,7 @@ const SELECTORS = {
   },
   ".ext-title": {
     displayName: "Title",
-    properties: ["color", "text-align", ...margins],
+    properties: ["color", "text-align", "font-weight", ...margins],
   },
 } satisfies Record<string, CSSSelector>;
 export default SELECTORS;
