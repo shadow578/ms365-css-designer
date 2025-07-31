@@ -1,8 +1,10 @@
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-export default function useQueryParams(query: Record<string, string> = {}) {
-  // update url when query changes
+export function useQueryParams(query?: Record<string, string>) {
   useEffect(() => {
+    if (!query) return;
+
     // timer to avoid too many updates
     // otherwise, replaceState may throw a security error
     const timer = setTimeout(() => {
@@ -15,4 +17,12 @@ export default function useQueryParams(query: Record<string, string> = {}) {
       clearTimeout(timer);
     };
   }, [query]);
+
+  const params = useSearchParams();
+  const queryParams: Record<string, string> = {};
+  params.forEach((value, key) => {
+    queryParams[key] = value;
+  });
+
+  return queryParams;
 }

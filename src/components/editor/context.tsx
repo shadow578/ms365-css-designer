@@ -1,8 +1,11 @@
+"use client"
+
 import { createContext, useContext, useMemo, useState } from "react";
 import type { CSSStyleDefinition } from ".";
 import generateCSS from "./generator";
+import useSetSaveState, { useGetSaveState } from "./useSaveState";
 
-interface EditorState {
+export interface EditorState {
   style: CSSStyleDefinition;
 }
 
@@ -18,10 +21,29 @@ const CSSEditorContext = createContext<ContextType | undefined>(undefined);
  */
 export default function CSSEditorContextProvider(props: {
   children: React.ReactNode;
+  saveToUrl?: boolean;
 }) {
-  const [state, setState] = useState<EditorState>({
-    style: {},
-  });
+  const { ready, state: initialState } = useGetSaveState();
+  if (!ready) return null;
+
+  return (
+    <EditorContextProviderInner initialState={initialState}>
+      {props.children}
+    </EditorContextProviderInner>
+  );
+}
+
+function EditorContextProviderInner(props: {
+  children: React.ReactNode;
+  initialState?: EditorState;
+}) {
+  const [state, setState] = useState(
+    props.initialState ?? {
+      style: {},
+    },
+  );
+
+  useSetSaveState(state);
 
   return (
     <CSSEditorContext.Provider value={{ state, setState }}>

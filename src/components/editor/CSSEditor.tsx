@@ -32,7 +32,6 @@ import EmptyState from "./editor/EmptyState";
 import IconButton from "./editor/IconButton";
 import ContentBox from "./editor/ContentBox";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
-import useQueryParams from "~/util/useQueryParams";
 
 export default function CSSEditor() {
   const showDebugButton = useKeycode(KONAMI_CODE);
@@ -40,10 +39,6 @@ export default function CSSEditor() {
 
   const [state, setState] = useCSSEditorState();
   const generatedCss = useGeneratedCSS();
-
-  useQueryParams({
-    state: JSON.stringify(state.style),
-  });
 
   const addSelector = (selector: CSSSelectorName) => {
     if (selector in state.style) {
