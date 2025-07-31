@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import type { EditorState } from "~/components/editor/context";
+import validateState from "./validateState";
 
 function serializeState(state: EditorState): string {
   return JSON.stringify(state);
@@ -8,7 +9,8 @@ function serializeState(state: EditorState): string {
 
 function deserializeState(state: string): EditorState {
   try {
-    return JSON.parse(state);
+    const stateUnknown = JSON.parse(state) as unknown;
+    return validateState(stateUnknown) ?? { style: {} };
   } catch (e) {
     console.error("Failed to deserialize state:", e);
     return { style: {} };
