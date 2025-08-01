@@ -1,13 +1,13 @@
-import type { CSSSelectorPropertyDefinition } from ".";
-import type { EditorState } from "./context";
+import type { CSSSelectorPropertyDefinition } from "../definitions";
+import type { EditorState } from "../index";
 import PROPERTIES, {
   ALL_PROPERTY_NAMES,
   PROP_SCHEMA_BY_KIND,
   type CSSPropertyKindFor,
   type CSSPropertyName,
   type CSSPropertyValueTypeByKind,
-} from "./properties";
-import { ALL_SELECTORS } from "./selectors";
+} from "../definitions/properties";
+import { ALL_SELECTORS } from "../definitions/selectors";
 
 function isValidStyleRecord(
   unknownStyle: unknown,

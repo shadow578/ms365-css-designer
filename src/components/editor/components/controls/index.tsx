@@ -3,7 +3,7 @@ import type {
   CSSPropertyKind,
   CSSPropertyOptionsForKind,
   CSSPropertyValueTypeByKind,
-} from "../properties";
+} from "../../definitions/properties"
 import ColorControl from "./Color";
 import DimensionControl from "./Dimension";
 import AlignmentControl from "./Alignment";

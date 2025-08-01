@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import SELECTORS, { type CSSSelectorName } from "./selectors";
+import SELECTORS, { type CSSSelectorName } from "./definitions/selectors";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
   CSSPropertyOptionsForKind,
   CSSPropertyValueTypeForProperty,
-} from "./properties";
-import SelectNewButton from "./editor/SelectNewButton";
+} from "./definitions/properties";
+import SelectNewButton from "./components/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
 import {
   Box,
@@ -17,9 +17,9 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import PROPERTIES, { assertCSSPropertyValue } from "./properties";
-import CONTROLS, { type ComponentFor } from "./controls";
-import type { CSSSelectorPropertyDefinition } from ".";
+import PROPERTIES, { assertCSSPropertyValue } from "./definitions/properties";
+import CONTROLS, { type ComponentFor } from "./components/controls";
+import type { CSSSelectorPropertyDefinition } from "./definitions";
 import {
   MdAdd,
   MdBugReport,
@@ -27,10 +27,10 @@ import {
   MdDownload,
   MdOutlineBugReport,
 } from "react-icons/md";
-import { useCSSEditorState, useGeneratedCSS } from "./context";
-import EmptyState from "./editor/EmptyState";
-import IconButton from "./editor/IconButton";
-import ContentBox from "./editor/ContentBox";
+import { useCSSEditorState, useGeneratedCSS } from ".";
+import EmptyState from "./components/EmptyState";
+import IconButton from "./components/IconButton";
+import ContentBox from "./components/ContentBox";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 
 export default function CSSEditor() {

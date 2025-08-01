@@ -14,7 +14,7 @@ import { useRef, useState } from "react";
 import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
 import CSSEditorContextProvider, {
   useGeneratedCSS,
-} from "~/components/editor/context";
+} from "~/components/editor";
 import CSSEditor from "~/components/editor/CSSEditor";
 import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";

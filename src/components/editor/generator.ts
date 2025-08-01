@@ -1,9 +1,9 @@
-import type { CSSSelectorPropertyDefinition, CSSStyleDefinition } from ".";
+import type { CSSSelectorPropertyDefinition, CSSStyleDefinition } from "./definitions";
 import type {
   CSSPropertyName,
   CSSPropertyValueTypeForProperty,
-} from "./properties";
-import PROPERTIES, { assertCSSPropertyValue } from "./properties";
+} from "./definitions/properties";
+import PROPERTIES, { assertCSSPropertyValue } from "./definitions/properties";
 
 function generateCSSProperty<Tprop extends CSSPropertyName>(
   prop: Tprop,

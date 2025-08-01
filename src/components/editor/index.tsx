@@ -1,9 +1,9 @@
 "use client"
 
 import { createContext, useContext, useMemo, useState } from "react";
-import type { CSSStyleDefinition } from ".";
+import type { CSSStyleDefinition } from "./definitions";
 import generateCSS from "./generator";
-import useSetSaveState, { useGetSaveState } from "./useSaveState";
+import useSetSaveState, { useGetSaveState } from "./util/useSaveState";
 
 export interface EditorState {
   style: CSSStyleDefinition;

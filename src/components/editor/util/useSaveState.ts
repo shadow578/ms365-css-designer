@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import type { EditorState } from "~/components/editor/context";
+import type { EditorState } from "../index"
 import validateState from "./validateState";
 
 function serializeState(state: EditorState): string {
