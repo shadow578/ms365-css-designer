@@ -11,10 +11,7 @@ interface ContextType {
 
 const CSSEditorContext = createContext<ContextType | undefined>(undefined);
 
-/**
- * Provide the context for the CSS editor state.
- */
-export default function CSSEditorContextProvider(props: {
+export default function CSSEditorStateContextProvider(props: {
   children: React.ReactNode;
   saveToUrl?: boolean;
 }) {

@@ -13,7 +13,7 @@ import {
 import { useRef, useState } from "react";
 import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
 import {
-  CSSEditorContextProvider,
+  CSSEditorContext,
   CSSEditor,
   useGeneratedCSS,
 } from "~/components/editor";
@@ -22,9 +22,9 @@ import useInjectedCss from "~/util/useInjectedCss";
 
 export default function Index() {
   return (
-    <CSSEditorContextProvider>
+    <CSSEditorContext>
       <MainLayout />
-    </CSSEditorContextProvider>
+    </CSSEditorContext>
   );
 }
 

@@ -17,7 +17,7 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import PROPERTIES, { assertCSSPropertyValue } from "./definitions/properties";
+import PROPERTIES from "./definitions/properties";
 import CONTROLS, { type ComponentFor } from "./components/controls";
 import type { CSSSelectorPropertyDefinition } from "./definitions";
 import {
@@ -32,92 +32,16 @@ import EmptyState from "./components/EmptyState";
 import IconButton from "./components/IconButton";
 import ContentBox from "./components/ContentBox";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
+import { useCSSEditorMutation } from "./context/mutationContext";
 
 export default function CSSEditor() {
   const showDebugButton = useKeycode(KONAMI_CODE);
   const [debugMode, setDebugMode] = useState(false);
 
-  const [state, setState] = useCSSEditorState();
+  const [state] = useCSSEditorState();
+  const { addSelector } = useCSSEditorMutation();
+
   const generatedCss = useGeneratedCSS();
-
-  const addSelector = (selector: CSSSelectorName) => {
-    if (selector in state.style) {
-      console.warn(`selector ${selector} already exists.`);
-      return;
-    }
-
-    state.style[selector] = {};
-    setState({ ...state });
-  };
-
-  const removeSelector = (selector: CSSSelectorName) => {
-    if (!(selector in state.style)) {
-      console.warn(`selector ${selector} does not exist.`);
-      return;
-    }
-
-    delete state.style[selector];
-    setState({ ...state });
-  };
-
-  const addSelectorProperty = (
-    selector: CSSSelectorName,
-    prop: CSSPropertyName,
-  ) => {
-    if (!state.style[selector]) {
-      console.warn(`selector ${selector} does not exist.`);
-      return;
-    }
-    if (prop in state.style[selector]) {
-      console.warn(`property ${prop} already exists in selector ${selector}.`);
-      return;
-    }
-
-    const value = PROPERTIES[prop].defaultValue;
-    assertCSSPropertyValue(prop, value);
-
-    //@ts-expect-error -- FIXME figure this out some day
-    state.style[selector][prop] = value;
-    setState({ ...state });
-  };
-
-  const removeSelectorProperty = (
-    selector: CSSSelectorName,
-    prop: CSSPropertyName,
-  ) => {
-    if (!state.style[selector]) {
-      console.warn(`selector ${selector} does not exist.`);
-      return;
-    }
-    if (!(prop in state.style[selector])) {
-      console.warn(`property ${prop} does not exist in selector ${selector}.`);
-      return;
-    }
-
-    delete state.style[selector][prop];
-    setState({ ...state });
-  };
-
-  const setSelectorProperty = <Tprop extends CSSPropertyName>(
-    selector: CSSSelectorName,
-    prop: Tprop,
-    value: CSSPropertyValueTypeForProperty<Tprop>,
-  ) => {
-    if (!state.style[selector]) {
-      console.warn(`selector ${selector} does not exist.`);
-      return;
-    }
-    if (!(prop in state.style[selector])) {
-      console.warn(`property ${prop} does not exist in selector ${selector}.`);
-      return;
-    }
-
-    assertCSSPropertyValue(prop, value);
-
-    //@ts-expect-error -- FIXME figure this out some day
-    state.style[selector][prop] = value;
-    setState({ ...state });
-  };
 
   const selectableSelectors = filterRecord(
     SELECTORS,
@@ -162,12 +86,8 @@ export default function CSSEditor() {
           {([selector, _]) => (
             <SelectorEditor
               key={selector}
-              targetSelector={selector as CSSSelectorName}
-              cssProps={state.style[selector as CSSSelectorName]!}
-              onRemove={removeSelector}
-              addProperty={addSelectorProperty}
-              removeProperty={removeSelectorProperty}
-              setProperty={setSelectorProperty}
+              selector={selector as CSSSelectorName}
+              CSSProperties={state.style[selector as CSSSelectorName]!}
               debug={debugMode}
             ></SelectorEditor>
           )}
@@ -194,26 +114,20 @@ export default function CSSEditor() {
 }
 
 function SelectorEditor<Tsel extends CSSSelectorName>(props: {
-  targetSelector: Tsel;
-  cssProps: CSSSelectorPropertyDefinition;
-  onRemove?: (selector: CSSSelectorName) => void;
-  addProperty?: (selector: Tsel, prop: CSSPropertyName) => void;
-  removeProperty?: (selector: Tsel, prop: CSSPropertyName) => void;
-  setProperty?: <TsetProp extends CSSPropertyName>(
-    selector: Tsel,
-    prop: TsetProp,
-    value: CSSPropertyValueTypeForProperty<TsetProp>,
-  ) => void;
+  selector: Tsel;
+  CSSProperties: CSSSelectorPropertyDefinition;
   debug: boolean;
 }) {
-  const selector = SELECTORS[props.targetSelector];
+  const { removeSelector, addProperty } = useCSSEditorMutation();
+
+  const selector = SELECTORS[props.selector];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
     (selector.properties as string[]).includes(cssProp),
   );
 
   const selectableProperties = filterRecord(
     availableProperties,
-    (_, prop) => !(prop in props.cssProps),
+    (_, prop) => !(prop in props.CSSProperties),
   );
 
   return (
@@ -221,7 +135,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
       outline
       header={
         <Text fontSize="lg" fontWeight="bold">
-          {props.debug ? `${props.targetSelector}` : selector.displayName}
+          {props.debug ? `${props.selector}` : selector.displayName}
         </Text>
       }
       buttons={
@@ -232,7 +146,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
               (info) => info.displayName,
             )}
             onSelect={(cssProp) => {
-              props.addProperty?.(props.targetSelector, cssProp);
+              addProperty?.(props.selector, cssProp);
             }}
           >
             <IconButton label="Add Property">
@@ -243,7 +157,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
           <IconButton
             label="Remove this Selector"
             color="red.500"
-            onClick={() => props.onRemove?.(props.targetSelector)}
+            onClick={() => removeSelector(props.selector)}
           >
             <MdDelete />
           </IconButton>
@@ -251,27 +165,15 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
       }
     >
       <For
-        each={Object.entries(props.cssProps)}
+        each={Object.entries(props.CSSProperties)}
         fallback={<EmptyState>No Properties Selected</EmptyState>}
       >
         {([prop, value]) => (
           <PropertyEditor
             key={prop}
-            targetProperty={prop as CSSPropertyName}
+            selector={props.selector}
+            property={prop as CSSPropertyName}
             value={value}
-            setValue={(newValue) => {
-              props.setProperty?.(
-                props.targetSelector,
-                prop as CSSPropertyName,
-                newValue,
-              );
-            }}
-            remove={() => {
-              props.removeProperty?.(
-                props.targetSelector,
-                prop as CSSPropertyName,
-              );
-            }}
             debug={props.debug}
           />
         )}
@@ -281,15 +183,15 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
 }
 
 function PropertyEditor<Tprop extends CSSPropertyName>(props: {
-  targetProperty: Tprop;
+  selector: CSSSelectorName;
+  property: Tprop;
   value: CSSPropertyValueTypeForProperty<Tprop>;
-  setValue: (value: CSSPropertyValueTypeForProperty<Tprop>) => void;
-  remove?: () => void;
   debug: boolean;
 }) {
-  // FIXME fix type wonkyness in this function
-  const prop = PROPERTIES[props.targetProperty];
-  const ControlFn = CONTROLS[prop.kind]?.component as unknown as ComponentFor<
+  const { removeProperty, setProperty } = useCSSEditorMutation();
+
+  const prop = PROPERTIES[props.property];
+  const ControlFn = CONTROLS[prop.kind]?.component as ComponentFor<
     CSSPropertyKindFor<Tprop>
   >;
   if (!ControlFn) {
@@ -301,16 +203,14 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
       outline
       header={
         <Text fontSize="md">
-          {props.debug
-            ? `${props.targetProperty} (${prop.kind})`
-            : prop.displayName}
+          {props.debug ? `${props.property} (${prop.kind})` : prop.displayName}
         </Text>
       }
       buttons={
         <IconButton
           label="Remove this Property"
           color="red.500"
-          onClick={props.remove}
+          onClick={() => removeProperty(props.selector, props.property)}
         >
           <MdDelete />
         </IconButton>
@@ -325,7 +225,9 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
               >
             }
             value={props.value}
-            onChange={props.setValue}
+            onChange={(value) =>
+              setProperty(props.selector, props.property, value)
+            }
           />
         </Box>
       </Flex>
