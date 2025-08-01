@@ -1,11 +1,8 @@
 import type { CSSSelectorPropertyDefinition } from "../definitions";
 import type { EditorState } from "../index";
-import PROPERTIES, {
+import {
   ALL_PROPERTY_NAMES,
-  PROP_SCHEMA_BY_KIND,
-  type CSSPropertyKindFor,
-  type CSSPropertyName,
-  type CSSPropertyValueTypeByKind,
+  validateCSSPropertyValue,
 } from "../definitions/properties";
 import { ALL_SELECTORS } from "../definitions/selectors";
 
@@ -23,19 +20,6 @@ function isValidStyleRecord(
       value !== null &&
       Object.keys(value as object).every((prop) => typeof prop === "string"),
   );
-}
-
-function isValidPropertyValue<Tprop extends CSSPropertyName>(
-  prop: Tprop,
-  unknownPropValue: unknown,
-): unknownPropValue is CSSPropertyValueTypeByKind<CSSPropertyKindFor<Tprop>> {
-  const propDefinition = PROPERTIES[prop];
-  if (!propDefinition) return false;
-
-  const valueSchema = PROP_SCHEMA_BY_KIND[propDefinition.kind];
-  if (!valueSchema) return false;
-
-  return valueSchema.safeParse(unknownPropValue).success;
 }
 
 export default function validateState(state: unknown): EditorState | undefined {
@@ -64,7 +48,7 @@ export default function validateState(state: unknown): EditorState | undefined {
         if (prop in properties) {
           const propValue = properties[prop];
 
-          if (isValidPropertyValue(prop, propValue)) {
+          if (validateCSSPropertyValue(prop, propValue)) {
             hasValidProperties = true;
 
             // @ts-expect-error -- FIXME wonky types here

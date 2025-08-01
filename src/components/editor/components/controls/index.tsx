@@ -1,13 +1,12 @@
 import type React from "react";
 import type {
-  CSSPropertyKind,
   CSSPropertyOptionsForKind,
-  CSSPropertyValueTypeByKind,
 } from "../../definitions/properties"
 import ColorControl from "./Color";
 import DimensionControl from "./Dimension";
 import AlignmentControl from "./Alignment";
 import FontWeightControl from "./FontWeight";
+import type { CSSPropertyKind, CSSPropertyValueTypeByKind } from "../../definitions/kinds";
 
 export type PropsFor<T extends CSSPropertyKind> = {
   options: CSSPropertyOptionsForKind<T>;
