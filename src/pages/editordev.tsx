@@ -1,7 +1,6 @@
 "use client";
 
-import CSSEditorContextProvider from "~/components/editor";
-import CSSEditor from "~/components/editor/CSSEditor";
+import {CSSEditorContextProvider, CSSEditor} from "~/components/editor";
 
 export default function ConvergedSignInPage() {
   return (

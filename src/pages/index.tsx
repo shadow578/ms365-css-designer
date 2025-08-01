@@ -12,10 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
-import CSSEditorContextProvider, {
+import {
+  CSSEditorContextProvider,
+  CSSEditor,
   useGeneratedCSS,
 } from "~/components/editor";
-import CSSEditor from "~/components/editor/CSSEditor";
 import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
 
