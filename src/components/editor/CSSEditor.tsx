@@ -8,7 +8,7 @@ import type {
 } from "./definitions/properties";
 import SelectNewButton from "./components/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
 import PROPERTIES from "./definitions/properties";
 import CONTROLS, { type ComponentFor } from "./components/controls";
 import type { CSSSelectorPropertyDefinition } from "./definitions";
@@ -40,14 +40,12 @@ export default function CSSEditor() {
     (_, s) => !(s in state.style),
   );
 
-  const AddSelectorButton = () => (
+  const SelectSelectorButton = (cprops: { children: React.ReactNode }) => (
     <SelectNewButton
       options={mapRecord(selectableSelectors, (info) => info.displayName)}
       onSelect={addSelector}
     >
-      <IconButton label="Add CSS Selector">
-        <MdAdd />
-      </IconButton>
+      {cprops.children}
     </SelectNewButton>
   );
 
@@ -68,7 +66,11 @@ export default function CSSEditor() {
 
             <DownloadButton />
 
-            <AddSelectorButton />
+            <SelectSelectorButton>
+              <IconButton label="Add Selector">
+                <MdAdd />
+              </IconButton>
+            </SelectSelectorButton>
           </>
         }
       >
@@ -77,7 +79,14 @@ export default function CSSEditor() {
           fallback={
             <EmptyState
               title={"No Selectors Added"}
-              action={<AddSelectorButton />}
+              action={
+                <SelectSelectorButton>
+                  <Button variant="outline">
+                    <MdAdd />
+                    Add Selector
+                  </Button>
+                </SelectSelectorButton>
+              }
             />
           }
         >
@@ -128,16 +137,14 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
     (_, prop) => !(prop in props.CSSProperties),
   );
 
-  const AddPropertyButton = () => (
+  const SelectPropertyButton = (cprops: { children: React.ReactNode }) => (
     <SelectNewButton
       options={mapRecord(selectableProperties, (info) => info.displayName)}
       onSelect={(cssProp) => {
         addProperty?.(props.selector, cssProp);
       }}
     >
-      <IconButton label="Add Property">
-        <MdAdd />
-      </IconButton>
+      {cprops.children}
     </SelectNewButton>
   );
 
@@ -151,7 +158,11 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
       }
       buttons={
         <>
-          <AddPropertyButton />
+          <SelectPropertyButton>
+            <IconButton label="Add Property">
+              <MdAdd />
+            </IconButton>
+          </SelectPropertyButton>
 
           <IconButton
             label="Remove this Selector"
@@ -168,7 +179,14 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
         fallback={
           <EmptyState
             title="No Properties Added"
-            action={<AddPropertyButton />}
+            action={
+              <SelectPropertyButton>
+                <Button variant="outline">
+                  <MdAdd />
+                  Add Property
+                </Button>
+              </SelectPropertyButton>
+            }
           />
         }
       >
