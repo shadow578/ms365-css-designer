@@ -8,15 +8,7 @@ import type {
 } from "./definitions/properties";
 import SelectNewButton from "./components/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import {
-  Box,
-  Code,
-  DownloadTrigger,
-  Flex,
-  For,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
 import PROPERTIES from "./definitions/properties";
 import CONTROLS, { type ComponentFor } from "./components/controls";
 import type { CSSSelectorPropertyDefinition } from "./definitions";
@@ -24,7 +16,6 @@ import {
   MdAdd,
   MdBugReport,
   MdDelete,
-  MdDownload,
   MdOutlineBugReport,
 } from "react-icons/md";
 import { useCSSEditorState, useGeneratedCSS } from ".";
@@ -33,6 +24,7 @@ import IconButton from "./components/IconButton";
 import ContentBox from "./components/ContentBox";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 import { useCSSEditorMutation } from "./context/mutationContext";
+import DownloadButton from "./components/DownloadButton";
 
 export default function CSSEditor() {
   const showDebugButton = useKeycode(KONAMI_CODE);
@@ -232,22 +224,5 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
         </Box>
       </Flex>
     </ContentBox>
-  );
-}
-
-function DownloadButton() {
-  const css = useGeneratedCSS();
-
-  return (
-    <DownloadTrigger
-      data={css}
-      fileName="style.css"
-      mimeType="text/css"
-      asChild
-    >
-      <IconButton label="Download CSS">
-        <MdDownload />
-      </IconButton>
-    </DownloadTrigger>
   );
 }
