@@ -40,6 +40,17 @@ export default function CSSEditor() {
     (_, s) => !(s in state.style),
   );
 
+  const AddSelectorButton = () => (
+    <SelectNewButton
+      options={mapRecord(selectableSelectors, (info) => info.displayName)}
+      onSelect={addSelector}
+    >
+      <IconButton label="Add CSS Selector">
+        <MdAdd />
+      </IconButton>
+    </SelectNewButton>
+  );
+
   return (
     <Box padding={4}>
       <ContentBox
@@ -57,23 +68,18 @@ export default function CSSEditor() {
 
             <DownloadButton />
 
-            <SelectNewButton
-              options={mapRecord(
-                selectableSelectors,
-                (info) => info.displayName,
-              )}
-              onSelect={addSelector}
-            >
-              <IconButton label="Add CSS Selector">
-                <MdAdd />
-              </IconButton>
-            </SelectNewButton>
+            <AddSelectorButton />
           </>
         }
       >
         <For
           each={Object.entries(state.style)}
-          fallback={<EmptyState>No Selector Selected</EmptyState>}
+          fallback={
+            <EmptyState
+              title={"No Selectors Added"}
+              action={<AddSelectorButton />}
+            />
+          }
         >
           {([selector, _]) => (
             <SelectorEditor
@@ -122,6 +128,19 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
     (_, prop) => !(prop in props.CSSProperties),
   );
 
+  const AddPropertyButton = () => (
+    <SelectNewButton
+      options={mapRecord(selectableProperties, (info) => info.displayName)}
+      onSelect={(cssProp) => {
+        addProperty?.(props.selector, cssProp);
+      }}
+    >
+      <IconButton label="Add Property">
+        <MdAdd />
+      </IconButton>
+    </SelectNewButton>
+  );
+
   return (
     <ContentBox
       outline
@@ -132,19 +151,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
       }
       buttons={
         <>
-          <SelectNewButton
-            options={mapRecord(
-              selectableProperties,
-              (info) => info.displayName,
-            )}
-            onSelect={(cssProp) => {
-              addProperty?.(props.selector, cssProp);
-            }}
-          >
-            <IconButton label="Add Property">
-              <MdAdd />
-            </IconButton>
-          </SelectNewButton>
+          <AddPropertyButton />
 
           <IconButton
             label="Remove this Selector"
@@ -158,7 +165,12 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
     >
       <For
         each={Object.entries(props.CSSProperties)}
-        fallback={<EmptyState>No Properties Selected</EmptyState>}
+        fallback={
+          <EmptyState
+            title="No Properties Added"
+            action={<AddPropertyButton />}
+          />
+        }
       >
         {([prop, value]) => (
           <PropertyEditor
