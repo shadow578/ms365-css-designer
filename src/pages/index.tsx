@@ -25,7 +25,7 @@ import {
   CSSDesigner,
   useGeneratedCSS,
 } from "~/components/designer";
-import { ColorModeButton } from "~/components/ui/color-mode";
+import { ColorModeButton, useColorMode } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
 import { Editor as MonacoEditor } from "@monaco-editor/react";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
@@ -114,6 +114,8 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
     props.onCSSChange?.(currentCSS);
   }, [props, currentCSS]);
 
+  const { colorMode } = useColorMode();
+
   return (
     <Box p={4} height="100%">
       <ContentBox
@@ -181,6 +183,7 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
                 contextmenu: false,
               }}
               language="css"
+              theme={colorMode === "dark" ? "vs-dark" : "vs-light"}
               defaultValue={designerGeneratedCSS}
               value={monacoCSS}
               onChange={(e) => setMonacoCSS(e ?? "")}
