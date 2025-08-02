@@ -32,6 +32,7 @@ import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 import ContentBox from "~/components/ContentBox";
 import { CSSDesignerAddSelectorButton } from "~/components/designer/CSSDesigner";
 import IconButton from "~/components/IconButton";
+import { Trans } from "@lingui/react/macro";
 
 export default function Index() {
   return (
@@ -74,7 +75,9 @@ function MainLayout() {
         <Box>
           <Flex alignItems="center" gap={2}>
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
-            <Heading flex={1}>M365 CSS Designer</Heading>
+            <Heading flex={1}>
+              <Trans>M365 CSS Designer</Trans>
+            </Heading>
             <ColorModeButton />
           </Flex>
         </Box>

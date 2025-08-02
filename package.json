@@ -13,11 +13,16 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lingui:extract": "lingui extract",
+    "lingui:compile": "lingui compile"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.22.0",
     "@emotion/react": "^11.14.0",
+    "@lingui/core": "^5.4.0",
+    "@lingui/macro": "^5.4.0",
+    "@lingui/react": "^5.4.0",
     "@monaco-editor/react": "^4.7.0",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.69.0",
@@ -35,6 +40,9 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@lingui/cli": "^5.4.0",
+    "@lingui/loader": "^5.4.0",
+    "@lingui/swc-plugin": "^5.5.2",
     "@types/node": "^20.14.10",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
