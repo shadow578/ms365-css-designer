@@ -102,14 +102,14 @@ export default function CSSEditor() {
       </ContentBox>
 
       {debugMode && (
-        <ContentBox header={"Debug View"} outline>
-          <ContentBox header={"State"} outline>
+        <ContentBox outline collapsible header={"Debug View"}>
+          <ContentBox outline header={"State"}>
             <Code asChild width="100%">
               <pre>{JSON.stringify(state, null, 2)}</pre>
             </Code>
           </ContentBox>
 
-          <ContentBox header={"Generated CSS"} outline>
+          <ContentBox outline header={"Generated CSS"}>
             <Code asChild width="100%">
               <pre>{generatedCss}</pre>
             </Code>
@@ -151,6 +151,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
   return (
     <ContentBox
       outline
+      collapsible
       header={
         <Text fontSize="lg" fontWeight="bold">
           {props.debug ? `${props.selector}` : selector.displayName}
@@ -223,6 +224,7 @@ function PropertyEditor<Tprop extends CSSPropertyName>(props: {
   return (
     <ContentBox
       outline
+      collapsible
       header={
         <Text fontSize="md">
           {props.debug ? `${props.property} (${prop.kind})` : prop.displayName}
