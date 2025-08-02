@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SELECTORS, { type CSSSelectorName } from "./definitions/selectors";
 import type {
   CSSPropertyKindFor,
@@ -8,114 +8,92 @@ import type {
 } from "./definitions/properties";
 import SelectNewButton from "./components/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
-import { Box, Button, Code, Flex, For, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Code, Flex, For, Text } from "@chakra-ui/react";
 import PROPERTIES from "./definitions/properties";
 import CONTROLS, { type ComponentFor } from "./components/controls";
 import type { CSSSelectorPropertyDefinition } from "./definitions";
-import {
-  MdAdd,
-  MdBugReport,
-  MdDelete,
-  MdOutlineBugReport,
-} from "react-icons/md";
+import { MdAdd, MdDelete } from "react-icons/md";
 import { useCSSDesignerState, useGeneratedCSS } from ".";
 import EmptyState from "./components/EmptyState";
-import IconButton from "./components/IconButton";
-import ContentBox from "./components/ContentBox";
-import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
+import IconButton from "../IconButton";
+import ContentBox from "../ContentBox";
 import { useCSSDesignerMutation } from "./context/mutationContext";
-import DownloadButton from "./components/DownloadButton";
 
-export default function CSSDesigner() {
-  const showDebugButton = useKeycode(KONAMI_CODE);
-  const [debugMode, setDebugMode] = useState(false);
-
+export function CSSDesignerAddSelectorButton(props: {
+  children: React.ReactNode;
+}) {
   const [state] = useCSSDesignerState();
   const { addSelector } = useCSSDesignerMutation();
-
-  const generatedCss = useGeneratedCSS();
 
   const selectableSelectors = filterRecord(
     SELECTORS,
     (_, s) => !(s in state.style),
   );
 
-  const SelectSelectorButton = (cprops: { children: React.ReactNode }) => (
+  return (
     <SelectNewButton
       options={mapRecord(selectableSelectors, (info) => info.displayName)}
       onSelect={addSelector}
     >
-      {cprops.children}
+      {props.children}
     </SelectNewButton>
   );
+}
+
+function CSSDesignerDebugView() {
+  const [state] = useCSSDesignerState();
+
+  const generatedCss = useGeneratedCSS();
 
   return (
-    <Box padding={4}>
-      <ContentBox
-        header={<Heading>CSS Designer</Heading>}
-        buttons={
-          <>
-            {showDebugButton && (
-              <IconButton
-                label={debugMode ? "Disable Debug Mode" : "Enable Debug Mode"}
-                onClick={() => setDebugMode(!debugMode)}
-              >
-                {debugMode ? <MdBugReport /> : <MdOutlineBugReport />}
-              </IconButton>
-            )}
-
-            <DownloadButton />
-
-            <SelectSelectorButton>
-              <IconButton label="Add Selector">
-                <MdAdd />
-              </IconButton>
-            </SelectSelectorButton>
-          </>
-        }
-      >
-        <For
-          each={Object.entries(state.style)}
-          fallback={
-            <EmptyState
-              title={"No Selectors Added"}
-              action={
-                <SelectSelectorButton>
-                  <Button variant="outline">
-                    <MdAdd />
-                    Add Selector
-                  </Button>
-                </SelectSelectorButton>
-              }
-            />
-          }
-        >
-          {([selector, _]) => (
-            <SelectorDesigner
-              key={selector}
-              selector={selector as CSSSelectorName}
-              CSSProperties={state.style[selector as CSSSelectorName]!}
-              debug={debugMode}
-            ></SelectorDesigner>
-          )}
-        </For>
+    <ContentBox outline collapsible header={"Debug View"}>
+      <ContentBox outline header={"State"}>
+        <Code asChild width="100%">
+          <pre>{JSON.stringify(state, null, 2)}</pre>
+        </Code>
       </ContentBox>
 
-      {debugMode && (
-        <ContentBox outline collapsible header={"Debug View"}>
-          <ContentBox outline header={"State"}>
-            <Code asChild width="100%">
-              <pre>{JSON.stringify(state, null, 2)}</pre>
-            </Code>
-          </ContentBox>
+      <ContentBox outline header={"Generated CSS"}>
+        <Code asChild width="100%">
+          <pre>{generatedCss}</pre>
+        </Code>
+      </ContentBox>
+    </ContentBox>
+  );
+}
 
-          <ContentBox outline header={"Generated CSS"}>
-            <Code asChild width="100%">
-              <pre>{generatedCss}</pre>
-            </Code>
-          </ContentBox>
-        </ContentBox>
-      )}
+export default function CSSDesigner(props: { debug?: boolean }) {
+  const [state] = useCSSDesignerState();
+
+  return (
+    <Box>
+      <For
+        each={Object.entries(state.style)}
+        fallback={
+          <EmptyState
+            title={"No Selectors Added"}
+            action={
+              <CSSDesignerAddSelectorButton>
+                <Button variant="outline">
+                  <MdAdd />
+                  Add Selector
+                </Button>
+              </CSSDesignerAddSelectorButton>
+            }
+          />
+        }
+      >
+        {([selector, _]) => (
+          <SelectorDesigner
+            key={selector}
+            selector={selector as CSSSelectorName}
+            CSSProperties={state.style[selector as CSSSelectorName]!}
+            debug={props.debug ?? false}
+          ></SelectorDesigner>
+        )}
+      </For>
+
+      {props.debug && <CSSDesignerDebugView />}
     </Box>
   );
 }

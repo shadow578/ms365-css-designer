@@ -3,15 +3,23 @@
 import {
   Box,
   Center,
+  DownloadTrigger,
   Flex,
   Heading,
   Highlight,
-  IconButton,
   Presence,
   Text,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
+import { useEffect, useRef, useState } from "react";
+import {
+  MdAdd,
+  MdBugReport,
+  MdDownload,
+  MdEdit,
+  MdOutlineArrowLeft,
+  MdOutlineBugReport,
+  MdStyle,
+} from "react-icons/md";
 import {
   CSSDesignerContext,
   CSSDesigner,
@@ -20,6 +28,10 @@ import {
 import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
 import { Editor as MonacoEditor } from "@monaco-editor/react";
+import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
+import ContentBox from "~/components/ContentBox";
+import { CSSDesignerAddSelectorButton } from "~/components/designer/CSSDesigner";
+import IconButton from "~/components/IconButton";
 
 export default function Index() {
   return (
@@ -32,18 +44,14 @@ export default function Index() {
 function MainLayout() {
   const signinFrame = useRef<HTMLIFrameElement>(null);
 
-  const designerGeneratedCSS = useGeneratedCSS();
-  const [monacoCSS, setMonacoCSS] = useState("");
-
+  const [css, setCSS] = useState("");
   useInjectedCss(
     signinFrame.current?.contentDocument ??
       signinFrame.current?.contentWindow?.document,
-    monacoCSS,
+    css,
   );
 
   const [editorOpen, setEditorOpen] = useState(true);
-
-  console.log(monacoCSS);
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
@@ -59,22 +67,7 @@ function MainLayout() {
         }}
         animationDuration="moderate"
       >
-        <CSSDesigner />
-        {/*
-          
-        <Box p={4} paddingEnd={0} height="100%" backgroundColor="red.100">
-          <MonacoEditor
-            options={{
-              lineNumbers: "off",
-              minimap: { enabled: false },
-              contextmenu: false,
-            }}
-            language="css"
-            height="100%"
-            onChange={(e) => setMonacoCSS(e ?? "")}
-          />
-        </Box>
-              */}
+        <EditorPane onCSSChange={setCSS} />
       </Presence>
 
       <Flex direction="column" flexGrow={1} height="100%">
@@ -107,15 +100,105 @@ function MainLayout() {
   );
 }
 
+function EditorPane(props: { onCSSChange?: (css: string) => void }) {
+  const [designerMode, setDesignerMode] = useState(true);
+
+  const showDesignerDebugButton = useKeycode(KONAMI_CODE);
+  const [designerDebugMode, setDesignerDebugMode] = useState(false);
+
+  const designerGeneratedCSS = useGeneratedCSS();
+  const [monacoCSS, setMonacoCSS] = useState<string>("");
+  const currentCSS = designerMode ? designerGeneratedCSS : monacoCSS;
+
+  useEffect(() => {
+    props.onCSSChange?.(currentCSS);
+  }, [props, currentCSS]);
+
+  return (
+    <Box p={4} height="100%">
+      <ContentBox
+        height="100%"
+        header={
+          <Heading>{designerMode ? "CSS Designer" : "CSS Editor"}</Heading>
+        }
+        buttons={
+          <>
+            {designerMode && (
+              <>
+                <CSSDesignerAddSelectorButton>
+                  <IconButton label="Add Selector">
+                    <MdAdd />
+                  </IconButton>
+                </CSSDesignerAddSelectorButton>
+
+                {showDesignerDebugButton && (
+                  <IconButton
+                    label={
+                      designerDebugMode
+                        ? "Disable Debug Mode"
+                        : "Enable Debug Mode"
+                    }
+                    onClick={() => setDesignerDebugMode(!designerDebugMode)}
+                  >
+                    {designerDebugMode ? (
+                      <MdBugReport />
+                    ) : (
+                      <MdOutlineBugReport />
+                    )}
+                  </IconButton>
+                )}
+              </>
+            )}
+
+            <DownloadTrigger
+              data={currentCSS}
+              fileName="style.css"
+              mimeType="text/css"
+              asChild
+            >
+              <IconButton label="Download CSS">
+                <MdDownload />
+              </IconButton>
+            </DownloadTrigger>
+
+            <IconButton
+              label={designerMode ? "Switch to Editor" : "Switch to Designer"}
+              onClick={() => setDesignerMode(!designerMode)}
+            >
+              {designerMode ? <MdEdit /> : <MdStyle />}
+            </IconButton>
+          </>
+        }
+      >
+        {designerMode ? (
+          <CSSDesigner debug={designerDebugMode} />
+        ) : (
+          <Box flex={1} borderWidth={1}>
+            <MonacoEditor
+              options={{
+                lineNumbers: "off",
+                minimap: { enabled: false },
+                contextmenu: false,
+              }}
+              language="css"
+              defaultValue={designerGeneratedCSS}
+              value={monacoCSS}
+              onChange={(e) => setMonacoCSS(e ?? "")}
+            />
+          </Box>
+        )}
+      </ContentBox>
+    </Box>
+  );
+}
+
 function EditorButton(props: {
   open: boolean;
   onClick: (open: boolean) => void;
 }) {
   return (
     <IconButton
-      variant="ghost"
-      rounded="full"
-      size="xl"
+      label={props.open ? "Close Editor" : "Open Editor"}
       onClick={() => props.onClick(!props.open)}
     >
       {props.open ? <MdOutlineArrowLeft /> : <MdStyle />}

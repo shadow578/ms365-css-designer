@@ -1,11 +1,6 @@
 import { Box, ButtonGroup, Collapsible, Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdExpandLess,
-  MdExpandMore,
-} from "react-icons/md";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
 interface ContentBoxBaseProps {
   header: React.ReactNode;
@@ -14,10 +9,14 @@ interface ContentBoxBaseProps {
   outline?: boolean;
 }
 
-type BoxProps = Omit<React.ComponentProps<typeof Box>, "children">;
+type BoxProps = Omit<
+  React.ComponentProps<typeof Box>,
+  "children" | "direction"
+>;
 
 export default function ContentBox(
   props: ContentBoxBaseProps & {
+    height?: BoxProps["height"];
     collapsible?: boolean;
   },
 ) {
@@ -31,6 +30,7 @@ export default function ContentBox(
       borderWidth: props.outline ? 1 : 0,
       borderRadius: 5,
       marginBottom: 1,
+      height: props.height,
     },
   };
 
@@ -43,7 +43,7 @@ export default function ContentBox(
 
 function NormalBox(props: ContentBoxBaseProps & { box: BoxProps }) {
   return (
-    <Box {...props.box}>
+    <Flex {...props.box} direction="column">
       <Flex alignItems="center">
         <Box flex={1} textAlign="start">
           {props.header}
@@ -53,7 +53,7 @@ function NormalBox(props: ContentBoxBaseProps & { box: BoxProps }) {
       </Flex>
 
       {props.children}
-    </Box>
+    </Flex>
   );
 }
 
