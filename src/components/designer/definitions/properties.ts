@@ -49,10 +49,25 @@ type CSSPropertyKinds =
   | FontWeightProperty
   | URLProperty;
 
+/**
+ * a record of all supported CSS properties
+ * @note: there is a special case here: properties can also define a suffix for the selector, delimiting the suffic with a '$' character.
+ * for example, placing the the 'color$:hover' property on the selector 'button' will generate the following css rule:
+ * ```css
+ * button:hover {
+ *  color: <value>;
+ * }
+ */
 const PROPERTIES = {
   color: {
     kind: "color",
     displayName: "Color",
+    defaultValue: "#000000",
+    generateCSS: (value) => `${value}`,
+  },
+  "color$:hover": {
+    kind: "color",
+    displayName: "Color on Hover",
     defaultValue: "#000000",
     generateCSS: (value) => `${value}`,
   },

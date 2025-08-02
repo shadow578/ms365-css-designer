@@ -24,11 +24,7 @@ const SELECTORS = {
   ".ext-sign-in-box": {
     displayName: "Sign-in Box",
     description: "The main container of the sign-in form",
-    properties: [
-      "background-color",
-      "border-radius",
-      ...margins,
-    ],
+    properties: ["background-color", "border-radius", ...margins],
   },
   ".ext-banner-logo": {
     displayName: "Banner Logo",
@@ -61,7 +57,13 @@ const SELECTORS = {
   ".ext-button": {
     displayName: "Buttons",
     description: "All buttons below the form, e.g. 'Login' and 'Back'",
-    properties: ["font-weight", "color", "background-color", "border-radius"],
+    properties: [
+      "font-weight",
+      "color",
+      "color$:hover",
+      "background-color",
+      "border-radius",
+    ],
   },
   ".ext-button.ext-primary": {
     displayName: "Primary Button",
@@ -79,9 +81,7 @@ const SELECTORS = {
   ".ext-background-image": {
     displayName: "Background Image",
     description: "The background image of the sign-in page",
-    properties: [
-      "background-image"
-    ],
+    properties: ["background-image"],
   },
   ".ext-background-overlay": {
     displayName: "Background Overlay",
