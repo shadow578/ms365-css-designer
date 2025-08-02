@@ -4,12 +4,19 @@ import type { DesignerState } from "../index";
 import validateState from "./validateState";
 
 function serializeState(state: DesignerState): string {
-  return JSON.stringify(state);
+  const json = JSON.stringify(state);
+
+  // note: the json string is base64 encoded here to avoid having to URL escape characters.
+  // modern browsers only allow about 2k characters in the URL, so we need to ensure we keep it as short as possible.
+  // having to encode one character into three characters is not the way to do that, thus base64.
+  // this should be fine for the moment.
+  return btoa(json);
 }
 
 function deserializeState(state: string): DesignerState {
   try {
-    const stateUnknown = JSON.parse(state) as unknown;
+    const json = atob(state);
+    const stateUnknown = JSON.parse(json) as unknown;
     return validateState(stateUnknown) ?? { style: {} };
   } catch (e) {
     console.error("Failed to deserialize state:", e);
@@ -24,6 +31,10 @@ export function useGetSaveState(): {
   const { query, isReady } = useRouter();
   if (!isReady) {
     return { ready: false };
+  }
+
+  if (!query.s || typeof query.s !== "string") {
+    return { ready: true };
   }
 
   return {

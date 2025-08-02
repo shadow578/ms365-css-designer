@@ -13,7 +13,6 @@ const CSSDesignerContext = createContext<ContextType | undefined>(undefined);
 
 export default function CSSDesignerStateContextProvider(props: {
   children: React.ReactNode;
-  saveToUrl?: boolean;
 }) {
   const { ready, state: initialState } = useGetSaveState();
   if (!ready) return null;
