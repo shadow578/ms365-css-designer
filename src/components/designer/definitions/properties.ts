@@ -27,6 +27,7 @@ interface AlignmentProperty extends CSSBaseProperty<"alignment"> {
   allowed?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["alignment"]>[];
 }
 type FontWeightProperty = CSSBaseProperty<"fontWeight">;
+type URLProperty = CSSBaseProperty<"url">;
 
 export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
   T extends "color"
@@ -37,13 +38,16 @@ export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
         ? AlignmentProperty
         : T extends "fontWeight"
           ? FontWeightProperty
-          : never;
+          : T extends "url"
+            ? URLProperty
+            : never;
 
 type CSSPropertyKinds =
   | ColorProperty
   | DimensionProperty
   | AlignmentProperty
-  | FontWeightProperty;
+  | FontWeightProperty
+  | URLProperty;
 
 const PROPERTIES = {
   color: {
@@ -109,6 +113,12 @@ const PROPERTIES = {
     negative: true,
     defaultValue: { value: 0, unit: "px" },
     generateCSS: (value) => `${value.value}${value.unit}`,
+  },
+  "background-image": {
+    kind: "url",
+    displayName: "Background Image",
+    defaultValue: "",
+    generateCSS: (value) => `url("${value}")`,
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;

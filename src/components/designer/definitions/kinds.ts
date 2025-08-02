@@ -12,6 +12,7 @@ export const PROP_SCHEMA_BY_KIND = {
     z.enum(["bolder", "lighter", "inherit"]),
     z.number().int().min(100).max(900),
   ]),
+  url: z.string()
 } satisfies Record<string, ZodSchema>;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;

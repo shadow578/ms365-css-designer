@@ -7,6 +7,7 @@ import DimensionControl from "./Dimension";
 import AlignmentControl from "./Alignment";
 import FontWeightControl from "./FontWeight";
 import type { CSSPropertyKind, CSSPropertyValueTypeByKind } from "../../definitions/kinds";
+import URLSelectionControl from "./Url";
 
 export type PropsFor<T extends CSSPropertyKind> = {
   options: CSSPropertyOptionsForKind<T>;
@@ -39,5 +40,8 @@ const CONTROLS: ControlRecord = {
   fontWeight: {
     component: FontWeightControl,
   },
+  url: {
+    component: URLSelectionControl
+  }
 };
 export default CONTROLS;

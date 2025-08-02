@@ -26,14 +26,14 @@ const SELECTORS = {
     description: "The main container of the sign-in form",
     properties: [
       "background-color",
-      "border-radius" /*"box-shadow",*/,
+      "border-radius",
       ...margins,
     ],
   },
   ".ext-banner-logo": {
     displayName: "Banner Logo",
     description: "The logo shown in the top of the form",
-    properties: [...margins /* background-image */],
+    properties: [...margins, "background-image"],
   },
   ".ext-title": {
     displayName: "Title",
@@ -80,7 +80,7 @@ const SELECTORS = {
     displayName: "Background Image",
     description: "The background image of the sign-in page",
     properties: [
-      /* background-image */
+      "background-image"
     ],
   },
   ".ext-background-overlay": {
