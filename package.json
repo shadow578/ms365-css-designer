@@ -2,7 +2,6 @@
   "name": "ms-css-designer",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",

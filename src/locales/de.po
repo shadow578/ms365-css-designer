@@ -9,4 +9,4 @@ msgstr ""
 
 #: src/pages/index.tsx:79
 msgid "M365 CSS Designer"
-msgstr ""
+msgstr "Hallo in Deutsch"

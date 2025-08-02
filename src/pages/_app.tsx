@@ -1,8 +1,9 @@
 import { type Metadata } from "next";
 import type { AppProps } from "next/app";
-import { Provider } from "~/components/ui/provider";
+import { Provider as ChakraProvider } from "~/components/ui/provider";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import I18NProvider from "~/util/i18n";
 
 export const metadata: Metadata = {
   title: "M365 CSS Designer",
@@ -11,9 +12,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ Component, pageProps }: AppProps) {
   return (
     <TRPCReactProvider>
-      <Provider>
+      <ChakraProvider>
+        <I18NProvider>
         <Component {...pageProps} />
-      </Provider>
+        </I18NProvider>
+      </ChakraProvider>
     </TRPCReactProvider>
   );
 }
