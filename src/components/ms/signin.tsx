@@ -1,4 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-css-tags -- needed for ms css */
+/* eslint-disable @next/next/no-img-element -- needed for ms layouts*/
 import { useState } from "react";
 import { api } from "~/trpc/react";
 
