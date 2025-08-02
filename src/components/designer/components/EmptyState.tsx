@@ -2,7 +2,7 @@ import { ButtonGroup, EmptyState, VStack } from "@chakra-ui/react";
 import type React from "react";
 import { MdOutlineStyle } from "react-icons/md";
 
-export default function EditorEmptyState(props: {
+export default function DesignerEmptyState(props: {
   title: React.ReactNode;
   action?: React.ReactNode;
 }) {

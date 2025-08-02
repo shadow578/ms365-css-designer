@@ -18,20 +18,20 @@ import {
   MdDelete,
   MdOutlineBugReport,
 } from "react-icons/md";
-import { useCSSEditorState, useGeneratedCSS } from ".";
+import { useCSSDesignerState, useGeneratedCSS } from ".";
 import EmptyState from "./components/EmptyState";
 import IconButton from "./components/IconButton";
 import ContentBox from "./components/ContentBox";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
-import { useCSSEditorMutation } from "./context/mutationContext";
+import { useCSSDesignerMutation } from "./context/mutationContext";
 import DownloadButton from "./components/DownloadButton";
 
-export default function CSSEditor() {
+export default function CSSDesigner() {
   const showDebugButton = useKeycode(KONAMI_CODE);
   const [debugMode, setDebugMode] = useState(false);
 
-  const [state] = useCSSEditorState();
-  const { addSelector } = useCSSEditorMutation();
+  const [state] = useCSSDesignerState();
+  const { addSelector } = useCSSDesignerMutation();
 
   const generatedCss = useGeneratedCSS();
 
@@ -52,7 +52,7 @@ export default function CSSEditor() {
   return (
     <Box padding={4}>
       <ContentBox
-        header={<Heading>CSS Editor</Heading>}
+        header={<Heading>CSS Designer</Heading>}
         buttons={
           <>
             {showDebugButton && (
@@ -91,12 +91,12 @@ export default function CSSEditor() {
           }
         >
           {([selector, _]) => (
-            <SelectorEditor
+            <SelectorDesigner
               key={selector}
               selector={selector as CSSSelectorName}
               CSSProperties={state.style[selector as CSSSelectorName]!}
               debug={debugMode}
-            ></SelectorEditor>
+            ></SelectorDesigner>
           )}
         </For>
       </ContentBox>
@@ -120,12 +120,12 @@ export default function CSSEditor() {
   );
 }
 
-function SelectorEditor<Tsel extends CSSSelectorName>(props: {
+function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
   selector: Tsel;
   CSSProperties: CSSSelectorPropertyDefinition;
   debug: boolean;
 }) {
-  const { removeSelector, addProperty } = useCSSEditorMutation();
+  const { removeSelector, addProperty } = useCSSDesignerMutation();
 
   const selector = SELECTORS[props.selector];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
@@ -192,7 +192,7 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
         }
       >
         {([prop, value]) => (
-          <PropertyEditor
+          <PropertyDesigner
             key={prop}
             selector={props.selector}
             property={prop as CSSPropertyName}
@@ -205,13 +205,13 @@ function SelectorEditor<Tsel extends CSSSelectorName>(props: {
   );
 }
 
-function PropertyEditor<Tprop extends CSSPropertyName>(props: {
+function PropertyDesigner<Tprop extends CSSPropertyName>(props: {
   selector: CSSSelectorName;
   property: Tprop;
   value: CSSPropertyValueTypeForProperty<Tprop>;
   debug: boolean;
 }) {
-  const { removeProperty, setProperty } = useCSSEditorMutation();
+  const { removeProperty, setProperty } = useCSSDesignerMutation();
 
   const prop = PROPERTIES[props.property];
   const ControlFn = CONTROLS[prop.kind]?.component as ComponentFor<

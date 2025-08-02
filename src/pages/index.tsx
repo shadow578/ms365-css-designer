@@ -13,19 +13,19 @@ import {
 import { useRef, useState } from "react";
 import { MdOutlineArrowLeft, MdStyle } from "react-icons/md";
 import {
-  CSSEditorContext,
-  CSSEditor,
+  CSSDesignerContext,
+  CSSDesigner,
   useGeneratedCSS,
-} from "~/components/editor";
+} from "~/components/designer";
 import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
 import { Editor as MonacoEditor } from "@monaco-editor/react";
 
 export default function Index() {
   return (
-    <CSSEditorContext>
+    <CSSDesignerContext>
       <MainLayout />
-    </CSSEditorContext>
+    </CSSDesignerContext>
   );
 }
 
@@ -43,7 +43,7 @@ function MainLayout() {
 
   const [editorOpen, setEditorOpen] = useState(true);
 
-  console.log(monacoCSS)
+  console.log(monacoCSS);
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
@@ -59,6 +59,9 @@ function MainLayout() {
         }}
         animationDuration="moderate"
       >
+        <CSSDesigner />
+        {/*
+          
         <Box p={4} paddingEnd={0} height="100%" backgroundColor="red.100">
           <MonacoEditor
             options={{
@@ -71,6 +74,7 @@ function MainLayout() {
             onChange={(e) => setMonacoCSS(e ?? "")}
           />
         </Box>
+              */}
       </Presence>
 
       <Flex direction="column" flexGrow={1} height="100%">

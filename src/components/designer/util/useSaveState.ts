@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import type { EditorState } from "../index"
+import type { DesignerState } from "../index";
 import validateState from "./validateState";
 
-function serializeState(state: EditorState): string {
+function serializeState(state: DesignerState): string {
   return JSON.stringify(state);
 }
 
-function deserializeState(state: string): EditorState {
+function deserializeState(state: string): DesignerState {
   try {
     const stateUnknown = JSON.parse(state) as unknown;
     return validateState(stateUnknown) ?? { style: {} };
@@ -18,7 +18,7 @@ function deserializeState(state: string): EditorState {
 }
 
 export function useGetSaveState(): {
-  state?: EditorState;
+  state?: DesignerState;
   ready: boolean;
 } {
   const { query, isReady } = useRouter();
@@ -32,7 +32,7 @@ export function useGetSaveState(): {
   };
 }
 
-export default function useSetSaveState(state: EditorState) {
+export default function useSetSaveState(state: DesignerState) {
   useEffect(() => {
     // timer to avoid too many updates
     // otherwise, replaceState may throw a security error

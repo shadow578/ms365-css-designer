@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { useCSSEditorState } from "./stateContext";
+import { useCSSDesignerState } from "./stateContext";
 import type { CSSSelectorName } from "../definitions/selectors";
 import type {
   CSSPropertyName,
@@ -29,10 +29,10 @@ const MutationContext = createContext<MutationContextType | undefined>(
   undefined,
 );
 
-export default function CSSEditorMutationContextProvider(props: {
+export default function CSSDesignerMutationContextProvider(props: {
   children: React.ReactNode;
 }) {
-  const [state, setState] = useCSSEditorState();
+  const [state, setState] = useCSSDesignerState();
 
   const context: MutationContextType = {
     addSelector(selector) {
@@ -107,14 +107,14 @@ export default function CSSEditorMutationContextProvider(props: {
 }
 
 /**
- * use css editor mutation functions
+ * use css designer mutation functions
  */
-export function useCSSEditorMutation() {
+export function useCSSDesignerMutation() {
   const context = useContext(MutationContext);
 
   if (!context) {
     throw new Error(
-      "useCSSEditorMutationContext must be used within a CSSEditorMutationContextProvider",
+      "useCSSDesignerMutation must be used within a CSSDesignerMutationContextProvider",
     );
   }
 

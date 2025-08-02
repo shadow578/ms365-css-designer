@@ -1,5 +1,5 @@
 import type { CSSSelectorPropertyDefinition } from "../definitions";
-import type { EditorState } from "../index";
+import type { DesignerState } from "../index";
 import {
   ALL_PROPERTY_NAMES,
   validateCSSPropertyValue,
@@ -22,7 +22,9 @@ function isValidStyleRecord(
   );
 }
 
-export default function validateState(state: unknown): EditorState | undefined {
+export default function validateState(
+  state: unknown,
+): DesignerState | undefined {
   // must be object
   if (!state || typeof state !== "object") {
     return undefined;
@@ -33,7 +35,7 @@ export default function validateState(state: unknown): EditorState | undefined {
     return undefined;
   }
 
-  const parsedState: EditorState = { style: {} };
+  const parsedState: DesignerState = { style: {} };
 
   // copy over all selectors
   for (const sel of ALL_SELECTORS) {
