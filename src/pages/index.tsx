@@ -19,6 +19,7 @@ import {
 } from "~/components/editor";
 import { ColorModeButton } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
+import { Editor as MonacoEditor } from "@monaco-editor/react";
 
 export default function Index() {
   return (
@@ -31,14 +32,18 @@ export default function Index() {
 function MainLayout() {
   const signinFrame = useRef<HTMLIFrameElement>(null);
 
-  const css = useGeneratedCSS();
+  const designerGeneratedCSS = useGeneratedCSS();
+  const [monacoCSS, setMonacoCSS] = useState("");
+
   useInjectedCss(
     signinFrame.current?.contentDocument ??
       signinFrame.current?.contentWindow?.document,
-    css,
+    monacoCSS,
   );
 
   const [editorOpen, setEditorOpen] = useState(true);
+
+  console.log(monacoCSS)
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
@@ -54,7 +59,18 @@ function MainLayout() {
         }}
         animationDuration="moderate"
       >
-        <CSSEditor />
+        <Box p={4} paddingEnd={0} height="100%" backgroundColor="red.100">
+          <MonacoEditor
+            options={{
+              lineNumbers: "off",
+              minimap: { enabled: false },
+              contextmenu: false,
+            }}
+            language="css"
+            height="100%"
+            onChange={(e) => setMonacoCSS(e ?? "")}
+          />
+        </Box>
       </Presence>
 
       <Flex direction="column" flexGrow={1} height="100%">

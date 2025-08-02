@@ -21,7 +21,7 @@ export default function useInjectedCss(
     styleElement.appendChild(targetDocument.createTextNode(css));
     targetDocument.head.appendChild(styleElement);
 
-    console.log("Injecting CSS:");
+    console.log("Injecting CSS:", css);
 
     return () => {
       console.log("Removing injected CSS:", id);
