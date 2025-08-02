@@ -10,7 +10,7 @@ import {
   Presence,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import {
   MdAdd,
   MdBugReport,
@@ -53,6 +53,10 @@ function MainLayout() {
 
   const [editorOpen, setEditorOpen] = useState(true);
 
+  // force re-render once the iframe loads, since css injection will only
+  // work for a loaded iframe
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
   return (
     <Flex direction="row" width="100vw" height="100vh">
       <Presence
@@ -83,6 +87,7 @@ function MainLayout() {
             ref={signinFrame}
             src="/converged-signin-page"
             style={{ width: "100%", height: "100%", border: "none" }}
+            onLoad={() => forceUpdate()}
           />
         </Box>
         <Box backgroundColor="red.600">
