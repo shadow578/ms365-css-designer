@@ -67,13 +67,19 @@ const PROPERTIES = {
   },
   "color$:hover": {
     kind: "color",
-    displayName: "Color on Hover",
+    displayName: "Color (Hover)",
     defaultValue: "#000000",
     generateCSS: (value) => `${value}`,
   },
   "background-color": {
     kind: "color",
     displayName: "Background Color",
+    defaultValue: "#ffffff",
+    generateCSS: (value) => `${value}`,
+  },
+  "background-color$:hover": {
+    kind: "color",
+    displayName: "Background Color (Hover)",
     defaultValue: "#ffffff",
     generateCSS: (value) => `${value}`,
   },

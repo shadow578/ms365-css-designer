@@ -62,18 +62,33 @@ const SELECTORS = {
       "color",
       "color$:hover",
       "background-color",
+      "background-color$:hover",
       "border-radius",
     ],
   },
   ".ext-button.ext-primary": {
     displayName: "Primary Button",
     description: "The main button e.g. 'Login' or 'Next'",
-    properties: ["font-weight", "color", "background-color", "border-radius"],
+    properties: [
+      "font-weight",
+      "color",
+      "color$:hover",
+      "background-color",
+      "background-color$:hover",
+      "border-radius",
+    ],
   },
   ".ext-button.ext-secondary": {
     displayName: "Secondary Button",
     description: "The secondary button e.g. 'Back' or 'Cancel'",
-    properties: ["font-weight", "color", "background-color", "border-radius"],
+    properties: [
+      "font-weight",
+      "color",
+      "color$:hover",
+      "background-color",
+      "background-color$:hover",
+      "border-radius",
+    ],
   },
   //#endregion
 
