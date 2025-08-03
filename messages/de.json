@@ -1,5 +1,17 @@
 {
   "index": {
     "heading": "Überschrift in DE"
+  },
+  "LocaleSwitcher": {
+    "locales": {
+      "en": {
+        "name": "Englisch",
+        "emoji": "🇬🇧"
+      },
+      "de": {
+        "name": "Deutsch",
+        "emoji": "🇩🇪"
+      }
+    }
   }
 }

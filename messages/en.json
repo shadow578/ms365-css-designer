@@ -1,5 +1,17 @@
 {
   "index": {
     "heading": "Heading in EN"
+  },
+  "LocaleSwitcher": {
+    "locales": {
+      "en": {
+        "name": "English",
+        "emoji": "🇬🇧"
+      },
+      "de": {
+        "name": "German",
+        "emoji": "🇩🇪"
+      }
+    }
   }
 }
