@@ -1,4 +1,116 @@
 {
+  "Index": {
+    "MainLayout": {
+      "heading": "Designer für benutzerdefiniertes CSS in M365",
+      "disclaimer": "Diese Seite ist <strong>keine</strong> echte Anmeldeseite. Gebe nicht dein echtes Kennwort ein!",
+      "buttons": {
+        "pane": {
+          "open": "Design-Editor öffnen",
+          "close": "Design-Editor schließen"
+        }
+      }
+    },
+    "EditorPane": {
+      "heading": {
+        "designer": "CSS Designer",
+        "editor": "CSS Editor"
+      },
+      "buttons": {
+        "add_selector": "Selektor hinzufügen",
+        "debug": {
+          "enable": "Debug-Modus aktivieren",
+          "disable": "Debug-Modus deaktivieren"
+        },
+        "download_css": "CSS-Datei herunterladen",
+        "switch_to": {
+          "designer": "Zum Designer wechseln",
+          "editor": "Zum Editor wechseln"
+        }
+      }
+    }
+  },
+  "CSSDesigner": {
+    "selector": {
+      "remove": "Diesen Selektor entfernen",
+      "empty": {
+        "message": "Keine Selektoren",
+        "action": "Selektor hinzufügen"
+      }
+    },
+    "property": {
+      "add": "Eigenschaft hinzufügen",
+      "remove": "Diese Eigenschaft entfernen",
+      "empty": {
+        "message": "Keine Eigenschaften gesetzt",
+        "action": "Eigenschaft hinzufügen"
+      }
+    },
+    "selectors": {
+      "*": "Alles",
+      "#ext-sign-in-box": "Anmeldefenster",
+      "#ext-banner-logo": "Bannerlogo",
+      "#ext-title": "Titel",
+      "#ext-input": "Eingabefelder",
+      "#ext-has-error": "Eingabefeld mit Fehler",
+      "#ext-error": "Fehlernachricht",
+      "#ext-boilerplate-text": "Text der Anmeldeseite",
+      "#ext-button": "Schaltflächen",
+      "#ext-button#ext-primary": "Primäre Schaltfläche",
+      "#ext-button#ext-secondary": "Sekundäre Schaltfläche",
+      "#ext-background-image": "Hintergrundbild",
+      "#ext-background-overlay": "Overlay des Hintergrunds"
+    },
+    "properties": {
+      "color": "Farbe",
+      "color$:hover": "Farbe (Hover)",
+      "background-color": "Hintergrundfarbe",
+      "background-color$:hover": "Hintergrundfarbe (Hover)",
+      "border-radius": "Kantenradius",
+      "text-align": "Textausrichtung",
+      "font-weight": "Schriftstärke",
+      "margin-top": "Oberer Rand",
+      "margin-bottom": "Unterer Rand",
+      "margin-right": "Rechter Rand",
+      "margin-left": "Linker Rand",
+      "background-image": "Hintergrundbild"
+    },
+    "controls": {
+      "AlignmentControl": {
+        "left": "Links",
+        "center": "Zentriert",
+        "right": "Rechts",
+        "justify": "Blocksatz",
+        "inherit": "Vererbt"
+      },
+      "FontWeightControl": {
+        "absolute": "Absolut",
+        "bolder": "Fetter",
+        "lighter": "Dünner",
+        "inherit": "Vererbt",
+        "thin": "Dünn",
+        "extra_light": "Extra Schwach",
+        "light": "Schwach",
+        "normal": "Normal",
+        "medium": "Mittel",
+        "semi_bold": "Halbfett",
+        "bold": "Fett",
+        "extra_bold": "Extra Fett",
+        "black": "Vollfett"
+      }
+    }
+  },
+  "LocaleSwitcher": {
+    "locales": {
+      "en": {
+        "name": "Englisch",
+        "emoji": "🇦🇺"
+      },
+      "de": {
+        "name": "Deutsch",
+        "emoji": "🇩🇪"
+      }
+    }
+  },
   "ms": {
     "form": {
       "lightbox": {
