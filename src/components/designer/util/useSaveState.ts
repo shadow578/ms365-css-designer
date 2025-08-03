@@ -28,19 +28,21 @@ export function useGetSaveState(): {
   state?: DesignerState;
   ready: boolean;
 } {
-  const { query, isReady } = useRouter();
-  if (!isReady) {
-    return { ready: false };
-  }
-
-  if (!query.s || typeof query.s !== "string") {
-    return { ready: true };
-  }
-
-  return {
-    ready: true,
-    state: deserializeState(query.s),
-  };
+  // FIXME: this must be ported to app router
+  return { ready: true };
+  //const { query, isReady } = useRouter();
+  //if (!isReady) {
+  //  return { ready: false };
+  //}
+  //
+  //if (!query.s || typeof query.s !== "string") {
+  //  return { ready: true };
+  //}
+  //
+  //return {
+  //  ready: true,
+  //  state: deserializeState(query.s),
+  //};
 }
 
 export default function useSetSaveState(state: DesignerState) {

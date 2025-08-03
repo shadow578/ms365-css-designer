@@ -17,7 +17,6 @@ const createContext = cache(async () => {
   heads.set("x-trpc-source", "rsc");
 
   return createTRPCContext({
-    // @ts-expect-error -- FIXME still somehow not quite right after porting from T3 app to page router
     headers: heads,
   });
 });

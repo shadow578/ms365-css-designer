@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getResourceUrls } from "~/pages/api/assetProxy";
+import { getResourceUrls } from "~/app/api/proxy/util";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { getBaseHeaders } from "~/util/msHeaders";
