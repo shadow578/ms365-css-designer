@@ -29,6 +29,9 @@ const SELECTORS = {
   ".ext-input": {
     properties: ["font-weight", "color", "border-radius"],
   },
+  ".ext-has-error": {
+    properties: ["font-weight", "color", "border-radius"],
+  },
   ".ext-error": {
     properties: ["font-weight", "color", "background-color"],
   },
