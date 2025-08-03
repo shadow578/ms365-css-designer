@@ -6,7 +6,6 @@ import {
   DownloadTrigger,
   Flex,
   Heading,
-  Highlight,
   Presence,
   Text,
 } from "@chakra-ui/react";

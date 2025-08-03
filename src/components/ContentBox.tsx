@@ -78,7 +78,7 @@ function CollapsibleBox(props: ContentBoxBaseProps & { box: BoxProps }) {
         {props.buttons && <ButtonGroup>{props.buttons}</ButtonGroup>}
       </Flex>
 
-      <Collapsible.Content>{props.children}</Collapsible.Content>
+      <Collapsible.Content overflow="visible">{props.children}</Collapsible.Content>
     </Collapsible.Root>
   );
 }
