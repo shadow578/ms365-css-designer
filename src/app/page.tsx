@@ -32,7 +32,7 @@ import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 import ContentBox from "~/components/ContentBox";
 import { CSSDesignerAddSelectorButton } from "~/components/designer/CSSDesigner";
 import IconButton from "~/components/IconButton";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import LocaleSwitcher from "~/components/LocaleSwitcher";
 
 export default function Index() {
@@ -60,6 +60,7 @@ function MainLayout() {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const t = useTranslations("Index.MainLayout");
+  const locale = useLocale();
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
@@ -90,7 +91,7 @@ function MainLayout() {
         <Box flexGrow={1}>
           <iframe
             ref={signinFrame}
-            src="/converged-signin-page"
+            src={`converged-signin-page?l=${locale}`}
             style={{ width: "100%", height: "100%", border: "none" }}
             onLoad={() => forceUpdate()}
           />
