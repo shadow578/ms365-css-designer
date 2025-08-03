@@ -7,7 +7,7 @@ type ClickHandler = () => void;
 type InputHandler = (newValue: string) => void;
 
 function SignInOptions() {
-  const t = useTranslations("ms.promoted_fed_cred_box");
+  const t = useTranslations("ms.signin_options");
 
   return (
     <div className="promoted-fed-cred-box ext-promoted-fed-cred-box">

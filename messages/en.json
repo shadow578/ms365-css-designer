@@ -109,5 +109,65 @@
         "emoji": "🇩🇪"
       }
     }
+  },
+  "ms": {
+    "form": {
+      "lightbox": {
+        "background_image": {
+          "aria_label": "Organization background image"
+        },
+        "banner_logo": {
+          "aria_label": {
+            "ms": "Microsoft",
+            "org": "Organization banner logo"
+          }
+        }
+      },
+      "username": {
+        "title": "Sign in",
+        "input": {
+          "placeholder": "Email, phone or Skype",
+          "aria_label": "Enter your email, phone, or Skype."
+        },
+        "account_options": {
+          "create": {
+            "text": "No account? <a>Create one!</a>",
+            "aria_label": "Microsoft-Konto erstellen"
+          },
+          "recover": "Can't access your account?"
+        },
+        "button": {
+          "submit": "Next"
+        }
+      },
+      "password": {
+        "title": "Enter password",
+        "input": {
+          "placeholder": "Password",
+          "aria_label": "Enter the password for {username}"
+        },
+        "error": {
+          "password": "Your account or password is incorrect. If you don't remember your password, <a>reset it now.</a>"
+        },
+        "forgot_password": "Forgot my password",
+        "button": {
+          "submit": "Sign in",
+          "back": {
+            "aria_label": "Back"
+          }
+        }
+      }
+    },
+    "signin_options": {
+      "label": "Sign-in options"
+    },
+    "footer": {
+      "terms": "Terms of use",
+      "privacy": "Privacy & cookies",
+      "more_options": {
+        "text": "...",
+        "aria_label": "Click here for troubleshooting information"
+      }
+    }
   }
 }
