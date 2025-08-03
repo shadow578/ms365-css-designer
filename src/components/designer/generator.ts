@@ -1,5 +1,9 @@
 import type { CSSStyleDefinition } from "./definitions";
+import GENERATOR_BY_KIND, {
+  type GeneratorFunction,
+} from "./definitions/generators";
 import type {
+  CSSPropertyKindFor,
   CSSPropertyName,
   CSSPropertyValueTypeForProperty,
 } from "./definitions/properties";
@@ -9,16 +13,16 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   prop: Tprop,
   value: CSSPropertyValueTypeForProperty<Tprop>,
 ): string | undefined {
-  const gen = PROPERTIES[prop].generateCSS as (
-    value: CSSPropertyValueTypeForProperty<Tprop>,
-  ) => string;
-
   if (!validateCSSPropertyValue(prop, value)) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     console.warn(`Invalid value for property '${prop}': '${value}'`);
     return undefined;
   }
 
+  const kind = PROPERTIES[prop].kind;
+  const gen = GENERATOR_BY_KIND[kind] as GeneratorFunction<
+    CSSPropertyKindFor<Tprop>
+  >;
   return gen(value);
 }
 

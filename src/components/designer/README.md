@@ -2,33 +2,51 @@
 
 this directory contains the CSS designer component, which is a extensible component for editing CSS styles using a design wizard.
 
-## how to add a new selector
+## Definitions
 
-selectors are how the designer knows what "components" to show in the designer.
-each selector is a arbitrary CSS selector that matches elements in the document.
-for each selector, a list of properties is defined that can be edited for that selector.
+the designer requires a number of definitions to work.
+the following names are used:
 
-1. open `src/components/designer/selectors.ts`
-2. add the definition for the new selector to the `SELECTORS` object. Selectors must be unique. the key is the css selector matching the syntax in css files (so `.foo` selects all elements with the class `foo`).
-3. in the `properties` array, define all properties that can be edited for this selector. See the next section for adding new properties.
+| Name        | File                              | Description                                                                                                                  |
+| ----------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `selector`  | `./definitions/selectors.ts`      | defines the CSS selectors that can be edited in the designer. each selector has a list of **properties** that are be edited. |
+| `property`  | `./definitions/properties.ts`     | defines the CSS properties that can be edited in the designer. each property has a **kind** that defines its behaviour.      |
+| `kind`      | `./definitions/properties.ts`     | defines the data structure for that kind of value. provides the basis for both **generators** and **controls**.              |
+| `generator` | `./definitions/generators.ts`     | defines how the CSS is generated for each property.                                                                          |
+| `control`   | `./components/controls/index.tsx` | defines how the property is represented in the designer.                                                                     |
 
-## how to add a new property
+to add a new selector or property, you need to follow the steps below.
 
-properties are all the settings that can be edited for a selector.
+### add a new selector
 
-1. open `src/components/designer/properties.ts`
-2. add the property definition to the `PROPERTIES` object. the key is the name of the property (as in css). the `kind` defines what kind of property it is and how it is represented in the designer. depending on the kind, additional fields may be required in the definition. `generateCSS` is the function that generates the css for the property. it only needs to generate the value portion of the css rule, the selector and property name are generated automatically.
-3. if you want to add a new kind, see below.
+1. open `./definitions/selectors.ts`
+2. add the definition for the new selector to the `SELECTORS` record. Selectors must be unique. the key is the css selector matching the syntax in css files (so `.foo` selects all elements with the class `foo`).
+3. in the `properties` array, define all properties that can be edited for this selector.
 
-### how to add a new kind
+### add a new property
 
-property kinds define how the property is represented in the designer.
+1. open `./definitions/properties.ts`
+2. add the property definition to the `PROPERTIES` object. the key is the name of the property (as in css).
+3. add the `kind` to define what kind of property it is and how it is represented in the designer. depending on the kind, additional fields may be required in the definition.
 
-1. open `src/components/designer/properties.ts`
-2. add the new kind to the `PROP_SCHEMA_BY_KIND` object. for each kind, a zod schema must be defined that describes the data structure of the property.
-3. create a new type or interface in `properties.ts` that describes any additional fields required in the property definition. refer to the existing kinds for examples.
+> [!NOTE]
+> the property names have a special case: by using `$` as a delimiter, you can define a suffix for the selector the property applies to. for example, define `color$:hover` to apply the color property to the `:hover` state of the selector. this is useful for pseudo-classes and pseudo-elements.
+
+### add a new kind
+
+1. open `./definitions/kinds.ts`
+2. add the new kind and its data scheam to the `PROP_SCHEMA_BY_KIND` object
+3. create a new type or interface in `./defintions/properties.ts` that describes any additional fields required in the property definition. refer to the existing kinds for examples.
 4. add the new options type of the new kind to the `CSSPropertyOptionsForKind` helper type.
 5. also add the new options type to the `CSSPropertyKinds` type.
-6. open `src/components/designer/controls/index.tsx`
-7. add a new entry for the kind in the `CONTROLS` object. this object maps the kind to the component that renders the property in the designer.
-8. implement a new component that renders the property in the designer. refer to the existing components for examples.
+6. follow the steps below to add a new control and a new generator for the kind.
+
+#### add a new control
+
+1. open `./components/controls/index.tsx`
+2. add a new entry for the kind in the `CONTROLS` object, mapping the kind to the component that will render it. refer to the existing controls for examples.
+
+#### add a new CSS generator
+
+1. open `./definitions/generators.ts`
+2. add a new entry for the kind in the `GENERATORS` object, providing a function that generates the CSS value part for the property based on the data structure defined in the kind. refer to the existing generators for examples.

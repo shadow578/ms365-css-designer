@@ -1,6 +1,5 @@
 import type z from "zod";
-import {
-  PROP_SCHEMA_BY_KIND,
+import PROP_SCHEMA_BY_KIND, {
   type CSSPropertyKind,
   type CSSPropertyValueTypeByKind,
 } from "./kinds";
@@ -10,12 +9,6 @@ interface CSSBaseProperty<T extends CSSPropertyKind> {
   kind: T;
   displayName: string;
   defaultValue: CSSPropertyValueTypeByKind<T>;
-
-  /**
-   * generateCSS only generates the value part of the CSS property.
-   * property name and semicolon are handled by the generator.
-   */
-  generateCSS: (value: CSSPropertyValueTypeByKind<T>) => string;
 }
 
 type ColorProperty = CSSBaseProperty<"color">;
@@ -63,45 +56,38 @@ const PROPERTIES = {
     kind: "color",
     displayName: "Color",
     defaultValue: "#000000",
-    generateCSS: (value) => `${value}`,
   },
   "color$:hover": {
     kind: "color",
     displayName: "Color (Hover)",
     defaultValue: "#000000",
-    generateCSS: (value) => `${value}`,
   },
   "background-color": {
     kind: "color",
     displayName: "Background Color",
     defaultValue: "#ffffff",
-    generateCSS: (value) => `${value}`,
   },
   "background-color$:hover": {
     kind: "color",
     displayName: "Background Color (Hover)",
     defaultValue: "#ffffff",
-    generateCSS: (value) => `${value}`,
   },
   "border-radius": {
     kind: "dimension",
     displayName: "Border Radius",
     units: ["px", "%"],
     defaultValue: { value: 0, unit: "px" },
-    generateCSS: (value) => `${value.value}${value.unit}`,
   },
   "text-align": {
     kind: "alignment",
     displayName: "Text Alignment",
     defaultValue: "left",
     allowed: ["left", "right", "center"],
-    generateCSS: (value) => `${value}`,
   },
   "font-weight": {
     kind: "fontWeight",
     displayName: "Font Weight",
     defaultValue: "inherit",
-    generateCSS: (value) => `${value}`,
   },
   "margin-top": {
     kind: "dimension",
@@ -109,7 +95,6 @@ const PROPERTIES = {
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
-    generateCSS: (value) => `${value.value}${value.unit}`,
   },
   "margin-bottom": {
     kind: "dimension",
@@ -117,7 +102,6 @@ const PROPERTIES = {
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
-    generateCSS: (value) => `${value.value}${value.unit}`,
   },
   "margin-right": {
     kind: "dimension",
@@ -125,7 +109,6 @@ const PROPERTIES = {
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
-    generateCSS: (value) => `${value.value}${value.unit}`,
   },
   "margin-left": {
     kind: "dimension",
@@ -133,13 +116,11 @@ const PROPERTIES = {
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
-    generateCSS: (value) => `${value.value}${value.unit}`,
   },
   "background-image": {
     kind: "url",
     displayName: "Background Image",
     defaultValue: "",
-    generateCSS: (value) => `url("${value}")`,
   },
 } satisfies Record<string, CSSPropertyKinds>;
 export default PROPERTIES;

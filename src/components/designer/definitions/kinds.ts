@@ -1,7 +1,7 @@
 import z, { type ZodSchema } from "zod";
 import zx from "~/util/zodExtras";
 
-export const PROP_SCHEMA_BY_KIND = {
+const PROP_SCHEMA_BY_KIND = {
   color: zx.hexColorRGBA(),
   dimension: z.object({
     value: z.number(),
@@ -14,6 +14,7 @@ export const PROP_SCHEMA_BY_KIND = {
   ]),
   url: z.string()
 } satisfies Record<string, ZodSchema>;
+export default PROP_SCHEMA_BY_KIND;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
 
