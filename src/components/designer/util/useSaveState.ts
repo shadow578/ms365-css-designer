@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import type { DesignerState } from "../index";
 import validateState from "./validateState";
+import { useSearchParams } from "next/navigation";
 
 function serializeState(state: DesignerState): string {
   const json = JSON.stringify(state);
@@ -24,25 +24,16 @@ function deserializeState(state: string): DesignerState {
   }
 }
 
-export function useGetSaveState(): {
-  state?: DesignerState;
-  ready: boolean;
-} {
-  // FIXME: this must be ported to app router
-  return { ready: true };
-  //const { query, isReady } = useRouter();
-  //if (!isReady) {
-  //  return { ready: false };
-  //}
-  //
-  //if (!query.s || typeof query.s !== "string") {
-  //  return { ready: true };
-  //}
-  //
-  //return {
-  //  ready: true,
-  //  state: deserializeState(query.s),
-  //};
+export function useGetSaveState(): DesignerState | undefined {
+  const searchParams = useSearchParams();
+  const s = searchParams?.get("s");
+
+  // In app router, searchParams is always available, so ready is always true
+  if (!s || typeof s !== "string") {
+    return undefined;
+  }
+
+  return deserializeState(s)
 }
 
 export default function useSetSaveState(state: DesignerState) {

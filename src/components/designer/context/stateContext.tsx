@@ -14,8 +14,7 @@ const CSSDesignerContext = createContext<ContextType | undefined>(undefined);
 export default function CSSDesignerStateContextProvider(props: {
   children: React.ReactNode;
 }) {
-  const { ready, state: initialState } = useGetSaveState();
-  if (!ready) return null;
+  const initialState = useGetSaveState();
 
   return (
     <ContextProviderInner initialState={initialState}>
