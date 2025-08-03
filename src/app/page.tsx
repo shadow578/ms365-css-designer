@@ -32,6 +32,8 @@ import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 import ContentBox from "~/components/ContentBox";
 import { CSSDesignerAddSelectorButton } from "~/components/designer/CSSDesigner";
 import IconButton from "~/components/IconButton";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "~/components/LocaleSwitcher";
 
 export default function Index() {
   return (
@@ -57,6 +59,8 @@ function MainLayout() {
   // work for a loaded iframe
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
+  const t = useTranslations("index");
+
   return (
     <Flex direction="row" width="100vw" height="100vh">
       <Presence
@@ -78,8 +82,9 @@ function MainLayout() {
         <Box>
           <Flex alignItems="center" gap={2}>
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
-            <Heading flex={1}>M365 CSS Designer</Heading>
+            <Heading flex={1}>{t("heading")}</Heading>
             <ColorModeButton />
+            <LocaleSwitcher />
           </Flex>
         </Box>
         <Box flexGrow={1}>
