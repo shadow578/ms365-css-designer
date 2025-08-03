@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-css-tags -- needed for ms css */
 /* eslint-disable @next/next/no-img-element -- needed for ms layouts*/
 import { useState } from "react";
 import { api } from "~/trpc/react";
@@ -421,11 +420,6 @@ export default function MSConvergedSignInPage() {
 
   return (
     <>
-      {/* 
-      FIXME workaround because Next.js doesn't allow global css in the way we require. 
-      https://nextjs.org/docs/messages/css-global
-      */}
-      <link rel="stylesheet" href="ms/signin.css" />
       <LightboxTemplateContainer
         signInOptions={page === "username"}
         footer
