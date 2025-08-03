@@ -64,7 +64,9 @@ function MainLayout() {
   return (
     <Flex direction="row" width="100vw" height="100vh">
       <Presence
-        width="40%"
+        flex={1}
+        maxWidth="50%"
+        minWidth="400px"
         height="100vh"
         overflow="scroll"
         scrollBehavior="smooth"

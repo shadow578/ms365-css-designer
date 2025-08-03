@@ -59,8 +59,9 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
   };
 
   return (
-    <Flex gap={4} alignItems="center">
+    <Flex gap={4} alignItems="center" flexWrap="wrap">
       <Slider.Root
+        minWidth="300px"
         disabled={selectedWeightOption !== "absolute"}
         flex={1}
         value={[typeof props.value === "number" ? props.value : 0]}
