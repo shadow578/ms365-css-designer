@@ -17,6 +17,9 @@ the following names are used:
 
 to add a new selector or property, you need to follow the steps below.
 
+> [!NOTE]
+> besides the definitions, you'll also need to add the appropriate translation messages to `messages/[language].json` files.
+
 ### add a new selector
 
 1. open `./definitions/selectors.ts`
