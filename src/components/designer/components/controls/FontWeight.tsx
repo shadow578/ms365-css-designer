@@ -1,5 +1,6 @@
 import { Flex, SegmentGroup, Slider } from "@chakra-ui/react";
 import type { PropsFor } from ".";
+import { useTranslations } from "next-intl";
 
 export default function FontWeightControl(props: PropsFor<"fontWeight">) {
   const selectedWeightOption =
@@ -7,13 +8,15 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
 
   type SelectOptions = typeof selectedWeightOption;
 
+  const t = useTranslations("CSSDesigner.controls.FontWeightControl");
+
   // lookup for named weight display
   // order here is order in the ui
   const weightOptions = {
-    absolute: "Absolute",
-    bolder: "Bolder",
-    lighter: "Lighter",
-    inherit: "Inherit",
+    absolute: t("absolute"),
+    bolder: t("bolder"),
+    lighter: t("lighter"),
+    inherit: t("inherit"),
   } satisfies Record<SelectOptions, string>;
 
   const selectableWeightOptions = Object.entries(weightOptions).map(
@@ -25,15 +28,15 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
 
   // names for the absolute weights, selected by the slider
   const namedAbsoluteWeights = {
-    100: "Thin",
-    200: "Extra Light",
-    300: "Light",
-    400: "Normal",
-    500: "Medium",
-    600: "Semi Bold",
-    700: "Bold",
-    800: "Extra Bold",
-    900: "Black",
+    100: t("thin"),
+    200: t("extra_light"),
+    300: t("light"),
+    400: t("normal"),
+    500: t("medium"),
+    600: t("semi_bold"),
+    700: t("bold"),
+    800: t("extra_bold"),
+    900: t("black"),
   };
 
   const sliderValueFormatter = (w: number) => {

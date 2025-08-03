@@ -18,12 +18,16 @@ import EmptyState from "./components/EmptyState";
 import IconButton from "../IconButton";
 import ContentBox from "../ContentBox";
 import { useCSSDesignerMutation } from "./context/mutationContext";
+import { useTranslations } from "next-intl";
+import useDesignerTranslations from "./i18n";
 
 export function CSSDesignerAddSelectorButton(props: {
   children: React.ReactNode;
 }) {
   const [state] = useCSSDesignerState();
   const { addSelector } = useCSSDesignerMutation();
+
+  const { tSelector } = useDesignerTranslations();
 
   const selectableSelectors = filterRecord(
     SELECTORS,
@@ -32,7 +36,7 @@ export function CSSDesignerAddSelectorButton(props: {
 
   return (
     <SelectNewButton
-      options={mapRecord(selectableSelectors, (info) => info.displayName)}
+      options={mapRecord(selectableSelectors, (_, sel) => tSelector(sel))}
       onSelect={addSelector}
     >
       {props.children}
@@ -65,18 +69,20 @@ function CSSDesignerDebugView() {
 export default function CSSDesigner(props: { debug?: boolean }) {
   const [state] = useCSSDesignerState();
 
+  const t = useTranslations("CSSDesigner");
+
   return (
     <Box>
       <For
         each={Object.entries(state.style)}
         fallback={
           <EmptyState
-            title={"No Selectors Added"}
+            title={t("selector.empty.message")}
             action={
               <CSSDesignerAddSelectorButton>
                 <Button variant="outline">
                   <MdAdd />
-                  Add Selector
+                  {t("selector.empty.action")}
                 </Button>
               </CSSDesignerAddSelectorButton>
             }
@@ -105,6 +111,11 @@ function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
 }) {
   const { removeSelector, addProperty } = useCSSDesignerMutation();
 
+  const t = useTranslations("CSSDesigner.selector");
+  const tp = useTranslations("CSSDesigner.property");
+
+  const { tSelector, tProperty } = useDesignerTranslations();
+
   const selector = SELECTORS[props.selector];
   const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
     (selector.properties as string[]).includes(cssProp),
@@ -117,7 +128,7 @@ function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
 
   const SelectPropertyButton = (cprops: { children: React.ReactNode }) => (
     <SelectNewButton
-      options={mapRecord(selectableProperties, (info) => info.displayName)}
+      options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
       onSelect={(cssProp) => {
         addProperty?.(props.selector, cssProp);
       }}
@@ -132,19 +143,19 @@ function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
       collapsible
       header={
         <Text fontSize="lg" fontWeight="bold">
-          {props.debug ? `${props.selector}` : selector.displayName}
+          {props.debug ? `${props.selector}` : tSelector(props.selector)}
         </Text>
       }
       buttons={
         <>
           <SelectPropertyButton>
-            <IconButton label="Add Property">
+            <IconButton label={tp("add")}>
               <MdAdd />
             </IconButton>
           </SelectPropertyButton>
 
           <IconButton
-            label="Remove this Selector"
+            label={t("remove")}
             color="red.500"
             onClick={() => removeSelector(props.selector)}
           >
@@ -157,12 +168,12 @@ function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
         each={Object.entries(props.CSSProperties)}
         fallback={
           <EmptyState
-            title="No Properties Added"
+            title={tp("empty.message")}
             action={
               <SelectPropertyButton>
                 <Button variant="outline">
                   <MdAdd />
-                  Add Property
+                  {tp("empty.action")}
                 </Button>
               </SelectPropertyButton>
             }
@@ -191,6 +202,9 @@ function PropertyDesigner<Tprop extends CSSPropertyName>(props: {
 }) {
   const { removeProperty, setProperty } = useCSSDesignerMutation();
 
+  const t = useTranslations("CSSDesigner.property");
+  const { tProperty } = useDesignerTranslations();
+
   const prop = PROPERTIES[props.property];
   const ControlFn = CONTROLS[prop.kind]?.component as ComponentFor<
     CSSPropertyKindFor<Tprop>
@@ -205,12 +219,14 @@ function PropertyDesigner<Tprop extends CSSPropertyName>(props: {
       collapsible
       header={
         <Text fontSize="md">
-          {props.debug ? `${props.property} (${prop.kind})` : prop.displayName}
+          {props.debug
+            ? `${props.property} (${prop.kind})`
+            : tProperty(props.property as string)}
         </Text>
       }
       buttons={
         <IconButton
-          label="Remove this Property"
+          label={t("remove")}
           color="red.500"
           onClick={() => removeProperty(props.selector, props.property)}
         >

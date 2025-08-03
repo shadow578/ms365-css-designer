@@ -59,7 +59,7 @@ function MainLayout() {
   // work for a loaded iframe
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const t = useTranslations("index");
+  const t = useTranslations("Index.MainLayout");
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
@@ -99,8 +99,11 @@ function MainLayout() {
           <Center>
             <Text>
               <Highlight query="not" styles={{ fontWeight: "bold" }}>
-                This page is not a real sign-in page. Do not enter any real
-                credentials.
+                {
+                  t("disclaimer")
+
+                  /* TODO: highligh must be translateable somehow */
+                }
               </Highlight>
             </Text>
           </Center>
@@ -126,19 +129,23 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
 
   const { colorMode } = useColorMode();
 
+  const t = useTranslations("Index.EditorPane");
+
   return (
     <Box p={4} height="100%">
       <ContentBox
         height="100%"
         header={
-          <Heading>{designerMode ? "CSS Designer" : "CSS Editor"}</Heading>
+          <Heading>
+            {designerMode ? t("heading.designer") : t("heading.editor")}
+          </Heading>
         }
         buttons={
           <>
             {designerMode && (
               <>
                 <CSSDesignerAddSelectorButton>
-                  <IconButton label="Add Selector">
+                  <IconButton label={t("buttons.add_selector")}>
                     <MdAdd />
                   </IconButton>
                 </CSSDesignerAddSelectorButton>
@@ -147,8 +154,8 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
                   <IconButton
                     label={
                       designerDebugMode
-                        ? "Disable Debug Mode"
-                        : "Enable Debug Mode"
+                        ? t("buttons.debug.enable")
+                        : t("buttons.debug.disable")
                     }
                     onClick={() => setDesignerDebugMode(!designerDebugMode)}
                   >
@@ -168,13 +175,17 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
               mimeType="text/css"
               asChild
             >
-              <IconButton label="Download CSS">
+              <IconButton label={t("buttons.download_css")}>
                 <MdDownload />
               </IconButton>
             </DownloadTrigger>
 
             <IconButton
-              label={designerMode ? "Switch to Editor" : "Switch to Designer"}
+              label={
+                designerMode
+                  ? t("buttons.switch_to.editor")
+                  : t("buttons.switch_to.designer")
+              }
               onClick={() => setDesignerMode(!designerMode)}
             >
               {designerMode ? <MdEdit /> : <MdStyle />}
@@ -209,9 +220,11 @@ function EditorButton(props: {
   open: boolean;
   onClick: (open: boolean) => void;
 }) {
+  const t = useTranslations("Index.MainLayout");
+
   return (
     <IconButton
-      label={props.open ? "Close Editor" : "Open Editor"}
+      label={props.open ? t("buttons.pane.close") : t("buttons.pane.open")}
       onClick={() => props.onClick(!props.open)}
     >
       {props.open ? <MdOutlineArrowLeft /> : <MdStyle />}

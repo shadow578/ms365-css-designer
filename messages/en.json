@@ -1,6 +1,102 @@
 {
-  "index": {
-    "heading": "Heading in EN"
+  "Index": {
+    "MainLayout": {
+      "heading": "M365 Custom CSS Designer",
+      "disclaimer": "This page is not a real sign-in page. Do not enter any real credentials.",
+      "buttons": {
+        "pane": {
+          "open": "Open Design Editor",
+          "close": "Close Design Editor"
+        }
+      }
+    },
+    "EditorPane": {
+      "heading": {
+        "designer": "CSS Designer",
+        "editor": "CSS Editor"
+      },
+      "buttons": {
+        "add_selector": "Add Selector",
+        "debug": {
+          "enable": "Enable Debug Mode",
+          "disable": "Disable Debug Mode"
+        },
+        "download_css": "Download CSS",
+        "switch_to": {
+          "designer": "Switch to Designer",
+          "editor": "Switch to Editor"
+        }
+      }
+    }
+  },
+  "CSSDesigner": {
+    "selector": {
+      "remove": "Remove this Selector",
+      "empty": {
+        "message": "No selectors set",
+        "action": "Add Selector"
+      }
+    },
+    "property": {
+      "add": "Add Property",
+      "remove": "Remove this Property",
+      "empty": {
+        "message": "No Properties set",
+        "action": "Add Property"
+      }
+    },
+    "selectors": {
+      "*": "All",
+      "#ext-sign-in-box": "Sign-in Box",
+      "#ext-banner-logo": "Banner Logo",
+      "#ext-title": "Title",
+      "#ext-input": "Input Fields",
+      "#ext-error": "Form Error",
+      "#ext-boilerplate-text": "Boilerplate Text",
+      "#ext-button": "Buttons",
+      "#ext-button#ext-primary": "Primary Button",
+      "#ext-button#ext-secondary": "Secondary Button",
+      "#ext-background-image": "Background Image",
+      "#ext-background-overlay": "Background Overlay"
+    },
+    "properties": {
+      "color": "Color",
+      "color$:hover": "Color (Hover)",
+      "background-color": "Background Color",
+      "background-color$:hover": "Background Color (Hover)",
+      "border-radius": "Border Radius",
+      "text-align": "Text Alignment",
+      "font-weight": "Font Weight",
+      "margin-top": "Margin Top",
+      "margin-bottom": "Margin Bottom",
+      "margin-right": "Margin Right",
+      "margin-left": "Margin Left",
+      "background-image": "Background Image"
+    },
+    "controls": {
+      "AlignmentControl": {
+        "left": "Left",
+        "center": "Center",
+        "right": "Right",
+        "justify": "Justify",
+        "inherit": "Inherit"
+      },
+      "FontWeightControl": {
+        "absolute": "Absolute",
+        "bolder": "Bolder",
+        "lighter": "Lighter",
+        "inherit": "Inherit",
+        "thin": "Thin",
+        "extra_light": "Extra Light",
+        "light": "Light",
+        "normal": "Normal",
+        "medium": "Medium",
+        "semi_bold": "Semi Bold",
+        "bold": "Bold",
+        "extra_bold": "Extra Bold",
+        "black": "Black"
+      }
+    }
   },
   "LocaleSwitcher": {
     "locales": {

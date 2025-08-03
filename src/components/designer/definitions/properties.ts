@@ -7,7 +7,6 @@ import type { ZodSchema } from "zod";
 
 interface CSSBaseProperty<T extends CSSPropertyKind> {
   kind: T;
-  displayName: string;
   defaultValue: CSSPropertyValueTypeByKind<T>;
 }
 
@@ -54,72 +53,60 @@ type CSSPropertyKinds =
 const PROPERTIES = {
   color: {
     kind: "color",
-    displayName: "Color",
     defaultValue: "#000000",
   },
   "color$:hover": {
     kind: "color",
-    displayName: "Color (Hover)",
     defaultValue: "#000000",
   },
   "background-color": {
     kind: "color",
-    displayName: "Background Color",
     defaultValue: "#ffffff",
   },
   "background-color$:hover": {
     kind: "color",
-    displayName: "Background Color (Hover)",
     defaultValue: "#ffffff",
   },
   "border-radius": {
     kind: "dimension",
-    displayName: "Border Radius",
     units: ["px", "%"],
     defaultValue: { value: 0, unit: "px" },
   },
   "text-align": {
     kind: "alignment",
-    displayName: "Text Alignment",
     defaultValue: "left",
     allowed: ["left", "right", "center"],
   },
   "font-weight": {
     kind: "fontWeight",
-    displayName: "Font Weight",
     defaultValue: "inherit",
   },
   "margin-top": {
     kind: "dimension",
-    displayName: "Margin Top",
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
   },
   "margin-bottom": {
     kind: "dimension",
-    displayName: "Margin Bottom",
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
   },
   "margin-right": {
     kind: "dimension",
-    displayName: "Margin Right",
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
   },
   "margin-left": {
     kind: "dimension",
-    displayName: "Margin Left",
     units: ["px", "em", "rem"],
     negative: true,
     defaultValue: { value: 0, unit: "px" },
   },
   "background-image": {
     kind: "url",
-    displayName: "Background Image",
     defaultValue: "",
   },
 } satisfies Record<string, CSSPropertyKinds>;
