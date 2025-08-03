@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- needed for ms layouts*/
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { api } from "~/trpc/react";
 
@@ -6,6 +7,8 @@ type ClickHandler = () => void;
 type InputHandler = (newValue: string) => void;
 
 function SignInOptions() {
+  const t = useTranslations("ms.promoted_fed_cred_box");
+
   return (
     <div className="promoted-fed-cred-box ext-promoted-fed-cred-box">
       <div className="promoted-fed-cred-content">
@@ -15,7 +18,7 @@ function SignInOptions() {
               className="table"
               role="button"
               tabIndex={0}
-              aria-label="Anmeldeoptionen undefined"
+              aria-label={t("label")}
             >
               <div className="table-row">
                 <div className="table-cell tile-img medium">
@@ -27,7 +30,7 @@ function SignInOptions() {
                   />
                 </div>
                 <div className="table-cell text-left content">
-                  <div>Anmeldeoptionen</div>
+                  <div>{t("label")}</div>
                 </div>
               </div>
             </div>
@@ -55,6 +58,8 @@ function UsernamePage(props: {
   onUsernameChange?: InputHandler;
   onSubmit?: ClickHandler;
 }) {
+  const t = useTranslations("ms.form.username");
+
   return (
     <div role="main">
       <div>
@@ -64,7 +69,7 @@ function UsernamePage(props: {
               <div>
                 <div className="row title ext-title" id="loginHeader">
                   <div role="heading" aria-level={1}>
-                    Anmelden
+                    {t("title")}
                   </div>
                 </div>
               </div>
@@ -80,9 +85,9 @@ function UsernamePage(props: {
                     className="form-control ltr_override input ext-input text-box ext-text-box"
                     aria-required="true"
                     autoComplete="username webauthn"
-                    aria-label="Geben Sie Ihre E-Mail-Adresse, Telefonnummer oder Ihren Skype-Namen ein."
+                    aria-label={t("input.aria_label")}
                     aria-describedby="loginHeader usernameError"
-                    placeholder="E-Mail, Telefon oder Skype"
+                    placeholder={t("input.placeholder")}
                     value={props.username}
                     onChange={(e) => {
                       props.onUsernameChange?.(e.target.value);
@@ -96,18 +101,21 @@ function UsernamePage(props: {
                 <div className="col-md-24">
                   <div className="text-13">
                     <div className="form-group">
-                      Kein Konto?{" "}
-                      <a
-                        href="#"
-                        id="signup"
-                        aria-label="Microsoft-Konto erstellen"
-                      >
-                        Erstellen Sie jetzt eins!
-                      </a>
+                      {t.rich("account_options.create.text", {
+                        a: (c) => (
+                          <a
+                            href="#"
+                            id="signup"
+                            aria-label={t("account_options.create.aria_label")}
+                          >
+                            {c}
+                          </a>
+                        ),
+                      })}
                     </div>
                     <div className="form-group">
                       <a id="cantAccessAccount" href="#">
-                        Sie können nicht auf Ihr Konto zugreifen?
+                        {t("account_options.recover")}
                       </a>
                     </div>
                   </div>
@@ -127,7 +135,7 @@ function UsernamePage(props: {
                           props.onSubmit?.();
                         }}
                       >
-                        Weiter
+                        {t("button.submit")}
                       </button>
                     </div>
                   </div>
@@ -151,6 +159,8 @@ function PasswordPage(props: {
   onBack?: ClickHandler;
   onSubmit?: ClickHandler;
 }) {
+  const t = useTranslations("ms.form.password");
+
   return (
     <div role="main">
       <div>
@@ -161,7 +171,7 @@ function PasswordPage(props: {
                 type="button"
                 className="backButton"
                 id="idBtn_Back"
-                aria-label="Zurück"
+                aria-label={t("button.back.aria_label")}
                 onClick={props.onBack}
               >
                 <img
@@ -180,7 +190,7 @@ function PasswordPage(props: {
           <div>
             <div id="loginHeader" className="row title ext-title">
               <div role="heading" aria-level={1}>
-                Kennwort eingeben
+                {t("title")}
               </div>
             </div>
             <div className="row">
@@ -188,12 +198,13 @@ function PasswordPage(props: {
                 <div role="alert" aria-live="assertive">
                   {props.passwordInvalid ? (
                     <div id="passwordError" className="error ext-error">
-                      {
-                        "Ihr Konto oder Kennwort ist nicht korrekt. Wenn Sie Ihr Kennwort nicht mehr wissen, "
-                      }
-                      <a id="idA_IL_ForgotPassword0" href="#" role="link">
-                        {"setzen Sie es jetzt zurück."}
-                      </a>
+                      {t.rich("error.password", {
+                        a: (c) => (
+                          <a id="idA_IL_ForgotPassword0" href="#" role="link">
+                            {c}
+                          </a>
+                        ),
+                      })}
                     </div>
                   ) : null}
                 </div>
@@ -206,8 +217,10 @@ function PasswordPage(props: {
                     aria-required="true"
                     autoComplete="current-password"
                     aria-describedby="loginHeader passwordError  "
-                    placeholder="Kennwort"
-                    aria-label={`Geben Sie das Kennwort für "${props.username}" ein.`}
+                    placeholder={t("input.placeholder")}
+                    aria-label={t("input.aria_label", {
+                      username: props.username,
+                    })}
                     tabIndex={0}
                     value={props.password}
                     onChange={(e) => {
@@ -229,7 +242,7 @@ function PasswordPage(props: {
                           target=""
                           role="link"
                         >
-                          Kennwort vergessen
+                          {t("forgot_password")}
                         </a>
                       </div>
                       <div className="form-group"></div>
@@ -248,7 +261,7 @@ function PasswordPage(props: {
                         className="win-button button_primary high-contrast-overrides button ext-button primary ext-primary"
                         onClick={props.onSubmit}
                       >
-                        Anmelden
+                        {t("button.submit")}
                       </button>
                     </div>
                   </div>
@@ -264,6 +277,8 @@ function PasswordPage(props: {
 }
 
 function Footer() {
+  const t = useTranslations("ms.footer");
+
   return (
     <div id="footer" role="contentinfo" className="footer ext-footer">
       <div>
@@ -276,24 +291,24 @@ function Footer() {
             href="#"
             className="footer-content ext-footer-content footer-item ext-footer-item"
           >
-            Nutzungsbedingungen
+            {t("terms")}
           </a>
           <a
             id="ftrPrivacy"
             href="#"
             className="footer-content ext-footer-content footer-item ext-footer-item"
           >
-            Datenschutz und Cookies
+            {t("privacy")}
           </a>
           <a
             id="moreOptions"
             href="#"
             role="button"
-            aria-label="Klicken Sie hier, um weitere Informationen zur Problembehandlung zu erhalten."
+            aria-label={t("more_options.aria_label")}
             aria-expanded="false"
             className="footer-content ext-footer-content footer-item ext-footer-item debug-item ext-debug-item"
           >
-            ...
+            {t("more_options.text")}
           </a>
         </div>
       </div>
@@ -308,6 +323,8 @@ function LightboxTemplateContainer(props: {
   backgroundImage?: string;
   bannerLogo?: string;
 }) {
+  const t = useTranslations("ms.form.lightbox");
+
   return (
     <div className="cb" style={{ display: "block" }}>
       <div>
@@ -333,7 +350,7 @@ function LightboxTemplateContainer(props: {
                       backgroundImage: `url("${props.backgroundImage ?? "ms/background.svg"}")`,
                     }}
                     className="background-image ext-background-image"
-                    aria-label="Hintergrundbild der Organisation"
+                    aria-label={t("background_image.aria_label")}
                   />
                 </div>
 
@@ -359,14 +376,14 @@ function LightboxTemplateContainer(props: {
                                   className="banner-logo ext-banner-logo"
                                   role="img"
                                   src={props.bannerLogo}
-                                  alt="Logo des Organisationsbanners"
+                                  alt={t("banner_logo.aria_label.org")}
                                 />
                               ) : (
                                 <img
                                   className="logo"
                                   role="img"
                                   src="ms/microsoft-logo.svg"
-                                  alt="Microsoft"
+                                  alt={t("banner_logo.aria_label.ms")}
                                 />
                               )}
                             </div>

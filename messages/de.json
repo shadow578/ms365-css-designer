@@ -1,1 +1,63 @@
-{}
+{
+  "ms": {
+    "form": {
+      "lightbox": {
+        "background_image": {
+          "aria_label": "Hintergrundbild der Organisation"
+        },
+        "banner_logo": {
+          "aria_label": {
+            "ms": "Microsoft",
+            "org": "Logo des Organisationsbanners"
+          }
+        }
+
+      },
+      "username": {
+        "title": "Anmelden",
+        "input": {
+          "placeholder": "E-Mail, Telefon oder Skype",
+          "aria_label": "Geben Sie Ihre E-Mail-Adresse, Telefonnummer oder Ihren Skype-Namen ein."
+        },
+        "account_options": {
+          "create": {
+            "text": "Kein Konto? <a>Erstellen Sie jetzt eins!</a>",
+            "aria_label": "Microsoft-Konto erstellen"
+          },
+          "recover": "Sie können nicht auf Ihr Konto zugreifen?"
+        },
+        "button": {
+          "submit": "Weiter"
+        }
+      },
+      "password": {
+        "title": "Kennwort eingeben",
+        "input": {
+          "placeholder": "Kennwort",
+          "aria_label": "Geben Sie das Kennwort für \"{username}\" ein."
+        },
+        "error": {
+          "password": "Ihr Konto oder Kennwort ist nicht korrekt. Wenn Sie Ihr Kennwort nicht mehr wissen, <a>setzen Sie es jetzt zurück.</a>"
+        },
+        "forgot_password": "Kennwort vergessen?",
+        "button": {
+          "submit": "Anmelden",
+          "back": {
+            "aria_label": "Zurück"
+          }
+        }
+      }
+    },
+    "signin_options": {
+      "label": "Anmeldeoptionen"
+    },
+    "footer": {
+      "terms": "Nutzungsbedingungen",
+      "privacy": "Datenschutz und Cookies",
+      "more_options": {
+        "text": "...",
+        "aria_label": "Klicken Sie hier, um weitere Informationen zur Problembehandlung zu erhalten."
+      }
+    }
+  }
+}
