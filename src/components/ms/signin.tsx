@@ -171,8 +171,11 @@ function PasswordPage(props: {
                 type="button"
                 className="backButton"
                 id="idBtn_Back"
-                aria-label={t("button.back.aria_label")}
-                onClick={props.onBack}
+                aria-label={t("button.back_arrow.aria_label")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.onBack?.();
+                }}
               >
                 <img
                   role="presentation"
@@ -213,7 +216,7 @@ function PasswordPage(props: {
                     name="passwd"
                     type="password"
                     id="i0118"
-                    className="form-control input ext-input text-box ext-text-box"
+                    className={`form-control input ext-input text-box ext-text-box ${props.passwordInvalid ? "has-error ext-has-error" : ""}`}
                     aria-required="true"
                     autoComplete="current-password"
                     aria-describedby="loginHeader passwordError  "
@@ -255,11 +258,33 @@ function PasswordPage(props: {
               <div className="row move-buttons">
                 <div>
                   <div className="col-xs-24 no-padding-left-right button-container button-field-container ext-button-field-container">
+                    <div
+                      className="inline-block button-item ext-button-item"
+                      style={{
+                        /* TODO: this differs from the ms page, cannot figure out how they add the gap */
+                        marginRight: "4px",
+                      }}
+                    >
+                      <button
+                        id="idBtn_Back"
+                        className="win-button button-secondary button ext-button secondary ext-secondary"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          props.onBack?.();
+                        }}
+                      >
+                        {t("button.back")}
+                      </button>
+                    </div>
+
                     <div className="inline-block button-item ext-button-item">
                       <button
                         id="idSIButton9"
                         className="win-button button_primary high-contrast-overrides button ext-button primary ext-primary"
-                        onClick={props.onSubmit}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          props.onSubmit?.();
+                        }}
                       >
                         {t("button.submit")}
                       </button>
@@ -276,11 +301,15 @@ function PasswordPage(props: {
   );
 }
 
-function Footer() {
+function Footer(props: { hasBackground: boolean }) {
   const t = useTranslations("ms.footer");
 
   return (
-    <div id="footer" role="contentinfo" className="footer ext-footer">
+    <div
+      id="footer"
+      role="contentinfo"
+      className={`footer ext-footer ${props.hasBackground ? "has-background ext-has-background" : ""}`}
+    >
       <div>
         <div
           id="footerLinks"
@@ -289,14 +318,14 @@ function Footer() {
           <a
             id="ftrTerms"
             href="#"
-            className="footer-content ext-footer-content footer-item ext-footer-item"
+            className={`footer-content ext-footer-content footer-item ext-footer-item ${props.hasBackground ? "has-background ext-has-background" : ""}`}
           >
             {t("terms")}
           </a>
           <a
             id="ftrPrivacy"
             href="#"
-            className="footer-content ext-footer-content footer-item ext-footer-item"
+            className={`footer-content ext-footer-content footer-item ext-footer-item ${props.hasBackground ? "has-background ext-has-background" : ""}`}
           >
             {t("privacy")}
           </a>
@@ -306,7 +335,7 @@ function Footer() {
             role="button"
             aria-label={t("more_options.aria_label")}
             aria-expanded="false"
-            className="footer-content ext-footer-content footer-item ext-footer-item debug-item ext-debug-item"
+            className={`footer-content ext-footer-content footer-item ext-footer-item debug-item ext-debug-item ${props.hasBackground ? "has-background ext-has-background" : ""}`}
           >
             {t("more_options.text")}
           </a>
@@ -397,7 +426,7 @@ function LightboxTemplateContainer(props: {
                     </div>
                   </div>
                 </div>
-                {props.footer ? <Footer /> : null}
+                {props.footer ? <Footer hasBackground={!!props.backgroundImage} /> : null}
               </div>
             </div>
           </div>

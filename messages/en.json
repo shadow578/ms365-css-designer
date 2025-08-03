@@ -152,7 +152,8 @@
         "forgot_password": "Forgot my password",
         "button": {
           "submit": "Sign in",
-          "back": {
+          "back": "Back",
+          "back_arrow": {
             "aria_label": "Back"
           }
         }
