@@ -1,8 +1,5 @@
-import type { CSSPropertyKind, CSSPropertyValueTypeByKind } from "./kinds";
-
-export type GeneratorFunction<Tkind extends CSSPropertyKind> = (
-  value: CSSPropertyValueTypeByKind<Tkind>,
-) => string;
+import type { GeneratorFunction } from "../generator";
+import type { CSSPropertyKind } from "./kinds";
 
 type GeneratorRecord = { [K in CSSPropertyKind]: GeneratorFunction<K> };
 
@@ -15,7 +12,16 @@ const GENERATOR_BY_KIND = {
   dimension: (value) => `${value.value}${value.unit}`,
   alignment: (value) => `${value}`,
   fontWeight: (value) => `${value}`,
-  fontFamily: (value) => `"${value}"`,
-  url: (value) => `url(${value})`,
+  fontFamily: (value, ctx) => {
+    if (value.external && value.url) {
+      ctx.imports.push({
+        id: `external-font:${value.font.replaceAll(" ", "-")}`,
+        url: value.url,
+      });
+    }
+
+    return `"${value.font}"`;
+  },
+  url: (value) => `url('${value}')`,
 } satisfies GeneratorRecord;
 export default GENERATOR_BY_KIND;

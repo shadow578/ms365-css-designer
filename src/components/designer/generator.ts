@@ -1,7 +1,9 @@
 import type { CSSStyleDefinition } from "./definitions";
-import GENERATOR_BY_KIND, {
-  type GeneratorFunction,
-} from "./definitions/generators";
+import GENERATOR_BY_KIND from "./definitions/generators";
+import type {
+  CSSPropertyKind,
+  CSSPropertyValueTypeByKind,
+} from "./definitions/kinds";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
@@ -9,9 +11,27 @@ import type {
 } from "./definitions/properties";
 import PROPERTIES, { validateCSSPropertyValue } from "./definitions/properties";
 
+interface ImportItem {
+  id: string;
+  url: string;
+}
+
+type StyleTree = Record<string, Record<string, string>>;
+
+export type Context = {
+  imports: ImportItem[];
+  style: StyleTree;
+};
+
+export type GeneratorFunction<Tkind extends CSSPropertyKind> = (
+  value: CSSPropertyValueTypeByKind<Tkind>,
+  context: Context,
+) => string;
+
 function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   prop: Tprop,
   value: CSSPropertyValueTypeForProperty<Tprop>,
+  context: Context,
 ): string | undefined {
   if (!validateCSSPropertyValue(prop, value)) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -23,19 +43,24 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   const gen = GENERATOR_BY_KIND[kind] as GeneratorFunction<
     CSSPropertyKindFor<Tprop>
   >;
-  return gen(value);
+  return gen(value, context);
 }
 
-type CSSTree = Record<string, Record<string, string>>;
-
-function transformToCssTree(style: CSSStyleDefinition): CSSTree {
-  const cssTree: CSSTree = {};
+function transformToContext(style: CSSStyleDefinition): Context {
+  const context: Context = {
+    imports: [],
+    style: {},
+  };
 
   for (const [selector, properties] of Object.entries(style)) {
     for (const [prop, value] of Object.entries(properties)) {
       if (!prop || !(prop in PROPERTIES) || !value) continue;
 
-      const cssValue = generateCSSPropertyValue(prop as CSSPropertyName, value);
+      const cssValue = generateCSSPropertyValue(
+        prop as CSSPropertyName,
+        value,
+        context,
+      );
       if (!cssValue) continue;
 
       // check for selector suffix on property
@@ -45,18 +70,29 @@ function transformToCssTree(style: CSSStyleDefinition): CSSTree {
       const selectorSuffix = split.slice(1).join("$");
       const fullSelector = `${selector}${selectorSuffix}`;
 
-      cssTree[fullSelector] ??= {};
-      cssTree[fullSelector][baseProp] = cssValue;
+      context.style[fullSelector] ??= {};
+      context.style[fullSelector][baseProp] = cssValue;
     }
   }
 
-  return cssTree;
+  return context;
 }
 
-function generateCSSFragments(
-  style: CSSTree,
-  important: boolean,
-): { selector: string; content: string }[] {
+function generateImportFragments(imports: ImportItem[]): string[] {
+  // remove duplicates
+  const uniqueImports = new Map<string, ImportItem>();
+  for (const item of imports) {
+    if (!uniqueImports.has(item.url)) {
+      uniqueImports.set(item.url, item);
+    }
+  }
+
+  return [...uniqueImports.values()].map(
+    (i) => `/*${i.id}*/\n@import url('${i.url}');`,
+  );
+}
+
+function generateStyleFragment(style: StyleTree, important: boolean): string[] {
   return Object.entries(style).map(([selector, properties]) => {
     const props = Object.entries(properties)
       .map(
@@ -64,10 +100,7 @@ function generateCSSFragments(
           `  ${prop}: ${value}${important ? " !important" : ""};`,
       )
       .join("\n");
-    return {
-      selector,
-      content: `{\n${props}\n}`,
-    };
+    return `${selector} {\n${props}\n}`;
   });
 }
 
@@ -75,7 +108,10 @@ export default function generateCSS(
   style: CSSStyleDefinition,
   important = true,
 ) {
-  return generateCSSFragments(transformToCssTree(style), important)
-    .map(({ selector, content }) => `${selector} ${content}`)
-    .join("\n");
+  const context = transformToContext(style);
+
+  const imports = generateImportFragments(context.imports).join("\n");
+  const styles = generateStyleFragment(context.style, important).join("\n");
+
+  return [imports, styles].join("\n\n");
 }

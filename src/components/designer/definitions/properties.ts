@@ -87,7 +87,7 @@ const PROPERTIES = {
   },
   "font-family": {
     kind: "fontFamily",
-    defaultValue: "",
+    defaultValue: { external: false, font: "" },
   },
   "margin-top": {
     kind: "dimension",

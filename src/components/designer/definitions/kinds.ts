@@ -12,8 +12,14 @@ const PROP_SCHEMA_BY_KIND = {
     z.enum(["bolder", "lighter", "inherit"]),
     z.number().int().min(100).max(900),
   ]),
-  fontFamily: z.string(),
-  url: z.string()
+  fontFamily: z
+    .object({
+      font: z.string(),
+      external: z.boolean(),
+      url: z.string().optional(),
+    })
+    .refine((d) => (d.external ? d.url !== undefined : true)),
+  url: z.string(),
 } satisfies Record<string, ZodSchema>;
 export default PROP_SCHEMA_BY_KIND;
 

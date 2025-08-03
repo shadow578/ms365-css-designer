@@ -97,6 +97,16 @@
         "bold": "Bold",
         "extra_bold": "Extra Bold",
         "black": "Black"
+      },
+      "FontFamilyControl": {
+        "mode": {
+          "system": "Built-in",
+          "external": "External"
+        },
+        "placeholder":{
+          "system": "Select a built-in font",
+          "external": "Font Family"
+        }
       }
     }
   },
