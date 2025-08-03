@@ -2,7 +2,7 @@
   "Index": {
     "MainLayout": {
       "heading": "M365 Custom CSS Designer",
-      "disclaimer": "This page is not a real sign-in page. Do not enter any real credentials.",
+      "disclaimer": "This page is <strong>not</strong> a real sign-in page. Do not enter any real credentials.",
       "buttons": {
         "pane": {
           "open": "Open Design Editor",

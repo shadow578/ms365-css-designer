@@ -98,13 +98,9 @@ function MainLayout() {
         <Box backgroundColor="red.600">
           <Center>
             <Text>
-              <Highlight query="not" styles={{ fontWeight: "bold" }}>
-                {
-                  t("disclaimer")
-
-                  /* TODO: highligh must be translateable somehow */
-                }
-              </Highlight>
+              {t.rich("disclaimer", {
+                strong: (c) => <strong>{c}</strong>,
+              })}
             </Text>
           </Center>
         </Box>
