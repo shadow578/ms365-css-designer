@@ -67,6 +67,7 @@
       "background-color$:hover": "Background Color (Hover)",
       "border-radius": "Border Radius",
       "text-align": "Text Alignment",
+      "font-family": "Font Family",
       "font-weight": "Font Weight",
       "margin-top": "Margin Top",
       "margin-bottom": "Margin Bottom",

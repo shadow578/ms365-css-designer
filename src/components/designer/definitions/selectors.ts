@@ -13,7 +13,7 @@ const margins = [
 
 const SELECTORS = {
   "*": {
-    properties: ["color", "font-weight"],
+    properties: ["color", "font-family", "font-weight"],
   },
 
   //#region form
@@ -24,25 +24,32 @@ const SELECTORS = {
     properties: [...margins, "background-image"],
   },
   ".ext-title": {
-    properties: ["text-align", "font-weight", "color"],
+    properties: ["text-align", "font-family", "font-weight", "color"],
   },
   ".ext-input": {
-    properties: ["font-weight", "color", "border-radius"],
+    properties: ["font-family", "font-weight", "color", "border-radius"],
   },
   ".ext-has-error": {
-    properties: ["font-weight", "color", "border-radius"],
+    properties: ["font-family", "font-weight", "color", "border-radius"],
   },
   ".ext-error": {
-    properties: ["font-weight", "color", "background-color"],
+    properties: ["font-family", "font-weight", "color", "background-color"],
   },
   ".ext-boilerplate-text": {
-    properties: ["text-align", "font-weight", "color", "background-color"],
+    properties: [
+      "text-align",
+      "font-family",
+      "font-weight",
+      "color",
+      "background-color",
+    ],
   },
   //#endregion
 
   //#region buttons
   ".ext-button": {
     properties: [
+      "font-family",
       "font-weight",
       "color",
       "color$:hover",
@@ -53,6 +60,7 @@ const SELECTORS = {
   },
   ".ext-button.ext-primary": {
     properties: [
+      "font-family",
       "font-weight",
       "color",
       "color$:hover",
@@ -63,6 +71,7 @@ const SELECTORS = {
   },
   ".ext-button.ext-secondary": {
     properties: [
+      "font-family",
       "font-weight",
       "color",
       "color$:hover",

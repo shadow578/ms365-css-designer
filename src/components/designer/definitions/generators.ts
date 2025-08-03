@@ -15,6 +15,7 @@ const GENERATOR_BY_KIND = {
   dimension: (value) => `${value.value}${value.unit}`,
   alignment: (value) => `${value}`,
   fontWeight: (value) => `${value}`,
+  fontFamily: (value) => `"${value}"`,
   url: (value) => `url(${value})`,
 } satisfies GeneratorRecord;
 export default GENERATOR_BY_KIND;

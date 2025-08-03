@@ -19,6 +19,7 @@ interface AlignmentProperty extends CSSBaseProperty<"alignment"> {
   allowed?: z.infer<(typeof PROP_SCHEMA_BY_KIND)["alignment"]>[];
 }
 type FontWeightProperty = CSSBaseProperty<"fontWeight">;
+type FontFamilyProperty = CSSBaseProperty<"fontFamily">;
 type URLProperty = CSSBaseProperty<"url">;
 
 export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
@@ -30,15 +31,18 @@ export type CSSPropertyOptionsForKind<T extends CSSPropertyKind> =
         ? AlignmentProperty
         : T extends "fontWeight"
           ? FontWeightProperty
-          : T extends "url"
-            ? URLProperty
-            : never;
+          : T extends "fontFamily"
+            ? FontFamilyProperty
+            : T extends "url"
+              ? URLProperty
+              : never;
 
 type CSSPropertyKinds =
   | ColorProperty
   | DimensionProperty
   | AlignmentProperty
   | FontWeightProperty
+  | FontFamilyProperty
   | URLProperty;
 
 /**
@@ -80,6 +84,10 @@ const PROPERTIES = {
   "font-weight": {
     kind: "fontWeight",
     defaultValue: "inherit",
+  },
+  "font-family": {
+    kind: "fontFamily",
+    defaultValue: "",
   },
   "margin-top": {
     kind: "dimension",

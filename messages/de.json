@@ -67,6 +67,7 @@
       "background-color$:hover": "Hintergrundfarbe (Hover)",
       "border-radius": "Kantenradius",
       "text-align": "Textausrichtung",
+      "font-family": "Schriftart",
       "font-weight": "Schriftstärke",
       "margin-top": "Oberer Rand",
       "margin-bottom": "Unterer Rand",
