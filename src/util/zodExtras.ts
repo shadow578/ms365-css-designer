@@ -1,17 +1,11 @@
-import z, {
-  unknown,
-  ZodObject,
-  ZodSchema,
-  ZodType,
-  type ZodRawShape,
-} from "zod";
+import z, { ZodObject, type ZodRawShape } from "zod";
 
 const SCHEMA = {
   /**
    * zod schema for RGB hex color string.
    */
   hexColorRGB: () =>
-    z.string().regex(/^#(?:[0-9A-Fa-f]{6})|(?:[0-9A-Fa-f]{3})$/),
+    z.string().regex(/^#(?:(?:[0-9A-Fa-f]{6})|(?:[0-9A-Fa-f]{3}))$/),
 
   /**
    * zod schema for RGB or RGBA hex color string.
@@ -19,7 +13,7 @@ const SCHEMA = {
   hexColorRGBA: () =>
     z
       .string()
-      .regex(/^#(?:[0-9A-Fa-f]{8})|(?:[0-9A-Fa-f]{6})|(?:[0-9A-Fa-f]{3})$/),
+      .regex(/^#(?:(?:[0-9A-Fa-f]{8})|(?:[0-9A-Fa-f]{6})|(?:[0-9A-Fa-f]{3}))$/),
 };
 export default SCHEMA;
 
@@ -41,7 +35,6 @@ export function transform<T extends ZodRawShape>(
   let result = schema.safeParse(data);
 
   if (result.success) {
-    console.log("all ok", result.data);
     return result.data;
   }
 
@@ -56,12 +49,9 @@ export function transform<T extends ZodRawShape>(
         if (expectedType instanceof ZodObject) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- FIXME wonky
           value = transform(expectedType, value);
-          console.log("c vv", value);
         }
 
         const r = expectedType.safeParse(value);
-        console.log(key, " r ", r);
-
         return r.success ? [key, r.data as unknown] : [key, undefined];
       })
       .filter(([, value]) => value !== undefined),
