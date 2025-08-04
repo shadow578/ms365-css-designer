@@ -1,4 +1,10 @@
-import z, { ZodObject, type ZodRawShape } from "zod";
+import z, {
+  ZodObject,
+  ZodOptional,
+  ZodSchema,
+  ZodUnknown,
+  type ZodRawShape,
+} from "zod";
 
 const SCHEMA = {
   /**
@@ -41,9 +47,13 @@ export function transform<T extends ZodRawShape>(
   data = Object.fromEntries(
     Object.entries(data)
       .map(([key, value]) => {
-        const expectedType = schema.shape[key];
+        let expectedType = schema.shape[key];
         if (!expectedType) {
           return [key, undefined];
+        }
+
+        if (expectedType instanceof ZodOptional) {
+          expectedType = expectedType.unwrap() as ZodSchema;
         }
 
         if (expectedType instanceof ZodObject) {

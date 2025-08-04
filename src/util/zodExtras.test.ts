@@ -142,5 +142,33 @@ describe("transform", () => {
         name: "Bob",
       });
     });
+
+    test("transforms data with deep nested schema", () => {
+      const schema = z.object({
+        user: z.string(),
+        details: z
+          .object({
+            address: z.object({
+              street: z.string().optional(),
+              city: z.string().optional(),
+            }),
+          })
+          .optional(),
+      });
+
+      expect(
+        transform(schema, {
+          user: "Bob",
+          details: {
+            address: { street: 123, city: "Springfield" },
+          },
+        }),
+      ).toEqual({
+        user: "Bob",
+        details: {
+          address: { city: "Springfield" },
+        },
+      });
+    });
   });
 });
