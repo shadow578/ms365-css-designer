@@ -26,13 +26,15 @@ import {
 } from "~/components/designer";
 import { ColorModeButton, useColorMode } from "~/components/ui/color-mode";
 import useInjectedCss from "~/util/useInjectedCss";
-import { Editor as MonacoEditor } from "@monaco-editor/react";
+import { Editor as MonacoEditor, type Monaco } from "@monaco-editor/react";
 import useKeycode, { KONAMI_CODE } from "~/util/useKeycode";
 import ContentBox from "~/components/ContentBox";
 import { CSSDesignerAddSelectorButton } from "~/components/designer/CSSDesigner";
 import IconButton from "~/components/IconButton";
 import { useLocale, useTranslations } from "next-intl";
 import LocaleSwitcher from "~/components/LocaleSwitcher";
+import registerSimpleCSSClassCompletionProvider from "~/util/simpleCompletionProvider";
+import { ALL_SELECTORS } from "~/components/designer/definitions/selectors";
 
 export default function Index() {
   return (
@@ -129,6 +131,16 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
 
   const t = useTranslations("Index.EditorPane");
 
+  const onMonacoMount = (monaco: Monaco) => {
+    // provide autocomplete for all selectors the designer supports, as a start
+    registerSimpleCSSClassCompletionProvider(monaco, () =>
+      ALL_SELECTORS.map((s) => ({
+        label: s,
+        insertText: s,
+      })),
+    );
+  };
+
   return (
     <Box p={4} height="100%">
       <ContentBox
@@ -206,6 +218,7 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
               defaultValue={designerGeneratedCSS}
               value={monacoCSS}
               onChange={(e) => setMonacoCSS(e ?? "")}
+              onMount={(e, m) => onMonacoMount(m)}
             />
           </Box>
         )}
