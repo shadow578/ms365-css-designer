@@ -93,6 +93,6 @@ const SELECTORS = {
 } satisfies Record<string, CSSSelector>;
 export default SELECTORS;
 
-export const ALL_SELECTORS = Object.keys(SELECTORS) as CSSPropertyName[];
+export const ALL_SELECTORS = Object.keys(SELECTORS) as CSSSelectorName[];
 
 export type CSSSelectorName = keyof typeof SELECTORS;

@@ -1,7 +1,33 @@
 import { useEffect } from "react";
 import type { DesignerState } from "../index";
-import validateState from "./validateState";
 import { useSearchParams } from "next/navigation";
+import { transform } from "~/util/zodExtras";
+import z from "zod";
+import SELECTORS, { ALL_SELECTORS } from "../definitions/selectors";
+import PROP_SCHEMA_BY_KIND from "../definitions/kinds";
+import PROPERTIES from "../definitions/properties";
+
+export const DESIGNER_STATE_SCHEMA = (() => {
+  return z.object({
+    style: z.object(
+      Object.fromEntries(
+        ALL_SELECTORS.map((selector) => [
+          selector,
+          z
+            .object(
+              Object.fromEntries(
+                SELECTORS[selector].properties.map((property) => [
+                  property,
+                  PROP_SCHEMA_BY_KIND[PROPERTIES[property].kind].optional(),
+                ]),
+              ),
+            )
+            .optional(),
+        ]),
+      ),
+    ),
+  });
+})();
 
 function serializeState(state: DesignerState): string {
   const json = JSON.stringify(state);
@@ -17,7 +43,7 @@ function deserializeState(state: string): DesignerState {
   try {
     const json = atob(state);
     const stateUnknown = JSON.parse(json) as unknown;
-    return validateState(stateUnknown) ?? { style: {} };
+    return transform(DESIGNER_STATE_SCHEMA, stateUnknown) ?? { style: {} };
   } catch (e) {
     console.error("Failed to deserialize state:", e);
     return { style: {} };
@@ -33,7 +59,7 @@ export function useGetSaveState(): DesignerState | undefined {
     return undefined;
   }
 
-  return deserializeState(s)
+  return deserializeState(s);
 }
 
 export default function useSetSaveState(state: DesignerState) {
