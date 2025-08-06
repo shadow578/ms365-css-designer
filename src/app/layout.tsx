@@ -1,8 +1,10 @@
 import { type Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { Provider as ChakraProvider } from "~/components/ui/provider";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
+import { Provider as ChakraProvider } from "~/components/ui/provider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -22,6 +24,9 @@ export default async function RootLayout({
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
           </ChakraProvider>
         </TRPCReactProvider>
+
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
