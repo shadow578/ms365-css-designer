@@ -7,7 +7,7 @@ export function middleware(req: NextRequest) {
     // only allow access to the signin page within the iframe
     const context = req.headers.get("sec-fetch-dest");
     if (context !== "iframe") {
-      console.warn(`invalid access to signin page. Context: '${context}'`);
+      console.warn(`invalid access to signin page. sec-fetch-dest='${context}'`);
       return NextResponse.error();
     }
   }

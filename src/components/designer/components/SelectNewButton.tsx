@@ -9,7 +9,7 @@ export default function SelectNewButton<T extends string>(props: {
   const onMenuSelect = (details: SelectionDetails) => {
     const value = details.value;
     if (!(value in props.options)) {
-      console.warn(`Unknown value selected: ${value}`);
+      console.error(`selected invalid value '${value}'`);
       return;
     }
 

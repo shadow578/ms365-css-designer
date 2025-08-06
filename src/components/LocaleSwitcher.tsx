@@ -12,7 +12,7 @@ export default function LocaleSwitcher() {
 
   function onSelectLocale(value: string) {
     if (!LOCALES.includes(value as Locale)) {
-      console.warn(`Unsupported locale selected: ${value}`);
+      console.error(`selected a invalid locale '${value}'`);
       return;
     }
 

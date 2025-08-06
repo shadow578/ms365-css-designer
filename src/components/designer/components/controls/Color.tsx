@@ -3,7 +3,6 @@ import type { PropsFor } from ".";
 
 export default function ColorControl(props: PropsFor<"color">) {
   const formatColor = (color: Color) => {
-    console.log(color.getChannelValuePercent("alpha"));
     if (color.getChannelValuePercent("alpha") === 1) {
       return color.toString("hex");
     }

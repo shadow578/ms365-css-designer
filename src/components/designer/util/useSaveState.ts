@@ -45,7 +45,7 @@ function deserializeState(state: string): DesignerState {
     const stateUnknown = JSON.parse(json) as unknown;
     return transform(DESIGNER_STATE_SCHEMA, stateUnknown) ?? { style: {} };
   } catch (e) {
-    console.error("Failed to deserialize state:", e);
+    console.error("deserializeState failed:", e);
     return { style: {} };
   }
 }

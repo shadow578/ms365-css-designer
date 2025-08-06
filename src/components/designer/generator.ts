@@ -35,7 +35,7 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
 ): string | undefined {
   if (!validateCSSPropertyValue(prop, value)) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.warn(`Invalid value for property '${prop}': '${value}'`);
+    console.error(`property '${prop}' has invalid value: '${value}'`);
     return undefined;
   }
 
