@@ -107,6 +107,11 @@
           "system": "Select a built-in font",
           "external": "Font Family"
         }
+      },
+      "URLSelectionControl": {
+        "input": {
+          "placeholder": "Enter your URL"
+        }
       }
     }
   },

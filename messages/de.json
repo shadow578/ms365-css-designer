@@ -107,6 +107,11 @@
           "system": "Wähle eine Systemschriftart",
           "external": "Schriftart"
         }
+      },
+      "URLSelectionControl": {
+        "input": {
+          "placeholder": "Gebe die URL ein"
+        }
       }
     }
   },
