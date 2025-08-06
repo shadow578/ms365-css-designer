@@ -12,7 +12,7 @@ export default function useInjectedCss(
   css: string,
 ) {
   useEffect(() => {
-    if (!targetDocument) return;
+    if (!targetDocument?.head) return;
 
     const id = "__injected-style__"; // TODO: make this more unique, best per-call
 
