@@ -31,6 +31,12 @@
           "designer": "Switch to Designer",
           "editor": "Switch to Editor"
         }
+      },
+      "editor_switch_warning_dialog": {
+        "title": "Changes will not apply",
+        "content": "Changes made in the editor will not apply to the designer. Are you sure you want to switch to the designer?",
+        "primary": "Yes, i've saved my work",
+        "secondary": "Cancel"
       }
     }
   },

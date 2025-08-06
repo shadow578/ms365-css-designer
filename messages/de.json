@@ -31,6 +31,12 @@
           "designer": "Zum Designer wechseln",
           "editor": "Zum Editor wechseln"
         }
+      },
+      "editor_switch_warning_dialog": {
+        "title": "Änderungen werden nicht übernommen",
+        "content": "Änderungen, die im Code-Editor vorgenommen wurden, werden nicht in den Designer übernommen. Willst du wirklich zum Designer wechseln?",
+        "primary": "Ja, ich habe gespeichert",
+        "secondary": "Nein"
       }
     }
   },

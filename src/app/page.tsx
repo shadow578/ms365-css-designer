@@ -169,8 +169,6 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
 
   const { colorMode } = useColorMode();
 
-  const t = useTranslations("Index.EditorPane");
-
   const onMonacoMount = (monaco: Monaco) => {
     // provide autocomplete for all selectors the designer supports, as a start
     registerSimpleCSSClassCompletionProvider(monaco, () =>
@@ -181,89 +179,118 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
     );
   };
 
+  const [editorSwitchWarningOpen, setEditorSwitchWarningOpen] = useState(false);
+
+  const t = useTranslations("Index.EditorPane");
+
   return (
-    <Box p={4} height="100%">
-      <ContentBox
-        height="100%"
-        header={
-          <Heading>
-            {designerMode ? t("heading.designer") : t("heading.editor")}
-          </Heading>
-        }
-        buttons={
-          <>
-            {designerMode && (
-              <>
-                <CSSDesignerAddSelectorButton>
-                  <IconButton label={t("buttons.add_selector")}>
-                    <MdAdd />
-                  </IconButton>
-                </CSSDesignerAddSelectorButton>
-
-                {showDesignerDebugButton && (
-                  <IconButton
-                    label={
-                      designerDebugMode
-                        ? t("buttons.debug.enable")
-                        : t("buttons.debug.disable")
-                    }
-                    onClick={() => setDesignerDebugMode(!designerDebugMode)}
-                  >
-                    {designerDebugMode ? (
-                      <MdBugReport />
-                    ) : (
-                      <MdOutlineBugReport />
-                    )}
-                  </IconButton>
-                )}
-              </>
-            )}
-
-            <DownloadTrigger
-              data={currentCSS}
-              fileName="style.css"
-              mimeType="text/css"
-              asChild
-            >
-              <IconButton label={t("buttons.download_css")}>
-                <MdDownload />
-              </IconButton>
-            </DownloadTrigger>
-
-            <IconButton
-              label={
-                designerMode
-                  ? t("buttons.switch_to.editor")
-                  : t("buttons.switch_to.designer")
-              }
-              onClick={() => setDesignerMode(!designerMode)}
-            >
-              {designerMode ? <MdEdit /> : <MdStyle />}
-            </IconButton>
-          </>
-        }
+    <>
+      <Dialog
+        open={editorSwitchWarningOpen}
+        onOpenChange={setEditorSwitchWarningOpen}
+        title={t("editor_switch_warning_dialog.title")}
+        primary={t("editor_switch_warning_dialog.primary")}
+        onPrimary={() => {
+          setEditorSwitchWarningOpen(false);
+          setDesignerMode(true);
+        }}
+        secondary={t("editor_switch_warning_dialog.secondary")}
+        onSecondary={() => setEditorSwitchWarningOpen(false)}
       >
-        {designerMode ? (
-          <CSSDesigner debug={designerDebugMode} />
-        ) : (
-          <Box flex={1} borderWidth={1}>
-            <MonacoEditor
-              options={{
-                lineNumbers: "off",
-                minimap: { enabled: false },
-                contextmenu: false,
-              }}
-              language="css"
-              theme={colorMode === "dark" ? "vs-dark" : "vs-light"}
-              defaultValue={designerGeneratedCSS}
-              value={monacoCSS}
-              onChange={(e) => setMonacoCSS(e ?? "")}
-              onMount={(e, m) => onMonacoMount(m)}
-            />
-          </Box>
-        )}
-      </ContentBox>
-    </Box>
+        <Text>{t("editor_switch_warning_dialog.content")}</Text>
+      </Dialog>
+
+      <Box p={4} height="100%">
+        <ContentBox
+          height="100%"
+          header={
+            <Heading>
+              {designerMode ? t("heading.designer") : t("heading.editor")}
+            </Heading>
+          }
+          buttons={
+            <>
+              {designerMode && (
+                <>
+                  <CSSDesignerAddSelectorButton>
+                    <IconButton label={t("buttons.add_selector")}>
+                      <MdAdd />
+                    </IconButton>
+                  </CSSDesignerAddSelectorButton>
+
+                  {showDesignerDebugButton && (
+                    <IconButton
+                      label={
+                        designerDebugMode
+                          ? t("buttons.debug.enable")
+                          : t("buttons.debug.disable")
+                      }
+                      onClick={() => setDesignerDebugMode(!designerDebugMode)}
+                    >
+                      {designerDebugMode ? (
+                        <MdBugReport />
+                      ) : (
+                        <MdOutlineBugReport />
+                      )}
+                    </IconButton>
+                  )}
+                </>
+              )}
+
+              <DownloadTrigger
+                data={currentCSS}
+                fileName="style.css"
+                mimeType="text/css"
+                asChild
+              >
+                <IconButton label={t("buttons.download_css")}>
+                  <MdDownload />
+                </IconButton>
+              </DownloadTrigger>
+
+              <IconButton
+                label={
+                  designerMode
+                    ? t("buttons.switch_to.editor")
+                    : t("buttons.switch_to.designer")
+                }
+                onClick={() => {
+                  if (designerMode) {
+                    setDesignerMode(false);
+                  } else {
+                    // when switching back from editor to designer, warn
+                    // the user that changes in the editor will not be applied
+                    setEditorSwitchWarningOpen(true);
+                  }
+                }}
+              >
+                {designerMode ? <MdEdit /> : <MdStyle />}
+              </IconButton>
+            </>
+          }
+        >
+          {designerMode ? (
+            <CSSDesigner debug={designerDebugMode} />
+          ) : (
+            <Box flex={1} borderWidth={1}>
+              <MonacoEditor
+                options={{
+                  lineNumbers: "off",
+                  minimap: { enabled: false },
+                  contextmenu: false,
+                }}
+                language="css"
+                theme={colorMode === "dark" ? "vs-dark" : "vs-light"}
+                defaultValue={designerGeneratedCSS}
+                value={monacoCSS}
+                onChange={(e) => setMonacoCSS(e ?? "")}
+                onMount={(e, m) => onMonacoMount(m)}
+              />
+            </Box>
+          )}
+        </ContentBox>
+      </Box>
+    </>
   );
 }
 
