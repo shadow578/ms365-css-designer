@@ -35,6 +35,7 @@ import { useLocale, useTranslations } from "next-intl";
 import LocaleSwitcher from "~/components/LocaleSwitcher";
 import registerSimpleCSSClassCompletionProvider from "~/util/simpleCompletionProvider";
 import { ALL_SELECTORS } from "~/components/designer/definitions/selectors";
+import Dialog from "~/components/Dialog";
 
 export default function Index() {
   return (
@@ -58,15 +59,51 @@ function MainLayout() {
 
   const [editorOpen, setEditorOpen] = useState(true);
 
-  // force re-render once the iframe loads, since css injection will only
+  // FIXME: force re-render once the iframe loads, since css injection will only
   // work for a loaded iframe
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const [warningDialogOpen, setWarningDialogOpen] = useState(false);
+  const acceptWarningDialog = () => {
+    setWarningDialogOpen(false);
+    window.localStorage.setItem("warning_dismissed", "true");
+  };
+
+  // localStorage is checked inside useEffect to avoid SSR issues
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.localStorage) {
+      return;
+    }
+
+    const dismissed =
+      window.localStorage.getItem("warning_dismissed") === "true";
+    if (!dismissed) setWarningDialogOpen(true);
+  }, []);
 
   const t = useTranslations("Index.MainLayout");
   const locale = useLocale();
 
   return (
     <Flex direction="row" width="100vw" height="100vh">
+      <Dialog
+        open={warningDialogOpen}
+        noDismiss
+        title={t("warning_dialog.title")}
+        primary={t("warning_dialog.primary")}
+        onPrimary={acceptWarningDialog}
+        primaryProps={{
+          colorPalette: "red",
+          variant: "surface",
+          fontWeight: "bold",
+        }}
+      >
+        <Text>
+          {t.rich("warning_dialog.content", {
+            strong: (c) => <strong>{c}</strong>,
+          })}
+        </Text>
+      </Dialog>
+
       <Presence
         flex={1}
         maxWidth="50%"

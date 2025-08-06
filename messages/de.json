@@ -8,6 +8,11 @@
           "open": "Design-Editor öffnen",
           "close": "Design-Editor schließen"
         }
+      },
+      "warning_dialog": {
+        "title": "Achtung",
+        "content": "Die in den Designer eingebettete Anmeldeseite ist <strong>keine</strong> echte Anmeldeseite. Gebe nicht dein Kennwort ein!",
+        "primary": "Ich verstehe"
       }
     },
     "EditorPane": {

@@ -8,6 +8,11 @@
           "open": "Open Design Editor",
           "close": "Close Design Editor"
         }
+      },
+      "warning_dialog": {
+        "title": "Warning",
+        "content": "The sign-in page embedded into the designer is <strong>not</strong> a real sign-in page. Do not enter any real credentials.",
+        "primary": "I understand"
       }
     },
     "EditorPane": {
@@ -103,7 +108,7 @@
           "system": "Built-in",
           "external": "External"
         },
-        "placeholder":{
+        "placeholder": {
           "system": "Select a built-in font",
           "external": "Font Family"
         }
