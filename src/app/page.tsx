@@ -39,7 +39,9 @@ import { ALL_SELECTORS } from "~/components/designer/definitions/selectors";
 export default function Index() {
   return (
     <CSSDesignerContext>
-      <MainLayout />
+      <main role="main">
+        <MainLayout />
+      </main>
     </CSSDesignerContext>
   );
 }
@@ -93,6 +95,7 @@ function MainLayout() {
         </Box>
         <Box flexGrow={1}>
           <iframe
+            title="Sign-in Page Preview"
             ref={signinFrame}
             src={`converged-signin-page?l=${locale}`}
             style={{ width: "100%", height: "100%", border: "none" }}
