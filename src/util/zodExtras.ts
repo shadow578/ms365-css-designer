@@ -1,8 +1,7 @@
 import z, {
   ZodObject,
   ZodOptional,
-  ZodSchema,
-  ZodUnknown,
+  type ZodSchema,
   type ZodRawShape,
 } from "zod";
 
