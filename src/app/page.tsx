@@ -192,6 +192,14 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
     props.onCSSChange?.(currentCSS);
   }, [props, currentCSS]);
 
+  const getCSSForDownload = () => {
+    if (!designerMode) {
+      return currentCSS;
+    }
+
+    return `/* generated using ${window.location.href} */\n` + currentCSS;
+  };
+
   const { colorMode } = useColorMode();
 
   const onMonacoMount = (monaco: Monaco) => {
@@ -263,7 +271,7 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
               )}
 
               <DownloadTrigger
-                data={currentCSS}
+                data={getCSSForDownload}
                 fileName="style.css"
                 mimeType="text/css"
                 asChild
