@@ -9,7 +9,7 @@ import {
   Presence,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MdAdd,
   MdBugReport,
@@ -51,17 +51,13 @@ function MainLayout() {
   const signinFrame = useRef<HTMLIFrameElement>(null);
 
   const [css, setCSS] = useState("");
-  useInjectedCss(
+  const { injectCss: manualInjectCss } = useInjectedCss(
     signinFrame.current?.contentDocument ??
       signinFrame.current?.contentWindow?.document,
     css,
   );
 
   const [editorOpen, setEditorOpen] = useState(true);
-
-  // FIXME: force re-render once the iframe loads, since css injection will only
-  // work for a loaded iframe
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const [warningDialogOpen, setWarningDialogOpen] = useState(false);
   const acceptWarningDialog = () => {
@@ -161,7 +157,7 @@ function MainLayout() {
             ref={signinFrame}
             src={`converged-signin-page?l=${locale}`}
             style={{ width: "100%", height: "100%", border: "none" }}
-            onLoad={() => forceUpdate()}
+            onLoad={manualInjectCss}
           />
         </Box>
         <Box backgroundColor="red.600">

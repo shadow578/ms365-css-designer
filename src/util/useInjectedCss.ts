@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 /**
  * dynamically injects CSS into a target document.
@@ -11,18 +11,27 @@ export default function useInjectedCss(
   targetDocument: Document | undefined | null,
   css: string,
 ) {
-  useEffect(() => {
-    if (!targetDocument?.head) return;
+  const id = "__injected-style__";
 
-    const id = "__injected-style__"; // TODO: make this more unique, best per-call
+  const injectCss = useCallback(() => {
+    if (!targetDocument?.head) return;
 
     const styleElement = targetDocument.createElement("style");
     styleElement.id = id;
     styleElement.appendChild(targetDocument.createTextNode(css));
     targetDocument.head.appendChild(styleElement);
+  }, [targetDocument, css, id]);
 
-    return () => {
-      targetDocument.getElementById(id)?.remove();
-    };
-  }, [css, targetDocument]);
+  const removeCss = useCallback(() => {
+    if (!targetDocument?.head) return;
+
+    targetDocument.getElementById(id)?.remove();
+  }, [targetDocument, id]);
+
+  useEffect(() => {
+    injectCss();
+    return removeCss;
+  }, [injectCss, removeCss, css, targetDocument]);
+
+  return { injectCss };
 }
