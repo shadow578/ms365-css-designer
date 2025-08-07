@@ -65,6 +65,7 @@
       "#ext-has-error": "Input Field (Error)",
       "#ext-error": "Form Error Message",
       "#ext-boilerplate-text": "Boilerplate Text",
+      "#ext-promoted-fed-cred-box": "Sign-in Options Box",
       "#ext-button": "Buttons",
       "#ext-button#ext-primary": "Primary Button",
       "#ext-button#ext-secondary": "Secondary Button",

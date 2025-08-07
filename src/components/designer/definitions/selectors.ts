@@ -4,13 +4,6 @@ export interface CSSSelector {
   properties: CSSPropertyName[];
 }
 
-const margins = [
-  "margin-top",
-  "margin-bottom",
-  "margin-right",
-  "margin-left",
-] as const;
-
 const SELECTORS = {
   "*": {
     properties: ["color", "font-family", "font-weight"],
@@ -18,13 +11,33 @@ const SELECTORS = {
 
   //#region form
   ".ext-sign-in-box": {
-    properties: ["background-color", "border-radius", ...margins],
+    properties: [
+      "background-color",
+      "border-radius",
+      "margin-top",
+      "margin-bottom",
+      "margin-right",
+      "margin-left",
+    ],
   },
   ".ext-banner-logo": {
-    properties: [...margins, "background-image"],
+    properties: [
+      "background-image",
+      "margin-top",
+      "margin-bottom",
+      "margin-right",
+      "margin-left",
+    ],
   },
   ".ext-title": {
-    properties: ["text-align", "font-family", "font-weight", "color"],
+    properties: [
+      "text-align",
+      "font-family",
+      "font-weight",
+      "color",
+      "margin-top",
+      "margin-bottom",
+    ],
   },
   ".ext-input": {
     properties: ["font-family", "font-weight", "color", "border-radius"],
@@ -42,6 +55,16 @@ const SELECTORS = {
       "font-weight",
       "color",
       "background-color",
+    ],
+  },
+  ".ext-promoted-fed-cred-box": {
+    properties: [
+      "background-color",
+      "border-radius",
+      "margin-top",
+      "margin-bottom",
+      "margin-right",
+      "margin-left",
     ],
   },
   //#endregion

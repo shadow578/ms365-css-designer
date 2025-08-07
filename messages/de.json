@@ -65,6 +65,7 @@
       "#ext-has-error": "Eingabefeld mit Fehler",
       "#ext-error": "Fehlernachricht",
       "#ext-boilerplate-text": "Text der Anmeldeseite",
+      "#ext-promoted-fed-cred-box": "Box der Anmeldeoptionen",
       "#ext-button": "Schaltflächen",
       "#ext-button#ext-primary": "Primäre Schaltfläche",
       "#ext-button#ext-secondary": "Sekundäre Schaltfläche",
