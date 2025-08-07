@@ -18,7 +18,12 @@ export async function GET(req: NextRequest) {
       expires: searchParams.get("expires"),
       hash: searchParams.get("hash"),
     });
-    if (!parsed.success || !parsed.data.resource || !parsed.data.expires || !parsed.data.hash) {
+    if (
+      !parsed.success ||
+      !parsed.data.resource ||
+      !parsed.data.expires ||
+      !parsed.data.hash
+    ) {
       return new Response(
         JSON.stringify({ error: "Invalid request parameters." }),
         {
@@ -35,10 +40,15 @@ export async function GET(req: NextRequest) {
         parsed.data.hash,
       )
     ) {
-      return new Response(JSON.stringify({}), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Resource has expired.",
+        }),
+        {
+          status: 419,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
 
     const response = await fetch(parsed.data.resource, {
