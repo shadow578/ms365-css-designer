@@ -15,8 +15,8 @@ import {
   MdBugReport,
   MdDownload,
   MdEdit,
-  MdOutlineArrowLeft,
   MdOutlineBugReport,
+  MdOutlineStyle,
   MdStyle,
 } from "react-icons/md";
 import {
@@ -84,7 +84,13 @@ function MainLayout() {
   const locale = useLocale();
 
   return (
-    <Flex direction="row" width="100vw" height="100vh">
+    <Flex
+      direction={{
+        base: "column-reverse",
+        lg: "row",
+      }}
+      width="100vw"
+    >
       <Dialog
         open={warningDialogOpen}
         noDismiss
@@ -106,22 +112,41 @@ function MainLayout() {
 
       <Presence
         flex={1}
-        maxWidth="50%"
+        width={{
+          base: "100%",
+          lg: "unset",
+        }}
+        maxWidth={{
+          base: "100%",
+          lg: "50%",
+        }}
         minWidth="400px"
-        height="100vh"
-        overflow="scroll"
+        height={{
+          base: "unset",
+          lg: "100vh",
+        }}
+        overflow={{
+          base: "unset",
+          lg: "scroll",
+        }}
         scrollBehavior="smooth"
         present={editorOpen}
         animationName={{
-          _open: "slide-from-left-full",
-          _closed: "slide-to-left-full",
+          base: {
+            _open: "slide-from-bottom-full",
+            _closed: "slide-to-bottom-full",
+          },
+          lg: {
+            _open: "slide-from-left-full",
+            _closed: "slide-to-left-full",
+          },
         }}
         animationDuration="moderate"
       >
         <EditorPane onCSSChange={setCSS} />
       </Presence>
 
-      <Flex direction="column" flexGrow={1} height="100%">
+      <Flex direction="column" flexGrow={1} height="100vh">
         <Box>
           <Flex alignItems="center" gap={2}>
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
@@ -305,7 +330,7 @@ function EditorButton(props: {
       label={props.open ? t("buttons.pane.close") : t("buttons.pane.open")}
       onClick={() => props.onClick(!props.open)}
     >
-      {props.open ? <MdOutlineArrowLeft /> : <MdStyle />}
+      {props.open ? <MdStyle /> : <MdOutlineStyle />}
     </IconButton>
   );
 }
