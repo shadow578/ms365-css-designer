@@ -1,21 +1,24 @@
 import z from "zod";
 import { getBaseHeaders } from "~/util/msHeaders";
 import { type NextRequest } from "next/server";
-import { getResourceHash } from "./util";
+import { validateResourceRequest } from "./util";
 
 const requestQuerySchema = z.object({
   resource: z.string(),
+  expires: z.coerce.number().int().positive(),
   hash: z.string(),
 });
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const resource = searchParams.get("resource");
-    const hash = searchParams.get("hash");
 
-    const parsed = requestQuerySchema.safeParse({ resource, hash });
-    if (!parsed.success || !resource || !hash) {
+    const parsed = requestQuerySchema.safeParse({
+      resource: searchParams.get("resource"),
+      expires: searchParams.get("expires"),
+      hash: searchParams.get("hash"),
+    });
+    if (!parsed.success || !parsed.data.resource || !parsed.data.expires || !parsed.data.hash) {
       return new Response(
         JSON.stringify({ error: "Invalid request parameters." }),
         {
@@ -25,14 +28,20 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (hash !== getResourceHash(resource)) {
+    if (
+      !validateResourceRequest(
+        parsed.data.resource,
+        parsed.data.expires,
+        parsed.data.hash,
+      )
+    ) {
       return new Response(JSON.stringify({}), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    const response = await fetch(resource, {
+    const response = await fetch(parsed.data.resource, {
       method: "GET",
       headers: {
         Accept:
