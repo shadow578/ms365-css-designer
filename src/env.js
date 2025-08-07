@@ -9,6 +9,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     ASSET_PROXY_SECRET: z.string().min(1),
+    CORS_ORIGIN: z.string().url(),
   },
 
   /**
@@ -27,7 +28,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     ASSET_PROXY_SECRET: process.env.ASSET_PROXY_SECRET,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    CORS_ORIGIN: process.env.CORS_ORIGIN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
