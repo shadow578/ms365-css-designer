@@ -2,6 +2,7 @@
   "Index": {
     "MainLayout": {
       "heading": "M365 Custom CSS Designer",
+      "subheading": "Design your own custom sign-in page for Microsoft 365",
       "buttons": {
         "pane": {
           "open": "Open Design Editor",

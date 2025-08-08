@@ -7,6 +7,7 @@ import {
   Heading,
   Presence,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -150,7 +151,12 @@ function MainLayout() {
         <Box>
           <Flex alignItems="center" gap={2}>
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
-            <Heading flex={1}>{t("heading")}</Heading>
+            <VStack flex={1} alignItems="start" gap={0}>
+              <Heading>{t("heading")}</Heading>
+              <Text fontSize="sm" color="text.secondary">
+                {t("subheading")}
+              </Text>
+            </VStack>
             <ColorModeButton />
             <LocaleSwitcher style="full" />
           </Flex>
