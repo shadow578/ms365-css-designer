@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Center,
   DownloadTrigger,
   Flex,
   Heading,
@@ -164,15 +163,6 @@ function MainLayout() {
             style={{ width: "100%", height: "100%", border: "none" }}
             onLoad={manualInjectCss}
           />
-        </Box>
-        <Box backgroundColor="red.600">
-          <Center>
-            <Text>
-              {t.rich("disclaimer", {
-                strong: (c) => <strong>{c}</strong>,
-              })}
-            </Text>
-          </Center>
         </Box>
       </Flex>
     </Flex>
