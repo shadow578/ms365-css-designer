@@ -90,7 +90,12 @@ function MainLayout() {
       <Dialog
         open={warningDialogOpen}
         noDismiss
-        title={t("warning_dialog.title")}
+        title={
+          <Flex alignItems="center">
+            <Heading flex={1}>{t("warning_dialog.title")}</Heading>
+            <LocaleSwitcher style="minimal" noPortal />
+          </Flex>
+        }
         primary={t("warning_dialog.primary")}
         onPrimary={acceptWarningDialog}
         primaryProps={{
@@ -148,7 +153,7 @@ function MainLayout() {
             <EditorButton open={editorOpen} onClick={setEditorOpen} />
             <Heading flex={1}>{t("heading")}</Heading>
             <ColorModeButton />
-            <LocaleSwitcher />
+            <LocaleSwitcher style="full" />
           </Flex>
         </Box>
         <Box flexGrow={1}>

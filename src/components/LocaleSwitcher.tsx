@@ -1,12 +1,15 @@
 "use client";
 
-import { Button, For, Menu, Portal } from "@chakra-ui/react";
+import { Box, Button, For, Menu, Portal } from "@chakra-ui/react";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useTransition } from "react";
 import { LOCALES, type Locale } from "~/i18n/config";
 import { setUserLocale } from "~/server/locale";
 
-export default function LocaleSwitcher() {
+export default function LocaleSwitcher(props: {
+  style: "full" | "minimal";
+  noPortal?: boolean;
+}) {
   const currentLocale = useLocale() as Locale;
   const [, startTransition] = useTransition();
 
@@ -21,14 +24,16 @@ export default function LocaleSwitcher() {
     });
   }
 
+  const PortalW = props.noPortal ? Box : Portal;
+
   return (
     <Menu.Root onSelect={(e) => onSelectLocale(e.value)}>
       <Menu.Trigger asChild>
         <Button variant="ghost" size="sm">
-          <LocaleDisplay locale={currentLocale} />
+          <LocaleDisplay locale={currentLocale} emojiOnly={props.style === "minimal"} />
         </Button>
       </Menu.Trigger>
-      <Portal>
+      <PortalW>
         <Menu.Positioner>
           <Menu.Content>
             <For each={LOCALES}>
@@ -40,17 +45,17 @@ export default function LocaleSwitcher() {
             </For>
           </Menu.Content>
         </Menu.Positioner>
-      </Portal>
+      </PortalW>
     </Menu.Root>
   );
 }
 
-function LocaleDisplay(props: { locale: Locale }) {
+function LocaleDisplay(props: { locale: Locale, emojiOnly?: boolean }) {
   const t = useTranslations("LocaleSwitcher.locales");
 
   return (
     <>
-      {t(`${props.locale}.emoji`)} {t(`${props.locale}.name`)}
+      {t(`${props.locale}.emoji`)} {!props.emojiOnly && t(`${props.locale}.name`)}
     </>
   );
 }

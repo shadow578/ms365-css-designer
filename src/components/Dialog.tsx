@@ -33,7 +33,9 @@ const Dialog = React.memo(
           <ChakraDialog.Positioner>
             <ChakraDialog.Content>
               <ChakraDialog.Header>
-                <ChakraDialog.Title>{props.title}</ChakraDialog.Title>
+                <ChakraDialog.Title width="100%">
+                  {props.title}
+                </ChakraDialog.Title>
               </ChakraDialog.Header>
               <ChakraDialog.Body>{props.children}</ChakraDialog.Body>
               <ChakraDialog.Footer>
