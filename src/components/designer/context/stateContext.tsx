@@ -1,12 +1,19 @@
 "use client";
-import { createContext, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import generateCSS from "../generator";
 import useSetSaveState, { useGetSaveState } from "../util/useSaveState";
 import type { DesignerState } from "..";
 
 interface ContextType {
   state: DesignerState;
-  setState: (state: DesignerState) => void;
+  setState: Dispatch<SetStateAction<DesignerState>>;
 }
 
 const CSSDesignerContext = createContext<ContextType | undefined>(undefined);
@@ -48,8 +55,8 @@ function ContextProviderInner(props: {
  * Hook to access the state of the CSS designer, when within a CSSDesignerStateContextProvider.
  */
 export function useCSSDesignerState(): [
-  DesignerState,
-  (state: DesignerState) => void,
+  ContextType["state"],
+  ContextType["setState"],
 ] {
   const context = useContext(CSSDesignerContext);
   if (!context) {

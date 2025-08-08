@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useRef } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { useCSSDesignerState } from "./stateContext";
 import type { CSSSelectorName } from "../definitions/selectors";
 import type {
@@ -32,93 +32,115 @@ const MutationContext = createContext<MutationContextType | undefined>(
 export default function CSSDesignerMutationContextProvider(props: {
   children: React.ReactNode;
 }) {
-  const [state, setState] = useCSSDesignerState();
-  const stateRef = useRef(state);
+  const [, setState] = useCSSDesignerState();
 
   const context: MutationContextType = useMemo(() => {
-
-    // FIXME this is a quick hack to make other memo hooks work correctly
-    // ASAP this should be changed to do a proper state update instead of crappy mutation
-    const setStateW = (newState: typeof state) => {
-      setState(structuredClone(newState));
-    };
-
     return {
       addSelector(selector) {
-        const s = stateRef.current;
+        setState((prev) => {
+          if (selector in prev.style) {
+            throw new Error(
+              `selector '${selector}' already present in style def.`,
+            );
+          }
 
-        if (selector in s.style) {
-          throw new Error(
-            `selector '${selector}' already present in style def.`,
-          );
-        }
-
-        s.style[selector] = {};
-        setStateW({ ...s });
+          return {
+            ...prev,
+            style: {
+              ...prev.style,
+              [selector]: {},
+            },
+          };
+        });
       },
       removeSelector(selector) {
-        const s = stateRef.current;
+        setState((prev) => {
+          if (!(selector in prev.style)) {
+            throw new Error(`selector '${selector}' not found in style def.`);
+          }
 
-        if (!(selector in s.style)) {
-          throw new Error(`selector '${selector}' not found in style def.`);
-        }
-
-        delete s.style[selector];
-        setStateW({ ...s });
+          const { [selector]: _, ...style } = prev.style;
+          return {
+            ...prev,
+            style,
+          };
+        });
       },
       addProperty(selector, prop) {
-        const s = stateRef.current;
+        setState((prev) => {
+          if (!(selector in prev.style) || !prev.style[selector]) {
+            throw new Error(`selector '${selector}' not found in style def.`);
+          }
+          if (prop in prev.style[selector]) {
+            throw new Error(
+              `property '${prop}' already present in selector '${selector}'.`,
+            );
+          }
 
-        if (!(selector in s.style) || !s.style[selector]) {
-          throw new Error(`selector '${selector}' not found in style def.`);
-        }
-        if (prop in s.style[selector]) {
-          throw new Error(
-            `property '${prop}' already present in selector '${selector}'.`,
-          );
-        }
+          const value = PROPERTIES[prop].defaultValue;
+          assertCSSPropertyValue(prop, value);
 
-        const value = PROPERTIES[prop].defaultValue;
-        assertCSSPropertyValue(prop, value);
-
-        //@ts-expect-error -- FIXME figure this out some day
-        s.style[selector][prop] = value;
-        setStateW({ ...s });
+          return {
+            ...prev,
+            style: {
+              ...prev.style,
+              [selector]: {
+                ...prev.style[selector],
+                [prop]: value,
+              },
+            },
+          };
+        });
       },
       removeProperty(selector, prop) {
-        const s = stateRef.current;
-        if (!(selector in s.style) || !s.style[selector]) {
-          throw new Error(`selector '${selector}' not found in style def.`);
-        }
-        if (!(prop in s.style[selector])) {
-          throw new Error(
-            `property '${prop}' not found in selector '${selector}'.`,
-          );
-        }
+        setState((prev) => {
+          if (!(selector in prev.style) || !prev.style[selector]) {
+            throw new Error(`selector '${selector}' not found in style def.`);
+          }
+          if (!(prop in prev.style[selector])) {
+            throw new Error(
+              `property '${prop}' not found in selector '${selector}'.`,
+            );
+          }
 
-        delete s.style[selector][prop];
-        setStateW({ ...s });
+          const { [prop]: _, ...rest } = prev.style[selector];
+
+          return {
+            ...prev,
+            style: {
+              ...prev.style,
+              [selector]: rest,
+            },
+          };
+        });
       },
       setProperty(selector, prop, value) {
-        const s = stateRef.current;
+        setState((prev) => {
+          if (!(selector in prev.style) || !prev.style[selector]) {
+            throw new Error(`selector '${selector}' not found in style def.`);
+          }
+          if (!(prop in prev.style[selector])) {
+            throw new Error(
+              `property '${prop}' not found in selector '${selector}'.`,
+            );
+          }
 
-        if (!(selector in s.style) || !s.style[selector]) {
-          throw new Error(`selector '${selector}' not found in style def.`);
-        }
-        if (!(prop in s.style[selector])) {
-          throw new Error(
-            `property '${prop}' not found in selector '${selector}'.`,
-          );
-        }
+          assertCSSPropertyValue(prop, value);
 
-        assertCSSPropertyValue(prop, value);
-
-        //@ts-expect-error -- FIXME figure this out some day
-        s.style[selector][prop] = value;
-        setStateW({ ...s });
+          return {
+            ...prev,
+            style: {
+              ...prev.style,
+              [selector]: {
+                ...prev.style[selector],
+                [prop]: value,
+              },
+            },
+          };
+        });
       },
     };
-  }, [stateRef, setState]);
+  }, [setState]);
 
   return (
     <MutationContext.Provider value={context}>
