@@ -9,7 +9,7 @@ import {
   Presence,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   MdAdd,
   MdBugReport,
@@ -188,17 +188,17 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
     props.onCSSChange?.(currentCSS);
   }, [props, currentCSS]);
 
-  const getCSSForDownload = () => {
+  const getCSSForDownload = useCallback(() => {
     if (!designerMode) {
       return currentCSS;
     }
 
     return `/* generated using ${window.location.href} */\n` + currentCSS;
-  };
+  }, [designerMode, currentCSS]);
 
   const { colorMode } = useColorMode();
 
-  const onMonacoMount = (monaco: Monaco) => {
+  const onMonacoMount = useCallback((monaco: Monaco) => {
     // provide autocomplete for all selectors the designer supports, as a start
     registerSimpleCSSClassCompletionProvider(monaco, () =>
       ALL_SELECTORS.map((s) => ({
@@ -206,7 +206,7 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
         insertText: s,
       })),
     );
-  };
+  }, []);
 
   const [editorSwitchWarningOpen, setEditorSwitchWarningOpen] = useState(false);
 
