@@ -1,5 +1,5 @@
 import { Box, ButtonGroup, Collapsible, Flex } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
 interface ContentBoxBaseProps {
@@ -14,32 +14,37 @@ type BoxProps = Omit<
   "children" | "direction"
 >;
 
-export default function ContentBox(
-  props: ContentBoxBaseProps & {
-    height?: BoxProps["height"];
-    collapsible?: boolean;
-  },
-) {
-  const propsForward = {
-    header: props.header,
-    buttons: props.buttons,
-    outline: props.outline,
-    children: props.children,
-    box: {
-      p: 2,
-      borderWidth: props.outline ? 1 : 0,
-      borderRadius: 5,
-      marginBottom: 1,
-      height: props.height,
+const ContentBox = React.memo(
+  (
+    props: ContentBoxBaseProps & {
+      height?: BoxProps["height"];
+      collapsible?: boolean;
     },
-  };
+  ) => {
+    const propsForward = {
+      header: props.header,
+      buttons: props.buttons,
+      outline: props.outline,
+      children: props.children,
+      box: {
+        p: 2,
+        borderWidth: props.outline ? 1 : 0,
+        borderRadius: 5,
+        marginBottom: 1,
+        height: props.height,
+      },
+    };
 
-  return props.collapsible ? (
-    <CollapsibleBox {...propsForward} />
-  ) : (
-    <NormalBox {...propsForward} />
-  );
-}
+    return props.collapsible ? (
+      <CollapsibleBox {...propsForward} />
+    ) : (
+      <NormalBox {...propsForward} />
+    );
+  },
+);
+ContentBox.displayName = "ContentBox";
+
+export default ContentBox;
 
 function NormalBox(props: ContentBoxBaseProps & { box: BoxProps }) {
   return (
@@ -78,7 +83,9 @@ function CollapsibleBox(props: ContentBoxBaseProps & { box: BoxProps }) {
         {props.buttons && <ButtonGroup>{props.buttons}</ButtonGroup>}
       </Flex>
 
-      <Collapsible.Content overflow="visible">{props.children}</Collapsible.Content>
+      <Collapsible.Content overflow="visible">
+        {props.children}
+      </Collapsible.Content>
     </Collapsible.Root>
   );
 }
