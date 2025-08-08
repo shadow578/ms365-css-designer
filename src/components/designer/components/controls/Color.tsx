@@ -1,7 +1,8 @@
-import { ColorPicker, Portal, parseColor, type Color } from "@chakra-ui/react";
+import { type Color, ColorPicker, Portal, parseColor } from "@chakra-ui/react";
 import type { PropsFor } from ".";
+import React from "react";
 
-export default function ColorControl(props: PropsFor<"color">) {
+const ColorControl = React.memo((props: PropsFor<"color">) => {
   const formatColor = (color: Color) => {
     if (color.getChannelValuePercent("alpha") === 1) {
       return color.toString("hex");
@@ -29,4 +30,7 @@ export default function ColorControl(props: PropsFor<"color">) {
       </Portal>
     </ColorPicker.Root>
   );
-}
+});
+ColorControl.displayName = "ColorControl";
+
+export default ColorControl;

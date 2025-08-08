@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import SELECTORS, { type CSSSelectorName } from "./definitions/selectors";
 import type {
   CSSPropertyKindFor,
@@ -104,151 +104,171 @@ export default function CSSDesigner(props: { debug?: boolean }) {
   );
 }
 
-function SelectorDesigner<Tsel extends CSSSelectorName>(props: {
-  selector: Tsel;
-  CSSProperties: CSSSelectorPropertyDefinition;
-  debug: boolean;
-}) {
-  const { removeSelector, addProperty } = useCSSDesignerMutation();
+const SelectorDesigner = React.memo(
+  <Tsel extends CSSSelectorName>(props: {
+    selector: Tsel;
+    CSSProperties: CSSSelectorPropertyDefinition;
+    debug: boolean;
+  }) => {
+    const { removeSelector, addProperty } = useCSSDesignerMutation();
 
-  const t = useTranslations("CSSDesigner.selector");
-  const tp = useTranslations("CSSDesigner.property");
+    const t = useTranslations("CSSDesigner.selector");
+    const tp = useTranslations("CSSDesigner.property");
 
-  const { tSelector, tProperty } = useDesignerTranslations();
+    const { tSelector, tProperty } = useDesignerTranslations();
 
-  const selector = SELECTORS[props.selector];
-  const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
-    (selector.properties as string[]).includes(cssProp),
-  );
+    const selector = SELECTORS[props.selector];
+    const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
+      (selector.properties as string[]).includes(cssProp),
+    );
 
-  const selectableProperties = filterRecord(
-    availableProperties,
-    (_, prop) => !(prop in props.CSSProperties),
-  );
+    const selectableProperties = filterRecord(
+      availableProperties,
+      (_, prop) => !(prop in props.CSSProperties),
+    );
 
-  const SelectPropertyButton = (cprops: { children: React.ReactNode }) => (
-    <SelectNewButton
-      options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
-      onSelect={(cssProp) => {
-        addProperty?.(props.selector, cssProp);
-      }}
-    >
-      {cprops.children}
-    </SelectNewButton>
-  );
+    const SelectPropertyButton = useCallback((cprops: { children: React.ReactNode }) => (
+      <SelectNewButton
+        options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
+        onSelect={(cssProp) => {
+          addProperty?.(props.selector, cssProp);
+        }}
+      >
+        {cprops.children}
+      </SelectNewButton>
+    ), [tProperty, addProperty, props.selector, selectableProperties]);
 
-  return (
-    <ContentBox
-      outline
-      collapsible
-      header={
-        <Text fontSize="lg" fontWeight="bold">
-          {props.debug ? `${props.selector}` : tSelector(props.selector)}
-        </Text>
+    const children = useMemo(() => {
+      const properties = Object.entries(props.CSSProperties);
+
+      if (properties.length === 0) {
+        return (
+          <EmptyState
+              title={tp("empty.message")}
+              action={
+                <SelectPropertyButton>
+                  <Button variant="outline">
+                    <MdAdd />
+                    {tp("empty.action")}
+                  </Button>
+                </SelectPropertyButton>
+              }
+            />
+        )
       }
-      buttons={
-        <>
-          <SelectPropertyButton>
-            <IconButton label={tp("add")}>
-              <MdAdd />
-            </IconButton>
-          </SelectPropertyButton>
 
+      return properties.map(([prop, value]) => (
+        <PropertyDesigner
+              key={prop}
+              selector={props.selector}
+              property={prop as CSSPropertyName}
+              value={value}
+              debug={props.debug}
+            />
+      ))
+    }, [props.CSSProperties, props.debug, props.selector, tp, SelectPropertyButton]);
+
+    return (
+      <ContentBox
+        outline
+        collapsible
+        header={
+          <Text fontSize="lg" fontWeight="bold">
+            {props.debug ? `${props.selector}` : tSelector(props.selector)}
+          </Text>
+        }
+        buttons={
+          <>
+            <SelectPropertyButton>
+              <IconButton label={tp("add")}>
+                <MdAdd />
+              </IconButton>
+            </SelectPropertyButton>
+
+            <IconButton
+              label={t("remove")}
+              color="red.500"
+              onClick={() => removeSelector(props.selector)}
+            >
+              <MdDelete />
+            </IconButton>
+          </>
+        }
+      >
+        {children}
+      </ContentBox>
+    );
+  },
+);
+SelectorDesigner.displayName = "SelectorDesigner";
+
+const PropertyDesigner = React.memo(
+  <Tprop extends CSSPropertyName>(props: {
+    selector: CSSSelectorName;
+    property: Tprop;
+    value: CSSPropertyValueTypeForProperty<Tprop>;
+    debug: boolean;
+  }) => {
+    const { setProperty, removeProperty } = useCSSDesignerMutation();
+
+    const t = useTranslations("CSSDesigner.property");
+    const { tProperty } = useDesignerTranslations();
+
+    const prop = PROPERTIES[props.property];
+
+    const control = useMemo(() => {
+      const ControlFn = CONTROLS[prop.kind]?.component as ComponentFor<
+        CSSPropertyKindFor<Tprop>
+      >;
+      if (!ControlFn) {
+        throw new Error(
+          `don't know how to render control for kind '${prop.kind}'`,
+        );
+      }
+
+      return (
+        <ControlFn
+          options={
+            prop as unknown as CSSPropertyOptionsForKind<
+              CSSPropertyKindFor<Tprop>
+            >
+          }
+          value={props.value}
+          onChange={(value) =>
+            setProperty(props.selector, props.property, value)
+          }
+        />
+      );
+    }, [props.property, props.value, props.selector, prop, setProperty]);
+
+    return (
+      <ContentBox
+        outline
+        collapsible
+        header={
+          <Text fontSize="md">
+            {props.debug
+              ? `${props.property} (${prop.kind})`
+              : tProperty(props.property as string)}
+          </Text>
+        }
+        buttons={
           <IconButton
             label={t("remove")}
             color="red.500"
-            onClick={() => removeSelector(props.selector)}
+            onClick={() => removeProperty(props.selector, props.property)}
           >
             <MdDelete />
           </IconButton>
-        </>
-      }
-    >
-      <For
-        each={Object.entries(props.CSSProperties)}
-        fallback={
-          <EmptyState
-            title={tp("empty.message")}
-            action={
-              <SelectPropertyButton>
-                <Button variant="outline">
-                  <MdAdd />
-                  {tp("empty.action")}
-                </Button>
-              </SelectPropertyButton>
-            }
-          />
         }
       >
-        {([prop, value]) => (
-          <PropertyDesigner
-            key={prop}
-            selector={props.selector}
-            property={prop as CSSPropertyName}
-            value={value}
-            debug={props.debug}
-          />
-        )}
-      </For>
-    </ContentBox>
-  );
-}
-
-function PropertyDesigner<Tprop extends CSSPropertyName>(props: {
-  selector: CSSSelectorName;
-  property: Tprop;
-  value: CSSPropertyValueTypeForProperty<Tprop>;
-  debug: boolean;
-}) {
-  const { removeProperty, setProperty } = useCSSDesignerMutation();
-
-  const t = useTranslations("CSSDesigner.property");
-  const { tProperty } = useDesignerTranslations();
-
-  const prop = PROPERTIES[props.property];
-  const ControlFn = CONTROLS[prop.kind]?.component as ComponentFor<
-    CSSPropertyKindFor<Tprop>
-  >;
-  if (!ControlFn) {
-    throw new Error(`don't know how to render control for kind '${prop.kind}'`);
-  }
-
-  return (
-    <ContentBox
-      outline
-      collapsible
-      header={
-        <Text fontSize="md">
-          {props.debug
-            ? `${props.property} (${prop.kind})`
-            : tProperty(props.property as string)}
-        </Text>
-      }
-      buttons={
-        <IconButton
-          label={t("remove")}
-          color="red.500"
-          onClick={() => removeProperty(props.selector, props.property)}
-        >
-          <MdDelete />
-        </IconButton>
-      }
-    >
-      <Flex gap={2}>
-        <Box flex={1} padding={2}>
-          <ControlFn
-            options={
-              prop as unknown as CSSPropertyOptionsForKind<
-                CSSPropertyKindFor<Tprop>
-              >
-            }
-            value={props.value}
-            onChange={(value) =>
-              setProperty(props.selector, props.property, value)
-            }
-          />
-        </Box>
-      </Flex>
-    </ContentBox>
-  );
-}
+        <Flex gap={2}>
+          <Box flex={1} padding={2}>
+            {control}
+          </Box>
+        </Flex>
+      </ContentBox>
+    );
+  },
+);
+PropertyDesigner.displayName = "PropertyDesigner";

@@ -13,16 +13,21 @@ import {
 import type { PropsFor } from ".";
 import useFetchStatus from "~/util/useFetchStatus";
 import { useTranslations } from "next-intl";
+import React, { useMemo } from "react";
 
-export default function FontFamilyControl(props: PropsFor<"fontFamily">) {
+const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
   const t = useTranslations("CSSDesigner.controls.FontFamilyControl");
 
-  const systemFonts = createListCollection({
-    items: FONTS.map((font) => ({
-      label: font,
-      value: font,
-    })),
-  });
+  const systemFonts = useMemo(
+    () =>
+      createListCollection({
+        items: FONTS.map((font) => ({
+          label: font,
+          value: font,
+        })),
+      }),
+    [],
+  );
 
   const modes = ["system", "external"];
   const modeOptions = modes.map((mode) => ({
@@ -124,7 +129,10 @@ export default function FontFamilyControl(props: PropsFor<"fontFamily">) {
       </SegmentGroup.Root>
     </Flex>
   );
-}
+});
+FontFamilyControl.displayName = "FontFamilyControl";
+
+export default FontFamilyControl;
 
 /**
  * commonly used fonts available by default in both Windows and macOS

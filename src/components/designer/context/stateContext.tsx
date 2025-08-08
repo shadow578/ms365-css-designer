@@ -35,8 +35,10 @@ function ContextProviderInner(props: {
 
   useSetSaveState(state);
 
+  const context = useMemo(() => ({ state, setState }), [state, setState]);
+
   return (
-    <CSSDesignerContext.Provider value={{ state, setState }}>
+    <CSSDesignerContext.Provider value={context}>
       {props.children}
     </CSSDesignerContext.Provider>
   );

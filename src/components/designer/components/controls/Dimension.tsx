@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { MdAdd, MdOutlineSwipe, MdRemove } from "react-icons/md";
+import React, { useMemo } from "react";
 
 interface DimensionCommonSettings {
   max: number;
@@ -30,7 +31,7 @@ type DimensionStyleSettings =
   | DimensionInputStyleSettings
   | DimensionSliderStyleSettings;
 
-export default function DimensionControl(props: PropsFor<"dimension">) {
+const DimensionControl = React.memo((props: PropsFor<"dimension">) => {
   const unitConfig = {
     px: {
       style: "input",
@@ -55,9 +56,14 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
       valueFormatter: (value) => `${value}%`,
     },
   } satisfies Record<typeof props.value.unit, DimensionStyleSettings>;
-  const units = (
-    Object.keys(unitConfig) as Array<keyof typeof unitConfig>
-  ).filter((u) => props.options.units?.includes(u) ?? true);
+
+  const units = useMemo(
+    () =>
+      (Object.keys(unitConfig) as Array<keyof typeof unitConfig>).filter(
+        (u) => props.options.units?.includes(u) ?? true,
+      ),
+    [props.options.units, unitConfig],
+  );
   const currentUnitConfig = unitConfig[props.value.unit];
 
   const min = props.options.negative ? -currentUnitConfig.max : 0;
@@ -170,4 +176,7 @@ export default function DimensionControl(props: PropsFor<"dimension">) {
       </SegmentGroup.Root>
     </Flex>
   );
-}
+});
+DimensionControl.displayName = "DimensionControl";
+
+export default DimensionControl;

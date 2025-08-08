@@ -18,7 +18,7 @@ export type PropsFor<T extends CSSPropertyKind> = {
 
 export type ComponentFor<T extends CSSPropertyKind> = (
   props: PropsFor<T>,
-) => React.JSX.Element;
+) => React.ReactNode;
 
 interface Control<T extends CSSPropertyKind> {
   component: ComponentFor<T>;

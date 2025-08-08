@@ -1,8 +1,9 @@
 import { Flex, SegmentGroup, Slider } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { useTranslations } from "next-intl";
+import React, { useCallback, useMemo } from "react";
 
-export default function FontWeightControl(props: PropsFor<"fontWeight">) {
+const FontWeightControl = React.memo((props: PropsFor<"fontWeight">) => {
   const selectedWeightOption =
     typeof props.value === "number" ? "absolute" : props.value;
 
@@ -10,34 +11,37 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
 
   const t = useTranslations("CSSDesigner.controls.FontWeightControl");
 
-  // lookup for named weight display
-  // order here is order in the ui
-  const weightOptions = {
-    absolute: t("absolute"),
-    bolder: t("bolder"),
-    lighter: t("lighter"),
-    inherit: t("inherit"),
-  } satisfies Record<SelectOptions, string>;
+  const selectableWeightOptions = useMemo(() => {
+    // lookup for named weight display
+    // order here is order in the ui
+    const weightOptions = {
+      absolute: t("absolute"),
+      bolder: t("bolder"),
+      lighter: t("lighter"),
+      inherit: t("inherit"),
+    } satisfies Record<SelectOptions, string>;
 
-  const selectableWeightOptions = Object.entries(weightOptions).map(
-    ([key, name]) => ({
+    return Object.entries(weightOptions).map(([key, name]) => ({
       value: key,
       label: name,
-    }),
-  );
+    }));
+  }, [t]);
 
   // names for the absolute weights, selected by the slider
-  const namedAbsoluteWeights = {
-    100: t("thin"),
-    200: t("extra_light"),
-    300: t("light"),
-    400: t("normal"),
-    500: t("medium"),
-    600: t("semi_bold"),
-    700: t("bold"),
-    800: t("extra_bold"),
-    900: t("black"),
-  };
+  const namedAbsoluteWeights = useMemo(
+    () => ({
+      100: t("thin"),
+      200: t("extra_light"),
+      300: t("light"),
+      400: t("normal"),
+      500: t("medium"),
+      600: t("semi_bold"),
+      700: t("bold"),
+      800: t("extra_bold"),
+      900: t("black"),
+    }),
+    [t],
+  );
 
   const sliderValueFormatter = (w: number) => {
     if (w in namedAbsoluteWeights) {
@@ -47,16 +51,22 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
     return w.toString();
   };
 
-  const marks = Object.entries(namedAbsoluteWeights).map(([w, _]) => Number(w));
+  const marks = useMemo(
+    () => Object.entries(namedAbsoluteWeights).map(([w, _]) => Number(w)),
+    [namedAbsoluteWeights],
+  );
 
-  const onSelectWeightOption = (value: SelectOptions) => {
-    if (value === "absolute") {
-      // If "absolute" is selected, slider takes over
-      props.onChange(400);
-    } else {
-      props.onChange(value);
-    }
-  };
+  const onSelectWeightOption = useCallback(
+    (value: SelectOptions) => {
+      if (value === "absolute") {
+        // If "absolute" is selected, slider takes over
+        props.onChange(400);
+      } else {
+        props.onChange(value);
+      }
+    },
+    [props],
+  );
 
   return (
     <Flex gap={4} alignItems="center" flexWrap="wrap">
@@ -100,4 +110,7 @@ export default function FontWeightControl(props: PropsFor<"fontWeight">) {
       </SegmentGroup.Root>
     </Flex>
   );
-}
+});
+FontWeightControl.displayName = "FontWeightControl";
+
+export default FontWeightControl;

@@ -1,10 +1,11 @@
 import { Input } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { useTranslations } from "next-intl";
+import React from "react";
 
-export default function URLSelectionControl(props: PropsFor<"url">) {
+const URLSelectionControl = React.memo((props: PropsFor<"url">) => {
   const t = useTranslations("CSSDesigner.controls.URLSelectionControl");
-  
+
   return (
     <Input
       type="url"
@@ -14,4 +15,7 @@ export default function URLSelectionControl(props: PropsFor<"url">) {
       onChange={(e) => props.onChange(e.target.value)}
     />
   );
-}
+});
+URLSelectionControl.displayName = "URLSelectionControl";
+
+export default URLSelectionControl;
