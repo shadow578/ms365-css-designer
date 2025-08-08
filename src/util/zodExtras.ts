@@ -56,7 +56,8 @@ export function transform<T extends ZodRawShape>(
         }
 
         if (expectedType instanceof ZodObject) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- FIXME wonky
+          // FIXME: zod types get a bit wonky here
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           value = transform(expectedType, value);
         }
 

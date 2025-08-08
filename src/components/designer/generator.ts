@@ -34,6 +34,7 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   context: Context,
 ): string | undefined {
   if (!validateCSSPropertyValue(prop, value)) {
+    // NOTE: due to validateCSSPropertyValue, for typescript 'value' cannot be in this branch.
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     console.error(`property '${prop}' has invalid value: '${value}'`);
     return undefined;
