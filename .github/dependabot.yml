@@ -22,3 +22,6 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+      trpc:
+        patterns:
+          - "@trpc/*"

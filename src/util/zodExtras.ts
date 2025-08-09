@@ -1,9 +1,4 @@
-import z, {
-  ZodObject,
-  ZodOptional,
-  type ZodSchema,
-  type ZodRawShape,
-} from "zod";
+import z, { ZodObject, ZodOptional, type ZodType, type ZodRawShape } from "zod";
 
 const SCHEMA = {
   /**
@@ -46,23 +41,23 @@ export function transform<T extends ZodRawShape>(
   data = Object.fromEntries(
     Object.entries(data)
       .map(([key, value]) => {
+        // FIXME: zod types get a bit wonky in here
+
         let expectedType = schema.shape[key];
         if (!expectedType) {
           return [key, undefined];
         }
 
         if (expectedType instanceof ZodOptional) {
-          expectedType = expectedType.unwrap() as ZodSchema;
+          expectedType = expectedType.unwrap() as ZodType;
         }
 
         if (expectedType instanceof ZodObject) {
-          // FIXME: zod types get a bit wonky here
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           value = transform(expectedType, value);
         }
 
-        const r = expectedType.safeParse(value);
-        return r.success ? [key, r.data as unknown] : [key, undefined];
+        const r = (expectedType as ZodType).safeParse(value);
+        return r.success ? [key, r.data] : [key, undefined];
       })
       .filter(([, value]) => value !== undefined),
   ) as unknown;
