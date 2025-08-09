@@ -6,3 +6,11 @@ the files in this directory are a adapted version of the converged sign-in page 
 - `signin.css`: Original CSS from the Microsoft sign-in page. Included as-is.
 
 the pages were fetched on the 22nd of July 2025 from a login initiated from office.com.
+
+## Isn't it dangerous to publish this
+
+well, to some degree yes.
+by publishing this code, i'm somewhat lowering the barrier to entry for people who want to create convincing phishing pages.
+
+however, i believe that anyone with the skills to integrate this code into some phishing campaing - thus creating a backend etc. for it - would have no trouble creating the frontend themselves.
+so realistically, this only saves a hour or two of work for someone who wants to go the malicious route.
