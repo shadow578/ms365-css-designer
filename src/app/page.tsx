@@ -63,7 +63,7 @@ function MainLayout() {
     css,
   );
 
-  const [__editorOpen, setEditorOpen] = useState(false);
+  const [__editorOpen, setEditorOpen] = useState(true);
   const editorOpen = useBreakpointValue({
     // on small screens, the editor pane is always open (below the content)
     base: true,
