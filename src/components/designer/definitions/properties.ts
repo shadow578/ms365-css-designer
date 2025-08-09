@@ -161,7 +161,7 @@ export function assertCSSPropertyValue<
   const { kind, schema } = getSchemaFor(prop);
 
   schema.parse(value, {
-    errorMap: () => ({
+    error: () => ({
       message: `Invalid value for property '${prop}' of kind '${kind}'`,
     }),
   });
