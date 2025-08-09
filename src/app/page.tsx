@@ -145,7 +145,7 @@ function MainLayout() {
           }}
           overflow={{
             base: "unset",
-            lg: "scroll",
+            lg: "auto",
           }}
           scrollBehavior="smooth"
           present={editorOpen}
