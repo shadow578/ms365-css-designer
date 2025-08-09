@@ -3,9 +3,13 @@ import { env } from "~/env";
 import { getBaseUrl } from "~/util/baseUrl";
 
 function getHash(resource: string, expires: number): string {
-  return pbkdf2Sync(resource + expires.toString(), env.NODE_ENV, 1000, 64, "sha256").toString(
-    "base64url",
-  );
+  return pbkdf2Sync(
+    resource + expires.toString(),
+    env.NODE_ENV,
+    1000,
+    64,
+    "sha256",
+  ).toString("base64url");
 }
 
 export function validateResourceRequest(

@@ -426,7 +426,9 @@ function LightboxTemplateContainer(props: {
                     </div>
                   </div>
                 </div>
-                {props.footer ? <Footer hasBackground={!!props.backgroundImage} /> : null}
+                {props.footer ? (
+                  <Footer hasBackground={!!props.backgroundImage} />
+                ) : null}
               </div>
             </div>
           </div>

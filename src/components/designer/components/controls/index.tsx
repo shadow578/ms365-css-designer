@@ -1,12 +1,13 @@
 import type React from "react";
-import type {
-  CSSPropertyOptionsForKind,
-} from "../../definitions/properties"
+import type { CSSPropertyOptionsForKind } from "../../definitions/properties";
 import ColorControl from "./Color";
 import DimensionControl from "./Dimension";
 import AlignmentControl from "./Alignment";
 import FontWeightControl from "./FontWeight";
-import type { CSSPropertyKind, CSSPropertyValueTypeByKind } from "../../definitions/kinds";
+import type {
+  CSSPropertyKind,
+  CSSPropertyValueTypeByKind,
+} from "../../definitions/kinds";
 import URLSelectionControl from "./Url";
 import FontFamilyControl from "./FontFamily";
 
@@ -42,10 +43,10 @@ const CONTROLS: ControlRecord = {
     component: FontWeightControl,
   },
   fontFamily: {
-    component: FontFamilyControl
+    component: FontFamilyControl,
   },
   url: {
-    component: URLSelectionControl
-  }
+    component: URLSelectionControl,
+  },
 };
 export default CONTROLS;

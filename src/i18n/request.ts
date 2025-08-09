@@ -2,7 +2,7 @@ import type { DeepPartial } from "@trpc/server";
 import { getRequestConfig } from "next-intl/server";
 import { getUserLocale } from "~/server/locale";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "./config";
-import deepmerge from 'deepmerge';
+import deepmerge from "deepmerge";
 
 type MessageCatalog = DeepPartial<Record<string, unknown>> | null | undefined;
 
@@ -23,7 +23,7 @@ export default getRequestConfig(async () => {
   }
   if (locale !== DEFAULT_LOCALE) {
     const fallback = await loadMessageCatalog(DEFAULT_LOCALE);
-    messages = deepmerge(fallback ?? {}, messages ?? {}) as MessageCatalog
+    messages = deepmerge(fallback ?? {}, messages ?? {}) as MessageCatalog;
   }
 
   return {

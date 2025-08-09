@@ -127,16 +127,19 @@ const SelectorDesigner = React.memo(
       (_, prop) => !(prop in props.CSSProperties),
     );
 
-    const SelectPropertyButton = useCallback((cprops: { children: React.ReactNode }) => (
-      <SelectNewButton
-        options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
-        onSelect={(cssProp) => {
-          addProperty?.(props.selector, cssProp);
-        }}
-      >
-        {cprops.children}
-      </SelectNewButton>
-    ), [tProperty, addProperty, props.selector, selectableProperties]);
+    const SelectPropertyButton = useCallback(
+      (cprops: { children: React.ReactNode }) => (
+        <SelectNewButton
+          options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
+          onSelect={(cssProp) => {
+            addProperty?.(props.selector, cssProp);
+          }}
+        >
+          {cprops.children}
+        </SelectNewButton>
+      ),
+      [tProperty, addProperty, props.selector, selectableProperties],
+    );
 
     const children = useMemo(() => {
       const properties = Object.entries(props.CSSProperties);
@@ -144,29 +147,35 @@ const SelectorDesigner = React.memo(
       if (properties.length === 0) {
         return (
           <EmptyState
-              title={tp("empty.message")}
-              action={
-                <SelectPropertyButton>
-                  <Button variant="outline">
-                    <MdAdd />
-                    {tp("empty.action")}
-                  </Button>
-                </SelectPropertyButton>
-              }
-            />
-        )
+            title={tp("empty.message")}
+            action={
+              <SelectPropertyButton>
+                <Button variant="outline">
+                  <MdAdd />
+                  {tp("empty.action")}
+                </Button>
+              </SelectPropertyButton>
+            }
+          />
+        );
       }
 
       return properties.map(([prop, value]) => (
         <PropertyDesigner
-              key={prop}
-              selector={props.selector}
-              property={prop as CSSPropertyName}
-              value={value}
-              debug={props.debug}
-            />
-      ))
-    }, [props.CSSProperties, props.debug, props.selector, tp, SelectPropertyButton]);
+          key={prop}
+          selector={props.selector}
+          property={prop as CSSPropertyName}
+          value={value}
+          debug={props.debug}
+        />
+      ));
+    }, [
+      props.CSSProperties,
+      props.debug,
+      props.selector,
+      tp,
+      SelectPropertyButton,
+    ]);
 
     return (
       <ContentBox

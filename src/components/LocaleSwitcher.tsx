@@ -30,7 +30,10 @@ export default function LocaleSwitcher(props: {
     <Menu.Root onSelect={(e) => onSelectLocale(e.value)}>
       <Menu.Trigger asChild>
         <Button variant="ghost" size="sm">
-          <LocaleDisplay locale={currentLocale} emojiOnly={props.style === "minimal"} />
+          <LocaleDisplay
+            locale={currentLocale}
+            emojiOnly={props.style === "minimal"}
+          />
         </Button>
       </Menu.Trigger>
       <PortalW>
@@ -50,12 +53,13 @@ export default function LocaleSwitcher(props: {
   );
 }
 
-function LocaleDisplay(props: { locale: Locale, emojiOnly?: boolean }) {
+function LocaleDisplay(props: { locale: Locale; emojiOnly?: boolean }) {
   const t = useTranslations("LocaleSwitcher.locales");
 
   return (
     <>
-      {t(`${props.locale}.emoji`)} {!props.emojiOnly && t(`${props.locale}.name`)}
+      {t(`${props.locale}.emoji`)}{" "}
+      {!props.emojiOnly && t(`${props.locale}.name`)}
     </>
   );
 }
