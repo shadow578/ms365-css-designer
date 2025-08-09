@@ -92,13 +92,7 @@ function MainLayout() {
   const locale = useLocale();
 
   return (
-    <Flex
-      direction={{
-        base: "column-reverse",
-        lg: "row",
-      }}
-      width="100vw"
-    >
+    <>
       <Dialog
         open={warningDialogOpen}
         noDismiss
@@ -123,74 +117,95 @@ function MainLayout() {
         </Text>
       </Dialog>
 
-      <Presence
-        flex={1}
-        width={{
-          base: "100%",
-          lg: "unset",
+      <Flex
+        direction={{
+          base: "column-reverse",
+          lg: "row",
         }}
-        maxWidth={{
-          base: "100%",
-          lg: "50%",
-        }}
-        minWidth="400px"
-        height={{
-          base: "unset",
-          lg: "100vh",
-        }}
-        overflow={{
-          base: "unset",
-          lg: "scroll",
-        }}
-        scrollBehavior="smooth"
-        present={editorOpen}
-        animationName={{
-          base: {
-            _open: "slide-from-bottom-full",
-            _closed: "slide-to-bottom-full",
-          },
-          lg: {
-            _open: "slide-from-left-full",
-            _closed: "slide-to-left-full",
-          },
-        }}
-        animationDuration="moderate"
+        width="100vw"
       >
-        <EditorPane onCSSChange={setCSS} />
-      </Presence>
+        <Presence
+          flex={1}
+          width={{
+            base: "100%",
+            lg: "unset",
+          }}
+          maxWidth={{
+            base: "100%",
+            lg: "50%",
+          }}
+          minWidth="400px"
+          height={{
+            base: "unset",
+            lg: "100vh",
+          }}
+          overflow={{
+            base: "unset",
+            lg: "scroll",
+          }}
+          scrollBehavior="smooth"
+          present={editorOpen}
+          animationName={{
+            base: {
+              _open: "slide-from-bottom-full",
+              _closed: "slide-to-bottom-full",
+            },
+            lg: {
+              _open: "slide-from-left-full",
+              _closed: "slide-to-left-full",
+            },
+          }}
+          animationDuration="moderate"
+        >
+          <EditorPane onCSSChange={setCSS} />
+        </Presence>
 
-      <Flex position="relative" direction="column" flexGrow={1} height="100vh">
-        {editorOpenButtonShown && (
-          <Box position="absolute" top="50%" left="5px">
-            <IconButton
-              label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
-              onClick={() => setEditorOpen(!editorOpen)}
-            >
-              {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
-            </IconButton>
+        <Flex
+          position="relative"
+          direction="column"
+          flexGrow={1}
+          height="100vh"
+        >
+          {editorOpenButtonShown && (
+            <Box position="absolute" top="50%" left="5px">
+              <IconButton
+                label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
+                onClick={() => setEditorOpen(!editorOpen)}
+              >
+                {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
+              </IconButton>
+            </Box>
+          )}
+
+          <PageHeader />
+          <Box flexGrow={1}>
+            <iframe
+              title="Sign-in Page Preview"
+              ref={signinFrame}
+              src={`converged-signin-page?l=${locale}`}
+              style={{ width: "100%", height: "100%", border: "none" }}
+              onLoad={manualInjectCss}
+            />
           </Box>
-        )}
-
-        <Flex ml={5} mr={5} alignItems="center" gap={2}>
-          <VStack flex={1} alignItems="start" gap={0}>
-            <Heading>{t("heading")}</Heading>
-            <Text fontSize="sm" color="text.secondary">
-              {t("subheading")}
-            </Text>
-          </VStack>
-          <ColorModeButton />
-          <LocaleSwitcher style="full" />
         </Flex>
-        <Box flexGrow={1}>
-          <iframe
-            title="Sign-in Page Preview"
-            ref={signinFrame}
-            src={`converged-signin-page?l=${locale}`}
-            style={{ width: "100%", height: "100%", border: "none" }}
-            onLoad={manualInjectCss}
-          />
-        </Box>
       </Flex>
+    </>
+  );
+}
+
+function PageHeader() {
+  const t = useTranslations("Index.MainLayout");
+
+  return (
+    <Flex ml={5} mr={5} alignItems="center" gap={2}>
+      <VStack flex={1} alignItems="start" gap={0}>
+        <Heading>{t("heading")}</Heading>
+        <Text fontSize="sm" color="text.secondary">
+          {t("subheading")}
+        </Text>
+      </VStack>
+      <ColorModeButton />
+      <LocaleSwitcher style="full" />
     </Flex>
   );
 }
