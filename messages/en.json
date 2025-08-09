@@ -7,6 +7,10 @@
         "pane": {
           "open": "Open Design Editor",
           "close": "Close Design Editor"
+        },
+        "github": {
+          "text": "View on GitHub",
+          "link": "https://github.com/shadow578/m365-custom-css-designer"
         }
       },
       "warning_dialog": {

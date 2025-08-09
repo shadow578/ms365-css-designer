@@ -7,6 +7,9 @@
         "pane": {
           "open": "Design-Editor öffnen",
           "close": "Design-Editor schließen"
+        },
+        "github": {
+          "text": "Auf GitHub ansehen"
         }
       },
       "warning_dialog": {

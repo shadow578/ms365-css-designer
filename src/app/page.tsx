@@ -38,10 +38,11 @@ import LocaleSwitcher from "~/components/LocaleSwitcher";
 import registerSimpleCSSClassCompletionProvider from "~/util/simpleCompletionProvider";
 import { ALL_SELECTORS } from "~/components/designer/definitions/selectors";
 import Dialog from "~/components/Dialog";
-
 import appIcon from "~/../public/icon.svg";
 import Image from "next/image";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { FaGithub } from "react-icons/fa6";
+import Link from "next/link";
 
 export default function Index() {
   return (
@@ -214,8 +215,18 @@ function PageHeader() {
           {t("subheading")}
         </Text>
       </VStack>
-      <ColorModeButton />
       <LocaleSwitcher style="full" />
+      <ColorModeButton />
+
+      <Link
+        href={t("buttons.github.link")}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <IconButton label={t("buttons.github.text")}>
+          <FaGithub />
+        </IconButton>
+      </Link>
     </Flex>
   );
 }
