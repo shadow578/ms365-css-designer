@@ -10,24 +10,7 @@ import {
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import React, { useMemo, useState } from "react";
-
-const ChannelSliders = (props: { format: ColorPicker.ColorFormat }) => {
-  const channels = getColorChannels(props.format);
-  return (
-    <ColorPicker.View format={props.format}>
-      <For each={channels}>
-        {(channel) => (
-          <Stack gap="1" key={channel}>
-            <ColorPicker.ChannelText minW="5ch">
-              {channel}
-            </ColorPicker.ChannelText>
-            <ColorPicker.ChannelSlider channel={channel} />
-          </Stack>
-        )}
-      </For>
-    </ColorPicker.View>
-  );
-};
+import { useTranslations } from "next-intl";
 
 const ColorControl = React.memo((props: PropsFor<"color">) => {
   const formatColor = (color: Color) => {
@@ -74,14 +57,16 @@ const FormatSelect = (props: {
   format: ColorPicker.ColorFormat;
   onFormatChange: (format: ColorPicker.ColorFormat) => void;
 }) => {
+  const t = useTranslations("CSSDesigner.controls.ColorControl.format");
+
   const formats = useMemo(() => {
     const f: ColorPicker.ColorFormat[] = ["rgba", "hsla", "hsba"];
 
     return f.map((format) => ({
       value: format,
-      label: format.toUpperCase(),
+      label: t(format),
     }));
-  }, []);
+  }, [t]);
 
   return (
     <SegmentGroup.Root
@@ -95,5 +80,26 @@ const FormatSelect = (props: {
       <SegmentGroup.Indicator />
       <SegmentGroup.Items items={formats} />
     </SegmentGroup.Root>
+  );
+};
+
+const ChannelSliders = (props: { format: ColorPicker.ColorFormat }) => {
+  const t = useTranslations("CSSDesigner.controls.ColorControl.slider");
+
+  const channels = getColorChannels(props.format);
+
+  return (
+    <ColorPicker.View format={props.format}>
+      <For each={channels}>
+        {(channel) => (
+          <Stack gap="1" key={channel}>
+            <ColorPicker.ChannelText minW="5ch">
+              {t(channel)}
+            </ColorPicker.ChannelText>
+            <ColorPicker.ChannelSlider channel={channel} />
+          </Stack>
+        )}
+      </For>
+    </ColorPicker.View>
   );
 };

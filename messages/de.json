@@ -124,6 +124,18 @@
         "input": {
           "placeholder": "Gebe die URL ein"
         }
+      },
+      "ColorControl": {
+        "slider": {
+          "red": "Rot",
+          "green": "Grün",
+          "blue": "Blau",
+          "alpha": "Alpha",
+          "hue": "Farbton",
+          "saturation": "Sättigung",
+          "lightness": "Helligkeit",
+          "brightness": "Helligkeit"
+        }
       }
     }
   },

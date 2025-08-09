@@ -124,6 +124,23 @@
         "input": {
           "placeholder": "Enter your URL"
         }
+      },
+      "ColorControl": {
+        "format": {
+          "rgba": "RGBA",
+          "hsla": "HSLA",
+          "hsba": "HSBA"
+        },
+        "slider": {
+          "red": "Red",
+          "green": "Green",
+          "blue": "Blue",
+          "alpha": "Alpha",
+          "hue": "Hue",
+          "saturation": "Saturation",
+          "lightness": "Lightness",
+          "brightness": "Brightness"
+        }
       }
     }
   },
