@@ -7,16 +7,18 @@ import {
   Heading,
   Presence,
   Text,
+  useBreakpointValue,
   VStack,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   MdAdd,
   MdBugReport,
+  MdChevronLeft,
+  MdChevronRight,
   MdDownload,
   MdEdit,
   MdOutlineBugReport,
-  MdOutlineStyle,
   MdStyle,
 } from "react-icons/md";
 import {
@@ -57,7 +59,17 @@ function MainLayout() {
     css,
   );
 
-  const [editorOpen, setEditorOpen] = useState(true);
+  const [__editorOpen, setEditorOpen] = useState(false);
+  const editorOpen = useBreakpointValue({
+    // on small screens, the editor pane is always open (below the content)
+    base: true,
+    lg: __editorOpen,
+  });
+  const editorOpenButtonShown = useBreakpointValue({
+    // on small screens, the editor pane is always open, so the button is not shown
+    base: false,
+    lg: true,
+  });
 
   const [warningDialogOpen, setWarningDialogOpen] = useState(false);
   const acceptWarningDialog = () => {
@@ -147,20 +159,28 @@ function MainLayout() {
         <EditorPane onCSSChange={setCSS} />
       </Presence>
 
-      <Flex direction="column" flexGrow={1} height="100vh">
-        <Box>
-          <Flex alignItems="center" gap={2}>
-            <EditorButton open={editorOpen} onClick={setEditorOpen} />
-            <VStack flex={1} alignItems="start" gap={0}>
-              <Heading>{t("heading")}</Heading>
-              <Text fontSize="sm" color="text.secondary">
-                {t("subheading")}
-              </Text>
-            </VStack>
-            <ColorModeButton />
-            <LocaleSwitcher style="full" />
-          </Flex>
-        </Box>
+      <Flex position="relative" direction="column" flexGrow={1} height="100vh">
+        {editorOpenButtonShown && (
+          <Box position="absolute" top="50%" left="5px">
+            <IconButton
+              label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
+              onClick={() => setEditorOpen(!editorOpen)}
+            >
+              {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
+            </IconButton>
+          </Box>
+        )}
+
+        <Flex ml={5} mr={5} alignItems="center" gap={2}>
+          <VStack flex={1} alignItems="start" gap={0}>
+            <Heading>{t("heading")}</Heading>
+            <Text fontSize="sm" color="text.secondary">
+              {t("subheading")}
+            </Text>
+          </VStack>
+          <ColorModeButton />
+          <LocaleSwitcher style="full" />
+        </Flex>
         <Box flexGrow={1}>
           <iframe
             title="Sign-in Page Preview"
@@ -321,21 +341,5 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
         </ContentBox>
       </Box>
     </>
-  );
-}
-
-function EditorButton(props: {
-  open: boolean;
-  onClick: (open: boolean) => void;
-}) {
-  const t = useTranslations("Index.MainLayout");
-
-  return (
-    <IconButton
-      label={props.open ? t("buttons.pane.close") : t("buttons.pane.open")}
-      onClick={() => props.onClick(!props.open)}
-    >
-      {props.open ? <MdStyle /> : <MdOutlineStyle />}
-    </IconButton>
   );
 }
