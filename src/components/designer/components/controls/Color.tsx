@@ -1,6 +1,33 @@
-import { type Color, ColorPicker, Portal, parseColor } from "@chakra-ui/react";
+import {
+  type Color,
+  ColorPicker,
+  For,
+  Portal,
+  SegmentGroup,
+  Stack,
+  getColorChannels,
+  parseColor,
+} from "@chakra-ui/react";
 import type { PropsFor } from ".";
-import React from "react";
+import React, { useMemo, useState } from "react";
+
+const ChannelSliders = (props: { format: ColorPicker.ColorFormat }) => {
+  const channels = getColorChannels(props.format);
+  return (
+    <ColorPicker.View format={props.format}>
+      <For each={channels}>
+        {(channel) => (
+          <Stack gap="1" key={channel}>
+            <ColorPicker.ChannelText minW="5ch">
+              {channel}
+            </ColorPicker.ChannelText>
+            <ColorPicker.ChannelSlider channel={channel} />
+          </Stack>
+        )}
+      </For>
+    </ColorPicker.View>
+  );
+};
 
 const ColorControl = React.memo((props: PropsFor<"color">) => {
   const formatColor = (color: Color) => {
@@ -10,8 +37,11 @@ const ColorControl = React.memo((props: PropsFor<"color">) => {
     return color.toString("hexa");
   };
 
+  const [format, setFormat] = useState<ColorPicker.ColorFormat>("rgba");
+
   return (
     <ColorPicker.Root
+      format={format}
       value={parseColor(props.value)}
       onValueChange={(e) => props.onChange(formatColor(e.value))}
       width="fit-content"
@@ -23,8 +53,13 @@ const ColorControl = React.memo((props: PropsFor<"color">) => {
       <Portal>
         <ColorPicker.Positioner>
           <ColorPicker.Content>
+            <FormatSelect format={format} onFormatChange={setFormat} />
+
             <ColorPicker.Area />
-            <ColorPicker.Sliders />
+
+            <ChannelSliders format="hsla" />
+            <ChannelSliders format="hsba" />
+            <ChannelSliders format="rgba" />
           </ColorPicker.Content>
         </ColorPicker.Positioner>
       </Portal>
@@ -34,3 +69,31 @@ const ColorControl = React.memo((props: PropsFor<"color">) => {
 ColorControl.displayName = "ColorControl";
 
 export default ColorControl;
+
+const FormatSelect = (props: {
+  format: ColorPicker.ColorFormat;
+  onFormatChange: (format: ColorPicker.ColorFormat) => void;
+}) => {
+  const formats = useMemo(() => {
+    const f: ColorPicker.ColorFormat[] = ["rgba", "hsla", "hsba"];
+
+    return f.map((format) => ({
+      value: format,
+      label: format.toUpperCase(),
+    }));
+  }, []);
+
+  return (
+    <SegmentGroup.Root
+      size="sm"
+      justifyContent="space-around"
+      value={props.format}
+      onValueChange={(e) =>
+        props.onFormatChange(e.value as ColorPicker.ColorFormat)
+      }
+    >
+      <SegmentGroup.Indicator />
+      <SegmentGroup.Items items={formats} />
+    </SegmentGroup.Root>
+  );
+};
