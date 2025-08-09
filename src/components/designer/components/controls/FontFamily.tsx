@@ -106,7 +106,11 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
                 <Select.Content>
                   <For each={systemFonts.items}>
                     {(fnt) => (
-                      <Select.Item item={fnt.value} key={fnt.value}>
+                      <Select.Item
+                        item={fnt.value}
+                        key={fnt.value}
+                        fontFamily={fnt.value}
+                      >
                         {fnt.label}
                         <Select.ItemIndicator />
                       </Select.Item>
