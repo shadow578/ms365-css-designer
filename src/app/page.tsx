@@ -39,6 +39,10 @@ import registerSimpleCSSClassCompletionProvider from "~/util/simpleCompletionPro
 import { ALL_SELECTORS } from "~/components/designer/definitions/selectors";
 import Dialog from "~/components/Dialog";
 
+import appIcon from "~/../public/icon.svg";
+import Image from "next/image";
+import type { StaticImport } from "next/dist/shared/lib/get-img-props";
+
 export default function Index() {
   return (
     <CSSDesignerContext>
@@ -198,6 +202,12 @@ function PageHeader() {
 
   return (
     <Flex ml={5} mr={5} alignItems="center" gap={2}>
+      <Image
+        src={appIcon as StaticImport}
+        alt={t("heading")}
+        style={{ height: "100%", width: "auto", padding: "4px" }}
+      />
+
       <VStack flex={1} alignItems="start" gap={0}>
         <Heading>{t("heading")}</Heading>
         <Text fontSize="sm" color="text.secondary">

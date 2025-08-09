@@ -9,6 +9,15 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
   title: "M365 CSS Designer",
+  description: "A Designer for Microsoft 365 custom CSS",
+  applicationName: "M365 CSS Designer",
+  authors: [
+    {
+      name: "shadow578",
+      url: "https://github.com/shadow578/m365-custom-css-designer",
+    },
+  ],
+  icons: "/favicon.ico",
 };
 
 export const viewport: Viewport = {
