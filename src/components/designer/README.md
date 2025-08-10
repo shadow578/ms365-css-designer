@@ -56,5 +56,5 @@ to add a new selector or property, you need to follow the steps below.
 
 #### add a new test case for the generator
 
-1. open `./tests/generators.test.ts`
+1. open `./generator.test.ts`
 2. add a new test case for the newly created property kind that tests the CSS generation logic. use the existing tests as a reference for how to structure the test cases.
