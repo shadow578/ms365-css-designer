@@ -48,7 +48,13 @@ import Link from "next/link";
 export default function Index() {
   return (
     <CSSDesignerContext>
-      <main role="main">
+      <main
+        role="main"
+        style={{
+          // without this, chrome sometimes adds scrollbars to the page that do nothing
+          overflow: "hidden",
+        }}
+      >
         <MainLayout />
       </main>
     </CSSDesignerContext>
