@@ -53,3 +53,8 @@ to add a new selector or property, you need to follow the steps below.
 
 1. open `./definitions/generators.ts`
 2. add a new entry for the kind in the `GENERATORS` object, providing a function that generates the CSS value part for the property based on the data structure defined in the kind. refer to the existing generators for examples.
+
+#### add a new test case for the generator
+
+1. open `./tests/generators.test.ts`
+2. add a new test case for the newly created property kind that tests the CSS generation logic. use the existing tests as a reference for how to structure the test cases.
