@@ -1,20 +1,24 @@
 import { Box, For, Menu, Portal } from "@chakra-ui/react";
 import type { SelectionDetails } from "node_modules/@chakra-ui/react/dist/types/components/menu/namespace";
+import { useCallback } from "react";
 
 export default function SelectNewButton<T extends string>(props: {
   children: React.ReactNode;
   options: Record<T, string>;
   onSelect?: (value: T) => void;
 }) {
-  const onMenuSelect = (details: SelectionDetails) => {
-    const value = details.value;
-    if (!(value in props.options)) {
-      console.error(`selected invalid value '${value}'`);
-      return;
-    }
+  const onMenuSelect = useCallback(
+    (details: SelectionDetails) => {
+      const value = details.value;
+      if (!(value in props.options)) {
+        console.error(`selected invalid value '${value}'`);
+        return;
+      }
 
-    props.onSelect?.(value as T);
-  };
+      props.onSelect?.(value as T);
+    },
+    [props],
+  );
 
   return (
     <Menu.Root onSelect={onMenuSelect}>

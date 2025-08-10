@@ -117,15 +117,22 @@ const SelectorDesigner = React.memo(
 
     const { tSelector, tProperty } = useDesignerTranslations();
 
-    const selector = SELECTORS[props.selector];
-    const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
-      (selector.properties as string[]).includes(cssProp),
-    );
+    const { selectableProperties, hasSelectableProperties } = useMemo(() => {
+      const selector = SELECTORS[props.selector];
+      const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
+        (selector.properties as string[]).includes(cssProp),
+      );
 
-    const selectableProperties = filterRecord(
-      availableProperties,
-      (_, prop) => !(prop in props.CSSProperties),
-    );
+      const selectableProperties = filterRecord(
+        availableProperties,
+        (_, prop) => !(prop in props.CSSProperties),
+      );
+
+      return {
+        selectableProperties,
+        hasSelectableProperties: Object.keys(selectableProperties).length > 0,
+      };
+    }, [props.CSSProperties, props.selector]);
 
     const SelectPropertyButton = useCallback(
       (cprops: { children: React.ReactNode }) => (
@@ -189,7 +196,7 @@ const SelectorDesigner = React.memo(
         buttons={
           <>
             <SelectPropertyButton>
-              <IconButton label={tp("add")}>
+              <IconButton label={tp("add")} disabled={!hasSelectableProperties}>
                 <MdAdd />
               </IconButton>
             </SelectPropertyButton>
