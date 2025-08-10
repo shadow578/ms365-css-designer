@@ -77,11 +77,6 @@ function MainLayout() {
     base: true,
     lg: __editorOpen,
   });
-  const editorOpenButtonShown = useBreakpointValue({
-    // on small screens, the editor pane is always open, so the button is not shown
-    base: false,
-    lg: true,
-  });
 
   const [warningDialogOpen, setWarningDialogOpen] = useState(false);
   const acceptWarningDialog = () => {
@@ -178,16 +173,22 @@ function MainLayout() {
           flexGrow={1}
           height="100vh"
         >
-          {editorOpenButtonShown && (
-            <Box position="absolute" top="50%" left="5px">
-              <IconButton
-                label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
-                onClick={() => setEditorOpen(!editorOpen)}
-              >
-                {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
-              </IconButton>
-            </Box>
-          )}
+          <Box
+            position="absolute"
+            top="50%"
+            left="5px"
+            display={{
+              base: "none",
+              lg: "block",
+            }}
+          >
+            <IconButton
+              label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
+              onClick={() => setEditorOpen(!editorOpen)}
+            >
+              {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
+            </IconButton>
+          </Box>
 
           <PageHeader />
           <Box flexGrow={1}>
