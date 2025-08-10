@@ -20,7 +20,7 @@ const GENERATOR_BY_KIND = {
       });
     }
 
-    return `"${value.font}"`;
+    return `'${value.font}'`;
   },
   url: (value) => `url('${value}')`,
 } satisfies GeneratorRecord;
