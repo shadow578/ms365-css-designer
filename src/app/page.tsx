@@ -232,7 +232,7 @@ function PageHeader() {
             style={{
               height: "100%",
               width: "auto",
-              maxHeight: "2lh",
+              maxHeight: "2em",
               padding: "4px",
             }}
           />
