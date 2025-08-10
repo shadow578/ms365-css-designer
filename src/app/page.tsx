@@ -5,6 +5,7 @@ import {
   DownloadTrigger,
   Flex,
   Heading,
+  HStack,
   Presence,
   Text,
   useBreakpointValue,
@@ -202,31 +203,56 @@ function PageHeader() {
   const t = useTranslations("Index.MainLayout");
 
   return (
-    <Flex ml={5} mr={5} alignItems="center" gap={2}>
-      <Image
-        src={appIcon as StaticImport}
-        alt={t("heading")}
-        style={{ height: "100%", width: "auto", padding: "4px" }}
-      />
+    <Flex
+      pl={5}
+      pr={5}
+      alignItems="center"
+      gap={2}
+      flexWrap="wrap"
+      width="100%"
+    >
+      <HStack minWidth="10ch">
+        <Box
+          asChild
+          display={{
+            base: "none",
+            sm: "block",
+          }}
+        >
+          <Image
+            src={appIcon as StaticImport}
+            alt={t("heading")}
+            style={{
+              height: "100%",
+              width: "auto",
+              maxHeight: "2lh",
+              padding: "4px",
+            }}
+          />
+        </Box>
 
-      <VStack flex={1} alignItems="start" gap={0}>
-        <Heading>{t("heading")}</Heading>
-        <Text fontSize="sm" color="text.secondary">
-          {t("subheading")}
-        </Text>
-      </VStack>
-      <LocaleSwitcher style="full" />
-      <ColorModeButton />
+        <VStack alignItems="start" gap={0}>
+          <Heading>{t("heading")}</Heading>
+          <Text fontSize="sm" color="text.secondary">
+            {t("subheading")}
+          </Text>
+        </VStack>
+      </HStack>
 
-      <Link
-        href={t("buttons.github.link")}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <IconButton label={t("buttons.github.text")}>
-          <FaGithub />
-        </IconButton>
-      </Link>
+      <HStack marginLeft="auto">
+        <LocaleSwitcher style="full" />
+        <ColorModeButton />
+
+        <Link
+          href={t("buttons.github.link")}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconButton label={t("buttons.github.text")}>
+            <FaGithub />
+          </IconButton>
+        </Link>
+      </HStack>
     </Flex>
   );
 }
