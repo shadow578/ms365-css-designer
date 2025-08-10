@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  width: "400px", // = minWidth of EditorPane 
+  width: "400px", // = minWidth of EditorPane
   initialScale: 1,
 };
 
