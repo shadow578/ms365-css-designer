@@ -8,6 +8,7 @@ on:
 
 jobs:
   lint:
+    name: "Check Code Linting"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,6 +23,7 @@ jobs:
       - run: npm run lint
 
   format:
+    name: "Check Code Formatting"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,6 +38,7 @@ jobs:
       - run: npm run format:check
 
   typecheck:
+    name: "Validate TypeScript Types"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -50,6 +53,7 @@ jobs:
       - run: npm run typecheck
 
   test:
+    name: "Run Tests"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,6 +69,7 @@ jobs:
       - run: npm run test
 
   build:
+    name: "Build Project"
     runs-on: ubuntu-latest
     permissions:
       contents: read
