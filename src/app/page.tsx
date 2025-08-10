@@ -5,6 +5,7 @@ import {
   DownloadTrigger,
   Flex,
   Heading,
+  HStack,
   Presence,
   Text,
   useBreakpointValue,
@@ -47,7 +48,13 @@ import Link from "next/link";
 export default function Index() {
   return (
     <CSSDesignerContext>
-      <main role="main">
+      <main
+        role="main"
+        style={{
+          // without this, chrome sometimes adds scrollbars to the page that do nothing
+          overflow: "hidden",
+        }}
+      >
         <MainLayout />
       </main>
     </CSSDesignerContext>
@@ -69,11 +76,6 @@ function MainLayout() {
     // on small screens, the editor pane is always open (below the content)
     base: true,
     lg: __editorOpen,
-  });
-  const editorOpenButtonShown = useBreakpointValue({
-    // on small screens, the editor pane is always open, so the button is not shown
-    base: false,
-    lg: true,
   });
 
   const [warningDialogOpen, setWarningDialogOpen] = useState(false);
@@ -171,16 +173,22 @@ function MainLayout() {
           flexGrow={1}
           height="100vh"
         >
-          {editorOpenButtonShown && (
-            <Box position="absolute" top="50%" left="5px">
-              <IconButton
-                label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
-                onClick={() => setEditorOpen(!editorOpen)}
-              >
-                {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
-              </IconButton>
-            </Box>
-          )}
+          <Box
+            position="absolute"
+            top="50%"
+            left="5px"
+            display={{
+              base: "none",
+              lg: "block",
+            }}
+          >
+            <IconButton
+              label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
+              onClick={() => setEditorOpen(!editorOpen)}
+            >
+              {editorOpen ? <MdChevronLeft /> : <MdChevronRight />}
+            </IconButton>
+          </Box>
 
           <PageHeader />
           <Box flexGrow={1}>
@@ -202,31 +210,56 @@ function PageHeader() {
   const t = useTranslations("Index.MainLayout");
 
   return (
-    <Flex ml={5} mr={5} alignItems="center" gap={2}>
-      <Image
-        src={appIcon as StaticImport}
-        alt={t("heading")}
-        style={{ height: "100%", width: "auto", padding: "4px" }}
-      />
+    <Flex
+      pl={5}
+      pr={5}
+      alignItems="center"
+      gap={2}
+      flexWrap="wrap"
+      width="100%"
+    >
+      <HStack minWidth="10ch">
+        <Box
+          asChild
+          display={{
+            base: "none",
+            sm: "block",
+          }}
+        >
+          <Image
+            src={appIcon as StaticImport}
+            alt={t("heading")}
+            style={{
+              height: "100%",
+              width: "auto",
+              maxHeight: "2em",
+              padding: "4px",
+            }}
+          />
+        </Box>
 
-      <VStack flex={1} alignItems="start" gap={0}>
-        <Heading>{t("heading")}</Heading>
-        <Text fontSize="sm" color="text.secondary">
-          {t("subheading")}
-        </Text>
-      </VStack>
-      <LocaleSwitcher style="full" />
-      <ColorModeButton />
+        <VStack alignItems="start" gap={0}>
+          <Heading>{t("heading")}</Heading>
+          <Text fontSize="sm" color="text.secondary">
+            {t("subheading")}
+          </Text>
+        </VStack>
+      </HStack>
 
-      <Link
-        href={t("buttons.github.link")}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <IconButton label={t("buttons.github.text")}>
-          <FaGithub />
-        </IconButton>
-      </Link>
+      <HStack marginLeft="auto">
+        <LocaleSwitcher style="full" />
+        <ColorModeButton />
+
+        <Link
+          href={t("buttons.github.link")}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconButton label={t("buttons.github.text")}>
+            <FaGithub />
+          </IconButton>
+        </Link>
+      </HStack>
     </Flex>
   );
 }
