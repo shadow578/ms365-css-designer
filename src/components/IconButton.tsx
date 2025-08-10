@@ -6,6 +6,7 @@ const IconButton = React.memo(
   (props: {
     onClick?: () => void;
     label: string;
+    disabled?: boolean;
     color?: Parameters<typeof ChakraIconButton>["0"]["color"];
     children: React.ReactNode;
   }) => {
@@ -16,6 +17,7 @@ const IconButton = React.memo(
           onClick={props.onClick}
           variant="ghost"
           color={props.color}
+          disabled={props.disabled}
         >
           {props.children}
         </ChakraIconButton>

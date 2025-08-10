@@ -332,9 +332,14 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
               {designerMode && (
                 <>
                   <CSSDesignerAddSelectorButton>
-                    <IconButton label={t("buttons.add_selector")}>
-                      <MdAdd />
-                    </IconButton>
+                    {(n) => (
+                      <IconButton
+                        label={t("buttons.add_selector")}
+                        disabled={n <= 0}
+                      >
+                        <MdAdd />
+                      </IconButton>
+                    )}
                   </CSSDesignerAddSelectorButton>
 
                   {showDesignerDebugButton && (

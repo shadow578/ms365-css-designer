@@ -6,7 +6,9 @@ import type {
   CSSPropertyOptionsForKind,
   CSSPropertyValueTypeForProperty,
 } from "./definitions/properties";
-import SelectNewButton from "./components/SelectNewButton";
+import SelectNewButton, {
+  type SelectNewButtonChildren,
+} from "./components/SelectNewButton";
 import { filterRecord, mapRecord } from "~/util/util";
 import { Box, Button, Code, Flex, For, Text } from "@chakra-ui/react";
 import PROPERTIES from "./definitions/properties";
@@ -22,7 +24,7 @@ import { useTranslations } from "next-intl";
 import useDesignerTranslations from "./i18n";
 
 export function CSSDesignerAddSelectorButton(props: {
-  children: React.ReactNode;
+  children: SelectNewButtonChildren;
 }) {
   const [state] = useCSSDesignerState();
   const { addSelector } = useCSSDesignerMutation();
@@ -117,18 +119,20 @@ const SelectorDesigner = React.memo(
 
     const { tSelector, tProperty } = useDesignerTranslations();
 
-    const selector = SELECTORS[props.selector];
-    const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
-      (selector.properties as string[]).includes(cssProp),
-    );
+    const selectableProperties = useMemo(() => {
+      const selector = SELECTORS[props.selector];
+      const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
+        (selector.properties as string[]).includes(cssProp),
+      );
 
-    const selectableProperties = filterRecord(
-      availableProperties,
-      (_, prop) => !(prop in props.CSSProperties),
-    );
+      return filterRecord(
+        availableProperties,
+        (_, prop) => !(prop in props.CSSProperties),
+      );
+    }, [props.CSSProperties, props.selector]);
 
     const SelectPropertyButton = useCallback(
-      (cprops: { children: React.ReactNode }) => (
+      (cprops: { children: SelectNewButtonChildren }) => (
         <SelectNewButton
           options={mapRecord(selectableProperties, (_, sel) => tProperty(sel))}
           onSelect={(cssProp) => {
@@ -189,9 +193,11 @@ const SelectorDesigner = React.memo(
         buttons={
           <>
             <SelectPropertyButton>
-              <IconButton label={tp("add")}>
-                <MdAdd />
-              </IconButton>
+              {(n) => (
+                <IconButton label={tp("add")} disabled={n <= 0}>
+                  <MdAdd />
+                </IconButton>
+              )}
             </SelectPropertyButton>
 
             <IconButton
