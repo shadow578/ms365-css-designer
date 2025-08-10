@@ -1,9 +1,13 @@
 import { Box, For, Menu, Portal } from "@chakra-ui/react";
 import type { SelectionDetails } from "node_modules/@chakra-ui/react/dist/types/components/menu/namespace";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+
+export type SelectNewButtonChildren =
+  | React.ReactNode
+  | ((optionCount: number) => React.ReactNode);
 
 export default function SelectNewButton<T extends string>(props: {
-  children: React.ReactNode;
+  children: SelectNewButtonChildren;
   options: Record<T, string>;
   onSelect?: (value: T) => void;
 }) {
@@ -20,10 +24,17 @@ export default function SelectNewButton<T extends string>(props: {
     [props],
   );
 
+  const trigger = useMemo(() => {
+    if (typeof props.children === "function") {
+      return props.children(Object.keys(props.options).length);
+    }
+    return props.children;
+  }, [props]);
+
   return (
     <Menu.Root onSelect={onMenuSelect}>
       <Menu.Trigger asChild>
-        <Box>{props.children}</Box>
+        <Box>{trigger}</Box>
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
