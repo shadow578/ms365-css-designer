@@ -6,9 +6,14 @@ on:
   pull_request:
     branches: [main]
 
+permissions: {}
+
 jobs:
   lint:
+    name: "Check Code Linting"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,7 +25,10 @@ jobs:
       - run: npm run lint
 
   format:
+    name: "Check Code Formatting"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,7 +40,10 @@ jobs:
       - run: npm run format:check
 
   typecheck:
+    name: "Validate TypeScript Types"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,7 +55,10 @@ jobs:
       - run: npm run typecheck
 
   test:
+    name: "Run Tests"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [lint, format, typecheck]
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +71,10 @@ jobs:
       - run: npm run test
 
   build:
+    name: "Build Project"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: test
     steps:
       - uses: actions/checkout@v4
