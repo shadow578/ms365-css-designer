@@ -116,7 +116,8 @@
         "black": "Black"
       },
       "FontFamilyControl": {
-        "placeholder": "Select a font"
+        "placeholder": "Select a font",
+        "info": "Font availability depends on the browser and operating system. If a font is not available, the browser will use a fallback font."
       },
       "URLSelectionControl": {
         "input": {

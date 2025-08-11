@@ -115,7 +115,8 @@
         "black": "Vollfett"
       },
       "FontFamilyControl": {
-        "placeholder": "Wähle eine Schriftart"
+        "placeholder": "Wähle eine Schriftart",
+        "info": "Die Verfügbarkeit von Schriftarten hängt vom Browser und Betriebssystem ab. Wenn eine Schriftart nicht verfügbar ist, verwendet der Browser eine Ersatzschriftart."
       },
       "URLSelectionControl": {
         "input": {

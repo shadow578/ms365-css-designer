@@ -2,12 +2,14 @@ import {
   createListCollection,
   Flex,
   For,
+  InputGroup,
   Portal,
   Select,
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { useTranslations } from "next-intl";
 import React, { useMemo } from "react";
+import InfoOnHover from "~/components/InfoOnHover";
 
 const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
   const t = useTranslations("CSSDesigner.controls.FontFamilyControl");
@@ -29,41 +31,45 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
 
   return (
     <Flex gap={4} alignItems="center" flexWrap="wrap">
-      <Select.Root
+      <InputGroup
         flex={1}
         minWidth="300px"
-        collection={fonts}
-        value={[props.value]}
-        onValueChange={(e) => onSystemFontSelect(e.value[0] ?? "")}
+        endAddon={<InfoOnHover>{t("info")}</InfoOnHover>}
       >
-        <Select.HiddenSelect />
-        <Select.Control>
-          <Select.Trigger>
-            <Select.ValueText placeholder={t("placeholder")} />
-          </Select.Trigger>
-          <Select.IndicatorGroup>
-            <Select.Indicator />
-          </Select.IndicatorGroup>
-        </Select.Control>
-        <Portal>
-          <Select.Positioner>
-            <Select.Content>
-              <For each={fonts.items}>
-                {(fnt) => (
-                  <Select.Item
-                    item={fnt.value}
-                    key={fnt.value}
-                    fontFamily={fnt.value}
-                  >
-                    {fnt.label}
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                )}
-              </For>
-            </Select.Content>
-          </Select.Positioner>
-        </Portal>
-      </Select.Root>
+        <Select.Root
+          collection={fonts}
+          value={[props.value]}
+          onValueChange={(e) => onSystemFontSelect(e.value[0] ?? "")}
+        >
+          <Select.HiddenSelect />
+          <Select.Control>
+            <Select.Trigger>
+              <Select.ValueText placeholder={t("placeholder")} />
+            </Select.Trigger>
+            <Select.IndicatorGroup>
+              <Select.Indicator />
+            </Select.IndicatorGroup>
+          </Select.Control>
+          <Portal>
+            <Select.Positioner>
+              <Select.Content>
+                <For each={fonts.items}>
+                  {(fnt) => (
+                    <Select.Item
+                      item={fnt.value}
+                      key={fnt.value}
+                      fontFamily={fnt.value}
+                    >
+                      {fnt.label}
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  )}
+                </For>
+              </Select.Content>
+            </Select.Positioner>
+          </Portal>
+        </Select.Root>
+      </InputGroup>
     </Flex>
   );
 });
