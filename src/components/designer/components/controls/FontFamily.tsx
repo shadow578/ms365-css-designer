@@ -2,13 +2,15 @@ import {
   createListCollection,
   Flex,
   For,
+  Input,
   InputGroup,
   Portal,
   Select,
+  Switch,
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { useTranslations } from "next-intl";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import InfoOnHover from "~/components/InfoOnHover";
 
 const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
@@ -25,50 +27,76 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
     [],
   );
 
-  const onSystemFontSelect = (font: string) => {
-    props.onChange(font);
-  };
+  const isCustom = useMemo(
+    () => !fonts.items.some((f) => f.value === props.value),
+    [fonts.items, props.value],
+  );
+
+  const onCustomSwitchChange = useCallback(
+    (e: Switch.CheckedChangeDetails) => {
+      props.onChange(e.checked ? "" : (fonts.items[0]?.value ?? ""));
+    },
+    [fonts.items, props],
+  );
 
   return (
     <Flex gap={4} alignItems="center" flexWrap="wrap">
       <InputGroup
         flex={1}
         minWidth="300px"
+        startAddon={
+          <Switch.Root
+            checked={isCustom}
+            onCheckedChange={onCustomSwitchChange}
+          >
+            <Switch.HiddenInput />
+            <Switch.Label>{t("mode_switch")}</Switch.Label>
+            <Switch.Control />
+          </Switch.Root>
+        }
         endAddon={<InfoOnHover>{t("info")}</InfoOnHover>}
       >
-        <Select.Root
-          collection={fonts}
-          value={[props.value]}
-          onValueChange={(e) => onSystemFontSelect(e.value[0] ?? "")}
-        >
-          <Select.HiddenSelect />
-          <Select.Control>
-            <Select.Trigger>
-              <Select.ValueText placeholder={t("placeholder")} />
-            </Select.Trigger>
-            <Select.IndicatorGroup>
-              <Select.Indicator />
-            </Select.IndicatorGroup>
-          </Select.Control>
-          <Portal>
-            <Select.Positioner>
-              <Select.Content>
-                <For each={fonts.items}>
-                  {(fnt) => (
-                    <Select.Item
-                      item={fnt.value}
-                      key={fnt.value}
-                      fontFamily={fnt.value}
-                    >
-                      {fnt.label}
-                      <Select.ItemIndicator />
-                    </Select.Item>
-                  )}
-                </For>
-              </Select.Content>
-            </Select.Positioner>
-          </Portal>
-        </Select.Root>
+        {isCustom ? (
+          <Input
+            placeholder={t("placeholder.custom")}
+            value={props.value}
+            onChange={(e) => props.onChange(e.target.value)}
+          />
+        ) : (
+          <Select.Root
+            collection={fonts}
+            value={[props.value]}
+            onValueChange={(e) => props.onChange(e.value[0] ?? "")}
+          >
+            <Select.HiddenSelect />
+            <Select.Control>
+              <Select.Trigger>
+                <Select.ValueText placeholder={t("placeholder.system")} />
+              </Select.Trigger>
+              <Select.IndicatorGroup>
+                <Select.Indicator />
+              </Select.IndicatorGroup>
+            </Select.Control>
+            <Portal>
+              <Select.Positioner>
+                <Select.Content>
+                  <For each={fonts.items}>
+                    {(fnt) => (
+                      <Select.Item
+                        item={fnt.value}
+                        key={fnt.value}
+                        fontFamily={fnt.value}
+                      >
+                        {fnt.label}
+                        <Select.ItemIndicator />
+                      </Select.Item>
+                    )}
+                  </For>
+                </Select.Content>
+              </Select.Positioner>
+            </Portal>
+          </Select.Root>
+        )}
       </InputGroup>
     </Flex>
   );
