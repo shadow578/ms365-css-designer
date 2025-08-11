@@ -92,7 +92,7 @@ const PROPERTIES = {
   "font-size": {
     kind: "dimension",
     units: ["px", "em", "rem"],
-    defaultValue: { value: 16, unit: "px" },
+    defaultValue: { value: 1, unit: "rem" },
   },
   "margin-top": {
     kind: "dimension",
