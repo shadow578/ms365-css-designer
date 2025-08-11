@@ -115,14 +115,7 @@
         "black": "Vollfett"
       },
       "FontFamilyControl": {
-        "mode": {
-          "system": "System",
-          "external": "Extern"
-        },
-        "placeholder": {
-          "system": "Wähle eine Systemschriftart",
-          "external": "Schriftart"
-        }
+        "placeholder": "Wähle eine Schriftart"
       },
       "URLSelectionControl": {
         "input": {

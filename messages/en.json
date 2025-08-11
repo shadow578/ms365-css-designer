@@ -116,14 +116,7 @@
         "black": "Black"
       },
       "FontFamilyControl": {
-        "mode": {
-          "system": "Built-in",
-          "external": "External"
-        },
-        "placeholder": {
-          "system": "Select a built-in font",
-          "external": "Font Family"
-        }
+        "placeholder": "Select a font"
       },
       "URLSelectionControl": {
         "input": {
