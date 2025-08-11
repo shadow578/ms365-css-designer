@@ -21,6 +21,12 @@ describe("generator", () => {
         // kind: fontWeight
         "font-weight": 600,
 
+        // kind: dimension, font-size
+        "font-size": {
+          unit: "em",
+          value: 1.5,
+        },
+
         // kind: fontFamily, system font
         "font-family": {
           font: "Arial",
@@ -55,6 +61,7 @@ describe("generator", () => {
   margin-bottom: 10px;
   text-align: center;
   font-weight: 600;
+  font-size: 1.5em;
   font-family: 'Arial';
 }
 .ext-title {

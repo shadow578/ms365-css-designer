@@ -89,6 +89,11 @@ const PROPERTIES = {
     kind: "fontFamily",
     defaultValue: { external: false, font: "" },
   },
+  "font-size": {
+    kind: "dimension",
+    units: ["px", "em", "rem"],
+    defaultValue: { value: 1, unit: "rem" },
+  },
   "margin-top": {
     kind: "dimension",
     units: ["px", "em", "rem"],
