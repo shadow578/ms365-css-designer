@@ -1,24 +1,22 @@
 import {
-  Box,
   createListCollection,
-  Field,
   Flex,
   For,
   Input,
   InputGroup,
   Portal,
-  SegmentGroup,
   Select,
+  Switch,
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
-import useFetchStatus from "~/util/useFetchStatus";
 import { useTranslations } from "next-intl";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
+import InfoOnHover from "~/components/InfoOnHover";
 
 const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
   const t = useTranslations("CSSDesigner.controls.FontFamilyControl");
 
-  const systemFonts = useMemo(
+  const fonts = useMemo(
     () =>
       createListCollection({
         items: FONTS.map((font) => ({
@@ -29,68 +27,46 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
     [],
   );
 
-  const modes = ["system", "external"];
-  const modeOptions = modes.map((mode) => ({
-    value: mode,
-    label: t(`mode.${mode}`),
-  }));
+  const isCustom = useMemo(
+    () => !fonts.items.some((f) => f.value === props.value),
+    [fonts.items, props.value],
+  );
 
-  const currentMode = props.value.external ? "external" : "system";
-
-  const onModeChange = (value: string) => {
-    props.onChange({
-      font: "",
-      external: value === "external",
-      url: value === "external" ? "" : undefined,
-    });
-  };
-
-  const onSystemFontSelect = (font: string) => {
-    props.onChange({ external: false, font, url: undefined });
-  };
-
-  const gFontsHint = "fonts.google.com/specimen/";
-
-  const generateGoogleFontUrl = (family: string) => {
-    family = family.trim().replaceAll(" ", "+");
-
-    // TODO: requesting both with and without weights, as some fonts need them to load while others need them missing to load.
-    // this is a stupid workaround, but provides better UX than requiring the user to specify this.
-    return `https://fonts.googleapis.com/css2?family=${family}&family=${family}:wght@100..900&display=swap`;
-  };
-
-  const onExternalFontSelect = (family: string) => {
-    props.onChange({
-      external: true,
-      font: family,
-      url: generateGoogleFontUrl(family),
-    });
-  };
-
-  const { ok: externalFontOk } = useFetchStatus(
-    props.value.external ? props.value.url : undefined,
+  const onCustomSwitchChange = useCallback(
+    (e: Switch.CheckedChangeDetails) => {
+      props.onChange(e.checked ? "" : (fonts.items[0]?.value ?? ""));
+    },
+    [fonts.items, props],
   );
 
   return (
     <Flex gap={4} alignItems="center" flexWrap="wrap">
-      <Box flex={1} minWidth="300px">
-        {props.value.external ? (
-          <Field.Root invalid={!externalFontOk}>
-            <InputGroup flex="1" startElement={gFontsHint}>
-              <Input
-                ps={`${gFontsHint.length}ch`}
-                placeholder={t("placeholder.external")}
-                value={props.value.font}
-                onChange={(e) => onExternalFontSelect(e.target.value)}
-              />
-            </InputGroup>
-          </Field.Root>
+      <InputGroup
+        flex={1}
+        minWidth="300px"
+        startAddon={
+          <Switch.Root
+            checked={isCustom}
+            onCheckedChange={onCustomSwitchChange}
+          >
+            <Switch.HiddenInput />
+            <Switch.Label>{t("mode_switch")}</Switch.Label>
+            <Switch.Control />
+          </Switch.Root>
+        }
+        endAddon={<InfoOnHover>{t("info")}</InfoOnHover>}
+      >
+        {isCustom ? (
+          <Input
+            placeholder={t("placeholder.custom")}
+            value={props.value}
+            onChange={(e) => props.onChange(e.target.value)}
+          />
         ) : (
           <Select.Root
-            flex={1}
-            collection={systemFonts}
-            value={[props.value.font]}
-            onValueChange={(e) => onSystemFontSelect(e.value[0] ?? "")}
+            collection={fonts}
+            value={[props.value]}
+            onValueChange={(e) => props.onChange(e.value[0] ?? "")}
           >
             <Select.HiddenSelect />
             <Select.Control>
@@ -104,7 +80,7 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
             <Portal>
               <Select.Positioner>
                 <Select.Content>
-                  <For each={systemFonts.items}>
+                  <For each={fonts.items}>
                     {(fnt) => (
                       <Select.Item
                         item={fnt.value}
@@ -121,16 +97,7 @@ const FontFamilyControl = React.memo((props: PropsFor<"fontFamily">) => {
             </Portal>
           </Select.Root>
         )}
-      </Box>
-
-      <SegmentGroup.Root
-        size="sm"
-        value={currentMode}
-        onValueChange={(e) => onModeChange(e.value!)}
-      >
-        <SegmentGroup.Indicator />
-        <SegmentGroup.Items items={modeOptions} />
-      </SegmentGroup.Root>
+      </InputGroup>
     </Flex>
   );
 });
@@ -139,7 +106,7 @@ FontFamilyControl.displayName = "FontFamilyControl";
 export default FontFamilyControl;
 
 /**
- * commonly used fonts available by default in both Windows and macOS
+ * fonts available by default in both Windows and macOS
  * see https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list and https://developer.apple.com/fonts/system-fonts/
  */
 const FONTS = [
