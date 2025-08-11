@@ -2,6 +2,10 @@
 
 M365 Custom CSS Designer is a Next.js web application that allows you to visually design custom CSS for Microsoft's sign-in page. The application provides both a visual designer interface and a code editor (Monaco) for creating and testing CSS customizations.
 
+**Project Purpose**: Microsoft provides documentation for custom CSS but no tools for designing it. This application makes CSS customization accessible to non-technical users while providing advanced editing capabilities for developers.
+
+**Licensing**: All files are licensed under MIT License except `src/components/ms/` directory. Be aware of this distinction when working with Microsoft sign-in page components.
+
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
 ## Working Effectively
@@ -146,9 +150,53 @@ src/
 - All CI steps must pass for successful builds
 - Always run `npm run format:write` and `npm run lint:fix` before committing
 
+### CSS Designer Architecture (`src/components/designer/`)
+
+The CSS Designer is an extensible component for editing CSS styles using a design wizard. Understanding its architecture is crucial for extending functionality.
+
+#### Core Concepts
+The designer uses a definition-based architecture with these key components:
+
+| Component   | File                              | Description                                                                                                                  |
+| ----------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `selector`  | `./definitions/selectors.ts`      | Defines CSS selectors that can be edited. Each selector has a list of **properties** that can be edited.                   |
+| `property`  | `./definitions/properties.ts`     | Defines CSS properties that can be edited. Each property has a **kind** that defines its behavior.                          |
+| `kind`      | `./definitions/kinds.ts`          | Defines the data structure for property values. Provides the basis for both **generators** and **controls**.               |
+| `generator` | `./definitions/generators.ts`     | Defines how CSS is generated for each property type.                                                                        |
+| `control`   | `./components/controls/index.tsx` | Defines how properties are represented in the designer UI.                                                                  |
+
+#### Adding New Components
+
+**Adding a new CSS selector:**
+1. Open `src/components/designer/definitions/selectors.ts`
+2. Add definition to the `SELECTORS` record (key = CSS selector like `.foo`)
+3. Define all editable properties in the `properties` array
+4. Add translations to `messages/[language].json` files
+
+**Adding a new CSS property:**
+1. Open `src/components/designer/definitions/properties.ts`  
+2. Add property definition to `PROPERTIES` object (key = CSS property name)
+3. Specify the `kind` to define behavior and UI representation
+4. Special case: Use `$` delimiter for pseudo-classes (e.g., `color$:hover`)
+5. Add translations to `messages/[language].json` files
+
+**Adding a new property kind:**
+1. Open `src/components/designer/definitions/kinds.ts`
+2. Add new kind and schema to `PROP_SCHEMA_BY_KIND` object
+3. Create new type/interface in `./definitions/properties.ts`
+4. Update `CSSPropertyOptionsForKind` and `CSSPropertyKinds` helper types
+5. Add control component in `./components/controls/index.tsx`
+6. Add CSS generator in `./definitions/generators.ts`
+7. Add test case in `./generator.test.ts`
+
+#### Testing Requirements
+- Always add test cases for new generators in `./generator.test.ts`
+- Test CSS generation logic for new property kinds
+- Refer to existing tests for structure and patterns
+
 ### Common Development Scenarios
-- Adding new CSS selectors: Edit `src/components/designer/definitions/selectors.ts`
-- Adding new CSS properties: Edit `src/components/designer/definitions/properties.ts`
+- Adding new CSS selectors: Follow CSS Designer architecture above
+- Adding new CSS properties: Follow CSS Designer architecture above  
 - Modifying the designer UI: Edit files in `src/components/designer/`
 - Adding new translations: Edit `messages/en.json` and `messages/de.json`
 - Updating Microsoft sign-in page simulation: Edit `src/components/ms/signin.tsx`
