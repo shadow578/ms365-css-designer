@@ -154,6 +154,15 @@ src/
 - Updating Microsoft sign-in page simulation: Edit `src/components/ms/signin.tsx`
 - API changes: Edit files in `src/app/api/` and `src/server/`
 
+### Microsoft Sign-in Page Components (`src/components/ms/`)
+- **Important**: These are adapted components from Microsoft's actual converged sign-in page
+- Source: Fetched from office.com login flow on July 22, 2025
+- Key files:
+  - `signin.tsx`: Converted from HTML to JSX using transform.tools, with additional adjustments for React integration
+  - `signin.css`: Original Microsoft CSS included as-is
+  - `README.md`: Contains important context about source, security implications, and ethical considerations
+- **Security note**: These components enable realistic Microsoft sign-in page simulation - refer to `src/components/ms/README.md` for ethical considerations
+
 ### Debugging
 - VS Code launch configuration available in `.vscode/launch.json`
 - Debug command: "Next.js: debug server-side" runs `npm run dev`
