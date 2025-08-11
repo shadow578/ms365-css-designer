@@ -41,13 +41,31 @@ const SELECTORS = {
     ],
   },
   ".ext-input": {
-    properties: ["font-family", "font-weight", "font-size", "color", "border-radius"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "border-radius",
+    ],
   },
   ".ext-has-error": {
-    properties: ["font-family", "font-weight", "font-size", "color", "border-radius"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "border-radius",
+    ],
   },
   ".ext-error": {
-    properties: ["font-family", "font-weight", "font-size", "color", "background-color"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "background-color",
+    ],
   },
   ".ext-boilerplate-text": {
     properties: [
