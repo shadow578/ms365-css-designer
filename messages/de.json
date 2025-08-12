@@ -115,13 +115,11 @@
         "black": "Vollfett"
       },
       "FontFamilyControl": {
-        "mode": {
-          "system": "System",
-          "external": "Extern"
-        },
+        "info": "Die Verfügbarkeit von Schriftarten hängt vom Browser und Betriebssystem ab. Wenn eine Schriftart nicht verfügbar ist, verwendet der Browser eine Ersatzschriftart.",
+        "mode_switch": "Benutzerdef.",
         "placeholder": {
-          "system": "Wähle eine Systemschriftart",
-          "external": "Schriftart"
+          "system": "Wähle eine Schriftart",
+          "custom": "Benutzerdefinierter Schriftartname"
         }
       },
       "URLSelectionControl": {

@@ -116,13 +116,11 @@
         "black": "Black"
       },
       "FontFamilyControl": {
-        "mode": {
-          "system": "Built-in",
-          "external": "External"
-        },
+        "info": "Font availability depends on the browser and operating system. If a font is not available, the browser will use a fallback font.",
+        "mode_switch": "Custom",
         "placeholder": {
-          "system": "Select a built-in font",
-          "external": "Font Family"
+          "system": "Select a font",
+          "custom": "Custom Font name"
         }
       },
       "URLSelectionControl": {
