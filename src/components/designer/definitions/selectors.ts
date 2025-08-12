@@ -6,7 +6,7 @@ export interface CSSSelector {
 
 const SELECTORS = {
   "*": {
-    properties: ["color", "font-family", "font-weight"],
+    properties: ["color", "font-family", "font-weight", "font-size"],
   },
 
   //#region form
@@ -34,25 +34,45 @@ const SELECTORS = {
       "text-align",
       "font-family",
       "font-weight",
+      "font-size",
       "color",
       "margin-top",
       "margin-bottom",
     ],
   },
   ".ext-input": {
-    properties: ["font-family", "font-weight", "color", "border-radius"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "border-radius",
+    ],
   },
   ".ext-has-error": {
-    properties: ["font-family", "font-weight", "color", "border-radius"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "border-radius",
+    ],
   },
   ".ext-error": {
-    properties: ["font-family", "font-weight", "color", "background-color"],
+    properties: [
+      "font-family",
+      "font-weight",
+      "font-size",
+      "color",
+      "background-color",
+    ],
   },
   ".ext-boilerplate-text": {
     properties: [
       "text-align",
       "font-family",
       "font-weight",
+      "font-size",
       "color",
       "background-color",
     ],
@@ -74,6 +94,7 @@ const SELECTORS = {
     properties: [
       "font-family",
       "font-weight",
+      "font-size",
       "color",
       "color$:hover",
       "background-color",
@@ -85,6 +106,7 @@ const SELECTORS = {
     properties: [
       "font-family",
       "font-weight",
+      "font-size",
       "color",
       "color$:hover",
       "background-color",
@@ -96,6 +118,7 @@ const SELECTORS = {
     properties: [
       "font-family",
       "font-weight",
+      "font-size",
       "color",
       "color$:hover",
       "background-color",

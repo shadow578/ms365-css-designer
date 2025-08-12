@@ -21,20 +21,14 @@ describe("generator", () => {
         // kind: fontWeight
         "font-weight": 600,
 
-        // kind: fontFamily, system font
-        "font-family": {
-          font: "Arial",
-          external: false,
+        // kind: dimension, font-size
+        "font-size": {
+          unit: "em",
+          value: 1.5,
         },
-      },
-      ".ext-title": {
-        // kind: fontFamily, external font
-        // this will generate an @import as well
-        "font-family": {
-          font: "Open Sans",
-          external: true,
-          url: "https://example.com/fonts/open-sans.css",
-        },
+
+        // kind: fontFamily
+        "font-family": "Arial",
       },
       ".ext-button": {
         // .ext-button and .ext-button:hover should both be generated
@@ -47,18 +41,13 @@ describe("generator", () => {
       },
     };
     const expectedCSS = `
-/* due to external font in .ext-title */
-@import url('https://example.com/fonts/open-sans.css');
-
 .ext-boilerplate-text {
   color: #ff0000;
   margin-bottom: 10px;
   text-align: center;
   font-weight: 600;
+  font-size: 1.5em;
   font-family: 'Arial';
-}
-.ext-title {
-  font-family: 'Open Sans';
 }
 .ext-button {
   color: #00ff00;

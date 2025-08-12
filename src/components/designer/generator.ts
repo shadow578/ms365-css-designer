@@ -11,15 +11,9 @@ import type {
 } from "./definitions/properties";
 import PROPERTIES, { validateCSSPropertyValue } from "./definitions/properties";
 
-interface ImportItem {
-  id: string;
-  url: string;
-}
-
 type StyleTree = Record<string, Record<string, string>>;
 
 export type Context = {
-  imports: ImportItem[];
   style: StyleTree;
 };
 
@@ -49,7 +43,6 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
 
 function transformToContext(style: CSSStyleDefinition): Context {
   const context: Context = {
-    imports: [],
     style: {},
   };
 
@@ -79,20 +72,6 @@ function transformToContext(style: CSSStyleDefinition): Context {
   return context;
 }
 
-function generateImportFragments(imports: ImportItem[]): string[] {
-  // remove duplicates
-  const uniqueImports = new Map<string, ImportItem>();
-  for (const item of imports) {
-    if (!uniqueImports.has(item.url)) {
-      uniqueImports.set(item.url, item);
-    }
-  }
-
-  return [...uniqueImports.values()].map(
-    (i) => `/*${i.id}*/\n@import url('${i.url}');`,
-  );
-}
-
 function generateStyleFragment(style: StyleTree, important: boolean): string[] {
   return Object.entries(style).map(([selector, properties]) => {
     const props = Object.entries(properties)
@@ -111,8 +90,5 @@ export default function generateCSS(
 ) {
   const context = transformToContext(style);
 
-  const imports = generateImportFragments(context.imports).join("\n");
-  const styles = generateStyleFragment(context.style, important).join("\n");
-
-  return [imports, styles].join("\n\n");
+  return generateStyleFragment(context.style, important).join("\n");
 }

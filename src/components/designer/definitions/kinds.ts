@@ -1,4 +1,4 @@
-import z, { type ZodSchema } from "zod";
+import z, { type ZodType } from "zod";
 import zx from "~/util/zodExtras";
 
 const PROP_SCHEMA_BY_KIND = {
@@ -12,15 +12,9 @@ const PROP_SCHEMA_BY_KIND = {
     z.enum(["bolder", "lighter", "inherit"]),
     z.number().int().min(100).max(900),
   ]),
-  fontFamily: z
-    .object({
-      font: z.string(),
-      external: z.boolean(),
-      url: z.string().optional(),
-    })
-    .refine((d) => (d.external ? d.url !== undefined : true)),
+  fontFamily: z.string(),
   url: z.string(),
-} satisfies Record<string, ZodSchema>;
+} satisfies Record<string, ZodType>;
 export default PROP_SCHEMA_BY_KIND;
 
 export type CSSPropertyKind = keyof typeof PROP_SCHEMA_BY_KIND;
