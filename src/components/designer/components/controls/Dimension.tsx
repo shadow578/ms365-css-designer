@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import type { PropsFor } from ".";
 import { MdAdd, MdOutlineSwipe, MdRemove } from "react-icons/md";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 
 interface DimensionCommonSettings {
   max: number;
@@ -70,25 +70,38 @@ const DimensionControl = React.memo((props: PropsFor<"dimension">) => {
   const step = Math.pow(10, -currentUnitConfig.decimals);
 
   // ensure value has correct number of decimals
-  let currentValue =
-    Math.round(props.value.value * Math.pow(10, currentUnitConfig.decimals)) /
-    Math.pow(10, currentUnitConfig.decimals);
+  const clampValue = useCallback(
+    (v: number) => {
+      v =
+        Math.round(v * Math.pow(10, currentUnitConfig.decimals)) /
+        Math.pow(10, currentUnitConfig.decimals);
 
-  currentValue = Math.max(min, Math.min(currentValue, currentUnitConfig.max));
+      return Math.max(min, Math.min(v, currentUnitConfig.max));
+    },
+    [currentUnitConfig, min],
+  );
 
-  const onChange = (changed: {
-    value?: number;
-    unit?: keyof typeof unitConfig;
-  }) => {
-    if (changed.value !== undefined && isNaN(changed.value)) {
-      return;
-    }
+  const currentValue = useMemo(
+    () => clampValue(props.value.value),
+    [clampValue, props.value.value],
+  );
 
-    props.onChange({
-      value: changed.value ?? currentValue,
-      unit: changed.unit ?? props.value.unit,
-    });
-  };
+  const onChange = useCallback(
+    (changed: { value?: number; unit?: keyof typeof unitConfig }) => {
+      if (changed.value !== undefined && isNaN(changed.value)) {
+        return;
+      }
+
+      props.onChange({
+        value:
+          changed.value !== undefined
+            ? clampValue(changed.value)
+            : currentValue,
+        unit: changed.unit ?? props.value.unit,
+      });
+    },
+    [currentValue, props, clampValue],
+  );
 
   return (
     <Flex gap={4} alignItems="center" flexWrap="wrap">
