@@ -80,6 +80,10 @@ const DimensionControl = React.memo((props: PropsFor<"dimension">) => {
     value?: number;
     unit?: keyof typeof unitConfig;
   }) => {
+    if (changed.value !== undefined && isNaN(changed.value)) {
+      return;
+    }
+
     props.onChange({
       value: changed.value ?? currentValue,
       unit: changed.unit ?? props.value.unit,
