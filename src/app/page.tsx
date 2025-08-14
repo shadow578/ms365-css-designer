@@ -183,6 +183,8 @@ function MainLayout() {
             }}
           >
             <IconButton
+              variant="subtle"
+              rounded="full"
               label={t(`buttons.pane.${editorOpen ? "close" : "open"}`)}
               onClick={() => setEditorOpen(!editorOpen)}
             >
