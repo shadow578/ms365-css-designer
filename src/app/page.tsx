@@ -170,7 +170,10 @@ function MainLayout() {
         <Flex
           position="relative"
           direction="column"
-          flexGrow={1}
+          flex={{
+            base: "none",
+            lg: 2,
+          }}
           height="100vh"
         >
           <Box
@@ -193,7 +196,8 @@ function MainLayout() {
           </Box>
 
           <PageHeader />
-          <Box flexGrow={1}>
+
+          <Box flex={1}>
             <iframe
               title="Sign-in Page Preview"
               ref={signinFrame}
@@ -212,14 +216,7 @@ function PageHeader() {
   const t = useTranslations("Index.MainLayout");
 
   return (
-    <Flex
-      pl={5}
-      pr={5}
-      alignItems="center"
-      gap={2}
-      flexWrap="wrap"
-      width="100%"
-    >
+    <Flex pl={5} pr={5} alignItems="center" gap={2} flexWrap="wrap">
       <HStack minWidth="10ch">
         <Box
           asChild
