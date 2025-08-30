@@ -216,13 +216,7 @@ function PageHeader() {
   const t = useTranslations("Index.MainLayout");
 
   return (
-    <Flex
-      pl={5}
-      pr={5}
-      alignItems="center"
-      gap={2}
-      flexWrap="wrap"
-    >
+    <Flex pl={5} pr={5} alignItems="center" gap={2} flexWrap="wrap">
       <HStack minWidth="10ch">
         <Box
           asChild
