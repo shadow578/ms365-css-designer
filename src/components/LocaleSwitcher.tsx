@@ -6,7 +6,7 @@ import React, { useTransition } from "react";
 import { LOCALES, LOCALES_CONFIG, type Locale } from "~/i18n/config";
 import { setUserLocale } from "~/server/locale";
 
-import "/node_modules/flag-icons/css/flag-icons.min.css";
+import "flag-icons/css/flag-icons.min.css";
 
 export default function LocaleSwitcher(props: {
   style: "full" | "minimal";
