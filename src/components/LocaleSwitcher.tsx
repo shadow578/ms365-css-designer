@@ -60,7 +60,11 @@ function LocaleDisplay(props: { locale: Locale; emojiOnly?: boolean }) {
 
   return (
     <>
-      <span className={`fi fi-${LOCALES_CONFIG[props.locale].flag}`} />
+      <span
+        className={`fi fi-${LOCALES_CONFIG[props.locale].flag}`}
+        role="img"
+        aria-label={t(props.locale)}
+      />
       {!props.emojiOnly && <span>{t(props.locale)}</span>}
     </>
   );
