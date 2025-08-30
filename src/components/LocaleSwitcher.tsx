@@ -3,8 +3,10 @@
 import { Box, Button, For, Menu, Portal } from "@chakra-ui/react";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useTransition } from "react";
-import { LOCALES, type Locale } from "~/i18n/config";
+import { LOCALES, LOCALES_CONFIG, type Locale } from "~/i18n/config";
 import { setUserLocale } from "~/server/locale";
+
+import "flag-icons/css/flag-icons.min.css";
 
 export default function LocaleSwitcher(props: {
   style: "full" | "minimal";
@@ -58,8 +60,12 @@ function LocaleDisplay(props: { locale: Locale; emojiOnly?: boolean }) {
 
   return (
     <>
-      {t(`${props.locale}.emoji`)}{" "}
-      {!props.emojiOnly && t(`${props.locale}.name`)}
+      <span
+        className={`fi fi-${LOCALES_CONFIG[props.locale].flag}`}
+        role="img"
+        aria-label={t(props.locale)}
+      />
+      {!props.emojiOnly && <span>{t(props.locale)}</span>}
     </>
   );
 }
