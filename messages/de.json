@@ -143,14 +143,8 @@
   },
   "LocaleSwitcher": {
     "locales": {
-      "en": {
-        "name": "Englisch",
-        "emoji": "🇦🇺"
-      },
-      "de": {
-        "name": "Deutsch",
-        "emoji": "🇩🇪"
-      }
+      "en": "Englisch",
+      "de": "Deutsch"
     }
   },
   "ms": {
