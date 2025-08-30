@@ -170,7 +170,10 @@ function MainLayout() {
         <Flex
           position="relative"
           direction="column"
-          flexGrow={1}
+          flex={{
+            base: "unset",
+            lg: 2,
+          }}
           height="100vh"
         >
           <Box
@@ -193,7 +196,8 @@ function MainLayout() {
           </Box>
 
           <PageHeader />
-          <Box flexGrow={1}>
+
+          <Box flex={1}>
             <iframe
               title="Sign-in Page Preview"
               ref={signinFrame}
@@ -218,7 +222,6 @@ function PageHeader() {
       alignItems="center"
       gap={2}
       flexWrap="wrap"
-      width="100%"
     >
       <HStack minWidth="10ch">
         <Box
