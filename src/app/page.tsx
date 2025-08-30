@@ -171,7 +171,7 @@ function MainLayout() {
           position="relative"
           direction="column"
           flex={{
-            base: "unset",
+            base: "none",
             lg: 2,
           }}
           height="100vh"
