@@ -141,7 +141,7 @@ export default function generateCSS(
     !!options.includeAdditionalSelectors,
   );
 
-  return generateStyleRules(context.style, !!options.onlySpecCompliant).join(
+  return generateStyleRules(context.style, !!options.important).join(
     "\n",
   );
 }
