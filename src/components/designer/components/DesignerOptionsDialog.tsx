@@ -35,6 +35,16 @@ const DesignerOptionsDialog = React.memo(
             <Switch.Label>onlySpecCompliant</Switch.Label>
             <Switch.Control />
           </Switch.Root>
+          <Switch.Root
+            checked={options?.includeAdditionalSelectors}
+            onCheckedChange={(e) =>
+              mutateOptions({ includeAdditionalSelectors: e.checked })
+            }
+          >
+            <Switch.HiddenInput />
+            <Switch.Label>includeAdditionalSelectors</Switch.Label>
+            <Switch.Control />
+          </Switch.Root>
         </VStack>
       </Dialog>
     );

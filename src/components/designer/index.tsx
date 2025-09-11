@@ -12,6 +12,7 @@ export { default as CSSDesigner } from "./CSSDesigner";
 export const DEFAULT_DESIGNER_OPTIONS: GenerateCSSOptions = {
   important: true,
   onlySpecCompliant: false,
+  includeAdditionalSelectors: true,
 };
 
 export interface DesignerState {
