@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { DesignerState } from "../index";
+import { DEFAULT_DESIGNER_OPTIONS, type DesignerState } from "../index";
 import { useSearchParams } from "next/navigation";
 import { transform } from "~/util/zodExtras";
 import z from "zod";
@@ -44,13 +44,22 @@ function serializeState(state: DesignerState): string {
 }
 
 function deserializeState(state: string): DesignerState {
+  const fallback = { style: {}, options: DEFAULT_DESIGNER_OPTIONS }
+
   try {
     const json = atob(state);
     const stateUnknown = JSON.parse(json) as unknown;
-    return transform(DESIGNER_STATE_SCHEMA, stateUnknown) ?? { style: {} };
+
+    const parsedState = transform(DESIGNER_STATE_SCHEMA, stateUnknown);
+    if (!parsedState) return fallback;
+
+    parsedState.options ??= DEFAULT_DESIGNER_OPTIONS;
+    if (!parsedState.options) throw new Error("options is undefined");
+
+    return parsedState as DesignerState;
   } catch (e) {
     console.error("deserializeState failed:", e);
-    return { style: {} };
+    return fallback;
   }
 }
 

@@ -9,9 +9,14 @@ export { useCSSDesignerState, useGeneratedCSS } from "./context/stateContext";
 
 export { default as CSSDesigner } from "./CSSDesigner";
 
+export const DEFAULT_DESIGNER_OPTIONS: GenerateCSSOptions = {
+  important: true,
+  onlySpecCompliant: false,
+};
+
 export interface DesignerState {
   style: CSSStyleDefinition;
-  options?: GenerateCSSOptions;
+  options: GenerateCSSOptions;
 }
 
 export function CSSDesignerContext(props: { children: React.ReactNode }) {

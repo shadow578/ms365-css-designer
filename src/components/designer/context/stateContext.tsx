@@ -9,7 +9,7 @@ import {
 } from "react";
 import generateCSS from "../generator";
 import useSetSaveState, { useGetSaveState } from "../util/useSaveState";
-import type { DesignerState } from "..";
+import { DEFAULT_DESIGNER_OPTIONS, type DesignerState } from "..";
 
 interface ContextType {
   state: DesignerState;
@@ -37,6 +37,7 @@ function ContextProviderInner(props: {
   const [state, setState] = useState(
     props.initialState ?? {
       style: {},
+      options: DEFAULT_DESIGNER_OPTIONS
     },
   );
 
