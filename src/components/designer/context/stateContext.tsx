@@ -75,6 +75,6 @@ export function useGeneratedCSS() {
   const [state] = useCSSDesignerState();
 
   return useMemo(() => {
-    return generateCSS(state.style);
+    return generateCSS(state.style, state.options);
   }, [state]);
 }

@@ -10,6 +10,10 @@ import type {
   CSSPropertyValueTypeForProperty,
 } from "./definitions/properties";
 import PROPERTIES, { validateCSSPropertyValue } from "./definitions/properties";
+import SELECTORS, {
+  type CSSSelector,
+  type CSSSelectorName,
+} from "./definitions/selectors";
 
 type StyleTree = Record<string, Record<string, string>>;
 
@@ -41,12 +45,19 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   return gen(value, context);
 }
 
-function transformToContext(style: CSSStyleDefinition): Context {
+function transformToContext(
+  style: CSSStyleDefinition,
+  onlySpecCompliant: boolean,
+): Context {
   const context: Context = {
     style: {},
   };
 
   for (const [selector, properties] of Object.entries(style)) {
+    if (!selector || !(selector in SELECTORS)) continue;
+    const selectorDef: CSSSelector = SELECTORS[selector as CSSSelectorName];
+    if (onlySpecCompliant && selectorDef.specCompliant === false) continue;
+
     for (const [prop, value] of Object.entries(properties)) {
       if (!prop || !(prop in PROPERTIES) || !value) continue;
 
@@ -72,7 +83,7 @@ function transformToContext(style: CSSStyleDefinition): Context {
   return context;
 }
 
-function generateStyleFragment(style: StyleTree, important: boolean): string[] {
+function generateStyleRules(style: StyleTree, important: boolean): string[] {
   return Object.entries(style).map(([selector, properties]) => {
     const props = Object.entries(properties)
       .map(
@@ -84,11 +95,25 @@ function generateStyleFragment(style: StyleTree, important: boolean): string[] {
   });
 }
 
+export interface GenerateCSSOptions {
+  /**
+   * mark all properties as !important
+   */
+  important?: boolean;
+
+  /**
+   * only generate styles for selectors following the microsoft specification
+   */
+  onlySpecCompliant?: boolean;
+}
+
 export default function generateCSS(
   style: CSSStyleDefinition,
-  important = true,
+  options: GenerateCSSOptions = {},
 ) {
-  const context = transformToContext(style);
+  const context = transformToContext(style, !!options.onlySpecCompliant);
 
-  return generateStyleFragment(context.style, important).join("\n");
+  return generateStyleRules(context.style, !!options.onlySpecCompliant).join(
+    "\n",
+  );
 }

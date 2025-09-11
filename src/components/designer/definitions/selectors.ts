@@ -1,11 +1,22 @@
 import type { CSSPropertyName } from "./properties";
 
 export interface CSSSelector {
+  /**
+   * properties this selector supports
+   */
   properties: CSSPropertyName[];
+
+  /**
+   * is this selector parts of the official specification?
+   * @note generally, all selectors starting with "ext-" are spec compliant
+   * @note if not set, it is assumed to be true
+   */
+  specCompliant?: boolean;
 }
 
 const SELECTORS = {
   "*": {
+    specCompliant: false,
     properties: ["color", "font-family", "font-weight", "font-size"],
   },
 

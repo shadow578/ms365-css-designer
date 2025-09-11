@@ -9,6 +9,10 @@ import PROPERTIES from "../definitions/properties";
 
 export const DESIGNER_STATE_SCHEMA = (() => {
   return z.object({
+    options: z.object({
+      important: z.boolean().optional(),
+      onlySpecCompliant: z.boolean().optional(),
+    }).optional(),
     style: z.object(
       Object.fromEntries(
         ALL_SELECTORS.map((selector) => [
