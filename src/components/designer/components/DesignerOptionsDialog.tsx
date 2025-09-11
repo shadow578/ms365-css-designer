@@ -1,8 +1,9 @@
 import React from "react";
 import Dialog from "~/components/Dialog";
 import { useCSSDesignerMutation } from "../context/mutationContext";
-import { Switch, VStack } from "@chakra-ui/react";
+import { Text, Box, Switch, VStack } from "@chakra-ui/react";
 import { useCSSDesignerState } from "../context/stateContext";
+import { useTranslations } from "next-intl";
 
 // TODO i18n
 const DesignerOptionsDialog = React.memo(
@@ -10,45 +11,61 @@ const DesignerOptionsDialog = React.memo(
     const [{ options }] = useCSSDesignerState();
     const { mutateOptions } = useCSSDesignerMutation();
 
+    const t = useTranslations("DesignerOptionsDialog");
+
     return (
       <Dialog
         open={props.open}
         onOpenChange={props.onOpenChange}
-        title="Generator Options"
+        title={t("title")}
       >
-        <VStack alignItems="start">
-          <Switch.Root
-            checked={options?.important}
-            onCheckedChange={(e) => mutateOptions({ important: e.checked })}
-          >
-            <Switch.HiddenInput />
-            <Switch.Label>Important</Switch.Label>
-            <Switch.Control />
-          </Switch.Root>
-          <Switch.Root
-            checked={options?.onlySpecCompliant}
-            onCheckedChange={(e) =>
-              mutateOptions({ onlySpecCompliant: e.checked })
-            }
-          >
-            <Switch.HiddenInput />
-            <Switch.Label>onlySpecCompliant</Switch.Label>
-            <Switch.Control />
-          </Switch.Root>
-          <Switch.Root
-            checked={options?.includeAdditionalSelectors}
-            onCheckedChange={(e) =>
-              mutateOptions({ includeAdditionalSelectors: e.checked })
-            }
-          >
-            <Switch.HiddenInput />
-            <Switch.Label>includeAdditionalSelectors</Switch.Label>
-            <Switch.Control />
-          </Switch.Root>
+        <VStack alignItems="start" gap={4}>
+          <OptionSwitch
+            translationKey="important"
+            checked={!!options?.important}
+            onChange={(e) => mutateOptions({ important: e })}
+          />
+
+          <OptionSwitch
+            translationKey="onlySpecCompliant"
+            checked={!!options?.onlySpecCompliant}
+            onChange={(e) => mutateOptions({ onlySpecCompliant: e })}
+          />
+
+          <OptionSwitch
+            translationKey="includeAdditionalSelectors"
+            checked={!!options?.includeAdditionalSelectors}
+            onChange={(e) => mutateOptions({ includeAdditionalSelectors: e })}
+          />
         </VStack>
       </Dialog>
     );
   },
 );
 DesignerOptionsDialog.displayName = "DesignerOptionsDialog";
+
 export default DesignerOptionsDialog;
+
+function OptionSwitch(props: {
+  translationKey: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  const t = useTranslations(
+    `DesignerOptionsDialog.options.${props.translationKey}`,
+  );
+
+  return (
+    <Box>
+      <Switch.Root
+        checked={props.checked}
+        onCheckedChange={(e) => props.onChange(e.checked)}
+      >
+        <Switch.HiddenInput />
+        <Switch.Label>{t("label")}</Switch.Label>
+        <Switch.Control />
+      </Switch.Root>
+      <Text textStyle="sm">{t("help")}</Text>
+    </Box>
+  );
+}

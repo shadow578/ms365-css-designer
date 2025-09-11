@@ -20,6 +20,7 @@ import {
   MdDownload,
   MdEdit,
   MdOutlineBugReport,
+  MdSettings,
   MdStyle,
 } from "react-icons/md";
 import {
@@ -349,10 +350,10 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
                   </CSSDesignerAddSelectorButton>
 
                   <IconButton
-                    label="CSS Designer Options" // TODO i18n
+                    label={t("buttons.open_options")}
                     onClick={() => setDesignerOptionsOpen(true)}
                   >
-                    <MdBugReport />
+                    <MdSettings />
                   </IconButton>
 
                   {showDesignerDebugButton && (

@@ -26,6 +26,7 @@
       },
       "buttons": {
         "add_selector": "Add Selector",
+        "open_options": "Open Designer Options",
         "debug": {
           "enable": "Enable Debug Mode",
           "disable": "Disable Debug Mode"
@@ -144,6 +145,23 @@
           "lightness": "Lightness",
           "brightness": "Brightness"
         }
+      }
+    }
+  },
+  "DesignerOptionsDialog": {
+    "title": "Designer Options",
+    "options": {
+      "important": {
+        "label": "Important Properties",
+        "help": "Mark all properties as '!important' to ensure they always apply."
+      },
+      "onlySpecCompliant": {
+        "label": "Spec Compliant",
+        "help": "Only include CSS Selectors that are part of Microsoft's official specification."
+      },
+      "includeAdditionalSelectors": {
+        "label": "Additional Selectors",
+        "help": "Include additional selectors to improve compatibility across browsers, as well as working around bugs in Microsoft's implementation."
       }
     }
   },
