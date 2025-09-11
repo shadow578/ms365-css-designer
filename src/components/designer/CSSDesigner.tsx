@@ -1,5 +1,8 @@
 import React, { useCallback, useMemo } from "react";
-import SELECTORS, { type CSSSelectorName } from "./definitions/selectors";
+import SELECTORS, {
+  type CSSSelector,
+  type CSSSelectorName,
+} from "./definitions/selectors";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
@@ -32,13 +35,20 @@ export function CSSDesignerAddSelectorButton(props: {
   const { tSelector } = useDesignerTranslations();
 
   const selectOptions = useMemo(() => {
-    const selectableSelectors = filterRecord(
+    let selectableSelectors = filterRecord(
       SELECTORS,
       (_, s) => !(s in state.style),
     );
 
+    if (state.options?.onlySpecCompliant) {
+      selectableSelectors = filterRecord(
+        selectableSelectors,
+        (def: CSSSelector) => def.specCompliant !== false,
+      );
+    }
+
     return mapRecord(selectableSelectors, (_, sel) => tSelector(sel));
-  }, [state.style, tSelector]);
+  }, [state.style, state.options, tSelector]);
 
   return (
     <SelectNewButton options={selectOptions} onSelect={addSelector}>
