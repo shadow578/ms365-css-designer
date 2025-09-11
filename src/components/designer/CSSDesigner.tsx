@@ -130,6 +130,16 @@ const SelectorDesigner = React.memo(
 
     const { tSelector, tProperty } = useDesignerTranslations();
 
+    const [{ options: designerOptions }] = useCSSDesignerState();
+    const willSelectorGenerate = useMemo(() => {
+      if (designerOptions?.onlySpecCompliant) {
+        const def: CSSSelector = SELECTORS[props.selector];
+        return def.specCompliant ?? true;
+      }
+
+      return true;
+    }, [designerOptions, props.selector]);
+
     const selectableProperties = useMemo(() => {
       const selector = SELECTORS[props.selector];
       const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
@@ -197,7 +207,11 @@ const SelectorDesigner = React.memo(
         outline
         collapsible
         header={
-          <Text fontSize="lg" fontWeight="bold">
+          <Text
+            fontSize="lg"
+            fontWeight="bold"
+            textDecoration={willSelectorGenerate ? undefined : "line-through"}
+          >
             {props.debug ? `${props.selector}` : tSelector(props.selector)}
           </Text>
         }
