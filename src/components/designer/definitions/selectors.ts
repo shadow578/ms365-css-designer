@@ -19,7 +19,7 @@ export interface CSSSelector {
  * so all selectors here should be ones microsoft supports (see https://aka.ms/branding/customCssTemplate)
  */
 const SELECTORS = {
-  "body": {
+  body: {
     properties: ["color", "font-family", "font-weight", "font-size"],
   },
 
@@ -116,7 +116,7 @@ const SELECTORS = {
       "border-radius",
     ],
     additionalSelectors: [
-      // shitty ms spec does not allow .ext-button selector, always 
+      // shitty ms spec does not allow .ext-button selector, always
       // needs to be bundled with .ext-primary or .ext-secondary
       ".ext-button.ext-primary",
       ".ext-button.ext-secondary",

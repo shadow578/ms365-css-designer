@@ -37,7 +37,7 @@ function ContextProviderInner(props: {
   const [state, setState] = useState(
     props.initialState ?? {
       style: {},
-      options: DEFAULT_DESIGNER_OPTIONS
+      options: DEFAULT_DESIGNER_OPTIONS,
     },
   );
 

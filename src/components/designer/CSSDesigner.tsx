@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import SELECTORS, {
-  type CSSSelectorName,
-} from "./definitions/selectors";
+import SELECTORS, { type CSSSelectorName } from "./definitions/selectors";
 import type {
   CSSPropertyKindFor,
   CSSPropertyName,
@@ -189,10 +187,7 @@ const SelectorDesigner = React.memo(
         outline
         collapsible
         header={
-          <Text
-            fontSize="lg"
-            fontWeight="bold"
-          >
+          <Text fontSize="lg" fontWeight="bold">
             {props.debug ? `${props.selector}` : tSelector(props.selector)}
           </Text>
         }
