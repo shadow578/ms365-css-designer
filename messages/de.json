@@ -61,7 +61,7 @@
       }
     },
     "selectors": {
-      "*": "Alles",
+      "body": "Alles",
       "#ext-sign-in-box": "Anmeldefenster",
       "#ext-banner-logo": "Bannerlogo",
       "#ext-title": "Titel",

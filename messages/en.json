@@ -62,7 +62,7 @@
       }
     },
     "selectors": {
-      "*": "All",
+      "body": "All",
       "#ext-sign-in-box": "Sign-in Box",
       "#ext-banner-logo": "Banner Logo",
       "#ext-title": "Title",
