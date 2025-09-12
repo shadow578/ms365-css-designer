@@ -13,7 +13,10 @@ permissions: {}
 
 jobs:
   deploy:
+    name: "Deploy to Vercel"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: ${{ github.event.workflow_run.conclusion == 'success' }} # only if CI passed
     steps:
       - uses: actions/checkout@v5
