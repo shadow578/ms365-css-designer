@@ -8,6 +8,9 @@ on:
 
 permissions: {}
 
+env:
+ BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+
 jobs:
   lint:
     name: "Check Code Linting"
@@ -85,3 +88,26 @@ jobs:
       - run: mv .env.ci .env
       - run: npm ci
       - run: npm run build
+
+  deploy:
+    name: "Deploy to Vercel"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: build
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22.18" # LTS
+          cache: "npm"
+      - run: npm install --global vercel@latest
+      - run: echo running on branch ${BRANCH_NAME}
+
+      - name: "Deploy to Vercel (Preview)"
+        if: env.BRANCH_NAME != 'main'
+        run: vercel deploy --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: "Deploy to Vercel (Production)"
+        if: env.BRANCH_NAME == 'main'
+        run: vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}

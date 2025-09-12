@@ -10,6 +10,10 @@ import type {
   CSSPropertyValueTypeForProperty,
 } from "./definitions/properties";
 import PROPERTIES, { validateCSSPropertyValue } from "./definitions/properties";
+import SELECTORS, {
+  type CSSSelector,
+  type CSSSelectorName,
+} from "./definitions/selectors";
 
 type StyleTree = Record<string, Record<string, string>>;
 
@@ -41,12 +45,18 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
   return gen(value, context);
 }
 
-function transformToContext(style: CSSStyleDefinition): Context {
+function transformToContext(
+  style: CSSStyleDefinition,
+  includeAdditionalSelectors: boolean,
+): Context {
   const context: Context = {
     style: {},
   };
 
   for (const [selector, properties] of Object.entries(style)) {
+    if (!selector || !(selector in SELECTORS)) continue;
+    const selectorDef: CSSSelector = SELECTORS[selector as CSSSelectorName];
+
     for (const [prop, value] of Object.entries(properties)) {
       if (!prop || !(prop in PROPERTIES) || !value) continue;
 
@@ -57,22 +67,35 @@ function transformToContext(style: CSSStyleDefinition): Context {
       );
       if (!cssValue) continue;
 
+      // collect all selectors we need for this rule (additional selectors)
+      // selectors are transformed later to their full names
+      let selectors = [selector];
+      if (includeAdditionalSelectors && selectorDef.additionalSelectors) {
+        for (const additionalSelector of selectorDef.additionalSelectors) {
+          selectors.push(additionalSelector);
+        }
+      }
+
       // check for selector suffix on property
       // e.g. "color$:hover" should be transformed to "color" with "<selector>:hover" selector
       const split = prop.split("$");
       const baseProp = split[0]!;
       const selectorSuffix = split.slice(1).join("$");
-      const fullSelector = `${selector}${selectorSuffix}`;
 
-      context.style[fullSelector] ??= {};
-      context.style[fullSelector][baseProp] = cssValue;
+      // transform all selectors to their full names
+      selectors = selectors.map((s) => `${s}${selectorSuffix}`);
+
+      // generate rule
+      const rule = selectors.join(", ");
+      context.style[rule] ??= {};
+      context.style[rule][baseProp] = cssValue;
     }
   }
 
   return context;
 }
 
-function generateStyleFragment(style: StyleTree, important: boolean): string[] {
+function generateStyleRules(style: StyleTree, important: boolean): string[] {
   return Object.entries(style).map(([selector, properties]) => {
     const props = Object.entries(properties)
       .map(
@@ -84,11 +107,26 @@ function generateStyleFragment(style: StyleTree, important: boolean): string[] {
   });
 }
 
+export interface GenerateCSSOptions {
+  /**
+   * mark all properties as !important
+   */
+  important?: boolean;
+
+  /**
+   * include additional selectors (as defined in CSSSelector interface) to improve compatibility
+   */
+  includeAdditionalSelectors?: boolean;
+}
+
 export default function generateCSS(
   style: CSSStyleDefinition,
-  important = true,
+  options: GenerateCSSOptions = {},
 ) {
-  const context = transformToContext(style);
+  const context = transformToContext(
+    style,
+    !!options.includeAdditionalSelectors,
+  );
 
-  return generateStyleFragment(context.style, important).join("\n");
+  return generateStyleRules(context.style, !!options.important).join("\n");
 }

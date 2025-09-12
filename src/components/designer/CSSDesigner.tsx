@@ -31,16 +31,17 @@ export function CSSDesignerAddSelectorButton(props: {
 
   const { tSelector } = useDesignerTranslations();
 
-  const selectableSelectors = filterRecord(
-    SELECTORS,
-    (_, s) => !(s in state.style),
-  );
+  const selectOptions = useMemo(() => {
+    const selectableSelectors = filterRecord(
+      SELECTORS,
+      (_, s) => !(s in state.style),
+    );
+
+    return mapRecord(selectableSelectors, (_, sel) => tSelector(sel));
+  }, [state.style, tSelector]);
 
   return (
-    <SelectNewButton
-      options={mapRecord(selectableSelectors, (_, sel) => tSelector(sel))}
-      onSelect={addSelector}
-    >
+    <SelectNewButton options={selectOptions} onSelect={addSelector}>
       {props.children}
     </SelectNewButton>
   );

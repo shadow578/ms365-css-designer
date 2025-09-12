@@ -8,6 +8,7 @@ import type {
   CSSPropertyValueTypeForProperty,
 } from "../definitions/properties";
 import PROPERTIES, { assertCSSPropertyValue } from "../definitions/properties";
+import type { DesignerState } from "../index";
 
 interface MutationContextType {
   addSelector: (selector: CSSSelectorName) => void;
@@ -23,6 +24,7 @@ interface MutationContextType {
     prop: Tprop,
     value: CSSPropertyValueTypeForProperty<Tprop>,
   ) => void;
+  mutateOptions: (options: DesignerState["options"]) => void;
 }
 
 const MutationContext = createContext<MutationContextType | undefined>(
@@ -138,6 +140,15 @@ export default function CSSDesignerMutationContextProvider(props: {
             },
           };
         });
+      },
+      mutateOptions(options) {
+        setState((prev) => ({
+          ...prev,
+          options: {
+            ...prev.options,
+            ...options,
+          },
+        }));
       },
     };
   }, [setState]);

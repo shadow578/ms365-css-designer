@@ -61,7 +61,7 @@ describe("generator", () => {
 }
 `;
 
-    const generatedCSS = generateCSS(style, /* important */ false);
+    const generatedCSS = generateCSS(style, { important: false });
 
     const normalize = (css: string) => {
       // remove comments
