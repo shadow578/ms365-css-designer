@@ -8,6 +8,9 @@ on:
 
 permissions: {}
 
+env:
+ BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+
 jobs:
   lint:
     name: "Check Code Linting"
@@ -99,11 +102,12 @@ jobs:
           node-version: "22.18" # LTS
           cache: "npm"
       - run: npm install --global vercel@latest
+      - run: echo running on branch ${BRANCH_NAME}
 
       - name: "Deploy to Vercel (Preview)"
-        if: github.event.workflow_run.head_branch != 'main'
+        if: env.BRANCH_NAME != 'main'
         run: vercel deploy --yes --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: "Deploy to Vercel (Production)"
-        if: github.event.workflow_run.head_branch == 'main'
+        if: env.BRANCH_NAME == 'main'
         run: vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
