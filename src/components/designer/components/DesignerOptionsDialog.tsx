@@ -5,7 +5,6 @@ import { Text, Box, Switch, VStack } from "@chakra-ui/react";
 import { useCSSDesignerState } from "../context/stateContext";
 import { useTranslations } from "next-intl";
 
-// TODO i18n
 const DesignerOptionsDialog = React.memo(
   (props: { open: boolean; onOpenChange: (open: boolean) => void }) => {
     const [{ options }] = useCSSDesignerState();
