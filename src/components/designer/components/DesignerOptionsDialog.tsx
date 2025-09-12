@@ -27,12 +27,6 @@ const DesignerOptionsDialog = React.memo(
           />
 
           <OptionSwitch
-            translationKey="onlySpecCompliant"
-            checked={!!options?.onlySpecCompliant}
-            onChange={(e) => mutateOptions({ onlySpecCompliant: e })}
-          />
-
-          <OptionSwitch
             translationKey="includeAdditionalSelectors"
             checked={!!options?.includeAdditionalSelectors}
             onChange={(e) => mutateOptions({ includeAdditionalSelectors: e })}

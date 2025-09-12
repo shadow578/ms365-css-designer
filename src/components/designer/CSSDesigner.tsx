@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react";
 import SELECTORS, {
-  type CSSSelector,
   type CSSSelectorName,
 } from "./definitions/selectors";
 import type {
@@ -35,20 +34,13 @@ export function CSSDesignerAddSelectorButton(props: {
   const { tSelector } = useDesignerTranslations();
 
   const selectOptions = useMemo(() => {
-    let selectableSelectors = filterRecord(
+    const selectableSelectors = filterRecord(
       SELECTORS,
       (_, s) => !(s in state.style),
     );
 
-    if (state.options?.onlySpecCompliant) {
-      selectableSelectors = filterRecord(
-        selectableSelectors,
-        (def: CSSSelector) => def.specCompliant !== false,
-      );
-    }
-
     return mapRecord(selectableSelectors, (_, sel) => tSelector(sel));
-  }, [state.style, state.options, tSelector]);
+  }, [state.style, tSelector]);
 
   return (
     <SelectNewButton options={selectOptions} onSelect={addSelector}>
@@ -130,16 +122,6 @@ const SelectorDesigner = React.memo(
 
     const { tSelector, tProperty } = useDesignerTranslations();
 
-    const [{ options: designerOptions }] = useCSSDesignerState();
-    const willSelectorGenerate = useMemo(() => {
-      if (designerOptions?.onlySpecCompliant) {
-        const def: CSSSelector = SELECTORS[props.selector];
-        return def.specCompliant ?? true;
-      }
-
-      return true;
-    }, [designerOptions, props.selector]);
-
     const selectableProperties = useMemo(() => {
       const selector = SELECTORS[props.selector];
       const availableProperties = filterRecord(PROPERTIES, (_, cssProp) =>
@@ -210,7 +192,6 @@ const SelectorDesigner = React.memo(
           <Text
             fontSize="lg"
             fontWeight="bold"
-            textDecoration={willSelectorGenerate ? undefined : "line-through"}
           >
             {props.debug ? `${props.selector}` : tSelector(props.selector)}
           </Text>

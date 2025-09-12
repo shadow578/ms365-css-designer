@@ -149,10 +149,6 @@
         "label": "Wichtige Eigenschaften",
         "help": "Markiert alle Eigenschaften als '!important' um sicherzustellen, dass Sie angewendet werden."
       },
-      "onlySpecCompliant": {
-        "label": "Spezifikationskonform",
-        "help": "Nur CSS-Selektoren einschließen, die Teil der offiziellen Microsoft-Spezifikation sind."
-      },
       "includeAdditionalSelectors": {
         "label": "Zusätzliche Selektoren",
         "help": "Weitere Selektoren einschließen, um die Kompatibilität zwischen Browsern zu verbessern und Fehler in Microsofts Implementierung zu umgehen."

@@ -7,22 +7,14 @@ export interface CSSSelector {
   properties: CSSPropertyName[];
 
   /**
-   * is this selector parts of the official specification?
-   * @note generally, all selectors starting with "ext-" are spec compliant
-   * @note if not set, it is assumed to be true
-   */
-  specCompliant?: boolean;
-
-  /**
    * additional selectors that should be generated alongside this selector
    * to account for quirkiness in browsers or microsoft products
    */
-  additionalSelectors?: { name: string; specCompliant?: boolean }[];
+  additionalSelectors?: string[];
 }
 
 const SELECTORS = {
   "*": {
-    specCompliant: false,
     properties: ["color", "font-family", "font-weight", "font-size"],
   },
 
@@ -93,18 +85,6 @@ const SELECTORS = {
       "color",
       "background-color",
     ],
-    additionalSelectors: [
-      // microsoft fucked up boilerplate text on OTP pages, so
-      // we account for that here
-      {
-        name: ".boilerplate-text",
-        specCompliant: false,
-      },
-      {
-        name: "#idBoilerPlateText",
-        specCompliant: false,
-      },
-    ],
   },
   ".ext-promoted-fed-cred-box": {
     properties: [
@@ -133,8 +113,8 @@ const SELECTORS = {
     additionalSelectors: [
       // explicitly define primary and secondary buttons as well, as
       // for some reason they do not inherit from .ext-button on some sign-in pages
-      { name: ".ext-button.ext-primary" },
-      { name: ".ext-button.ext-secondary" },
+      ".ext-button.ext-primary",
+      ".ext-button.ext-secondary",
     ],
   },
   ".ext-button.ext-primary": {

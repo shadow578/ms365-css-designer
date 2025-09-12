@@ -9,10 +9,12 @@ import PROPERTIES from "../definitions/properties";
 
 export const DESIGNER_STATE_SCHEMA = (() => {
   return z.object({
-    options: z.object({
-      important: z.boolean().optional(),
-      onlySpecCompliant: z.boolean().optional(),
-    }).optional(),
+    options: z
+      .object({
+        important: z.boolean().optional(),
+        includeAdditionalSelectors: z.boolean().optional(),
+      })
+      .optional(),
     style: z.object(
       Object.fromEntries(
         ALL_SELECTORS.map((selector) => [
@@ -44,7 +46,7 @@ function serializeState(state: DesignerState): string {
 }
 
 function deserializeState(state: string): DesignerState {
-  const fallback = { style: {}, options: DEFAULT_DESIGNER_OPTIONS }
+  const fallback = { style: {}, options: DEFAULT_DESIGNER_OPTIONS };
 
   try {
     const json = atob(state);

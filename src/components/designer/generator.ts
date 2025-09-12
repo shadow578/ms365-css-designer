@@ -47,7 +47,6 @@ function generateCSSPropertyValue<Tprop extends CSSPropertyName>(
 
 function transformToContext(
   style: CSSStyleDefinition,
-  onlySpecCompliant: boolean,
   includeAdditionalSelectors: boolean,
 ): Context {
   const context: Context = {
@@ -57,7 +56,6 @@ function transformToContext(
   for (const [selector, properties] of Object.entries(style)) {
     if (!selector || !(selector in SELECTORS)) continue;
     const selectorDef: CSSSelector = SELECTORS[selector as CSSSelectorName];
-    if (onlySpecCompliant && selectorDef.specCompliant === false) continue;
 
     for (const [prop, value] of Object.entries(properties)) {
       if (!prop || !(prop in PROPERTIES) || !value) continue;
@@ -74,12 +72,7 @@ function transformToContext(
       let selectors = [selector];
       if (includeAdditionalSelectors && selectorDef.additionalSelectors) {
         for (const additionalSelector of selectorDef.additionalSelectors) {
-          if (
-            !onlySpecCompliant ||
-            additionalSelector.specCompliant !== false
-          ) {
-            selectors.push(additionalSelector.name);
-          }
+          selectors.push(additionalSelector);
         }
       }
 
@@ -121,11 +114,6 @@ export interface GenerateCSSOptions {
   important?: boolean;
 
   /**
-   * only generate styles for selectors following the microsoft specification
-   */
-  onlySpecCompliant?: boolean;
-
-  /**
    * include additional selectors (as defined in CSSSelector interface) to improve compatibility
    */
   includeAdditionalSelectors?: boolean;
@@ -137,11 +125,8 @@ export default function generateCSS(
 ) {
   const context = transformToContext(
     style,
-    !!options.onlySpecCompliant,
     !!options.includeAdditionalSelectors,
   );
 
-  return generateStyleRules(context.style, !!options.important).join(
-    "\n",
-  );
+  return generateStyleRules(context.style, !!options.important).join("\n");
 }
