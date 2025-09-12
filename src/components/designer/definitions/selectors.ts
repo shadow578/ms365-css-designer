@@ -1,11 +1,25 @@
 import type { CSSPropertyName } from "./properties";
 
 export interface CSSSelector {
+  /**
+   * properties this selector supports
+   */
   properties: CSSPropertyName[];
+
+  /**
+   * additional selectors that should be generated alongside this selector
+   * to account for quirkiness in browsers or microsoft products
+   */
+  additionalSelectors?: string[];
 }
 
+/**
+ * css selectors supported by the designer
+ * @note microsoft started sanitising uploaded css, removing unsupported selectors
+ * so all selectors here should be ones microsoft supports (see https://aka.ms/branding/customCssTemplate)
+ */
 const SELECTORS = {
-  "*": {
+  body: {
     properties: ["color", "font-family", "font-weight", "font-size"],
   },
 
@@ -100,6 +114,12 @@ const SELECTORS = {
       "background-color",
       "background-color$:hover",
       "border-radius",
+    ],
+    additionalSelectors: [
+      // shitty ms spec does not allow .ext-button selector, always
+      // needs to be bundled with .ext-primary or .ext-secondary
+      ".ext-button.ext-primary",
+      ".ext-button.ext-secondary",
     ],
   },
   ".ext-button.ext-primary": {

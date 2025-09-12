@@ -20,6 +20,7 @@ import {
   MdDownload,
   MdEdit,
   MdOutlineBugReport,
+  MdSettings,
   MdStyle,
 } from "react-icons/md";
 import {
@@ -44,6 +45,7 @@ import Image from "next/image";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
+import DesignerOptionsDialog from "~/components/designer/components/DesignerOptionsDialog";
 
 export default function Index() {
   return (
@@ -298,6 +300,7 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
   }, []);
 
   const [editorSwitchWarningOpen, setEditorSwitchWarningOpen] = useState(false);
+  const [designerOptionsOpen, setDesignerOptionsOpen] = useState(false);
 
   const t = useTranslations("Index.EditorPane");
 
@@ -317,6 +320,11 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
       >
         <Text>{t("editor_switch_warning_dialog.content")}</Text>
       </Dialog>
+
+      <DesignerOptionsDialog
+        open={designerOptionsOpen}
+        onOpenChange={setDesignerOptionsOpen}
+      />
 
       <Box p={4} height="100%">
         <ContentBox
@@ -340,6 +348,13 @@ function EditorPane(props: { onCSSChange?: (css: string) => void }) {
                       </IconButton>
                     )}
                   </CSSDesignerAddSelectorButton>
+
+                  <IconButton
+                    label={t("buttons.open_options")}
+                    onClick={() => setDesignerOptionsOpen(true)}
+                  >
+                    <MdSettings />
+                  </IconButton>
 
                   {showDesignerDebugButton && (
                     <IconButton
