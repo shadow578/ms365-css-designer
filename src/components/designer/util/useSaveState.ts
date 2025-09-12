@@ -56,8 +56,6 @@ function deserializeState(state: string): DesignerState {
     if (!parsedState) return fallback;
 
     parsedState.options ??= DEFAULT_DESIGNER_OPTIONS;
-    if (!parsedState.options) throw new Error("options is undefined");
-
     return parsedState as DesignerState;
   } catch (e) {
     console.error("deserializeState failed:", e);
