@@ -17,10 +17,12 @@ updates:
       chakra-ui:
         patterns:
           - "@chakra-ui/*"
-      next-intl:
+          - "@emotion/*"
+      next:
         patterns:
+          - "next"
           - "next-intl"
-          - "use-intl"
+          - "next-themes"
       react:
         patterns:
           - "react"
@@ -30,3 +32,17 @@ updates:
       trpc:
         patterns:
           - "@trpc/*"
+          - "@tanstack/react-query"
+      devtools:
+        patterns:
+          - "@eslint/eslintrc"
+          - "eslint"
+          - "eslint-config-next"
+          - "jest"
+          - "@types/jest"
+          - "jest-environment-jsdom"
+          - "typescript-eslint"
+          - "prettier"
+      other:
+        patterns:
+          - "*"
