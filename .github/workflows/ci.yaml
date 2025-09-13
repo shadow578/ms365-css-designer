@@ -116,7 +116,7 @@ jobs:
       - name: "Post PR comment with deployment URL"
         if: github.event_name == 'pull_request'
         run: |
-          gh pr comment ${{ github.event.pull_request.number }} --body "[Preview deployment URL](${{ env.PREVIEW_DEPLOYMENT_URL }})"
+          gh pr comment ${{ github.event.pull_request.number }} --body "✅ This PR was successfully deployed to a [preview Environment.](${{ env.PREVIEW_DEPLOYMENT_URL }})" --edit-last --create-if-none
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
