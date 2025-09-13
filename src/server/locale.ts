@@ -2,6 +2,7 @@
 
 import { cookies, headers } from "next/headers";
 import { type Locale, DEFAULT_LOCALE, LOCALES } from "~/i18n/config";
+import { parse as parseAcceptLanguageHeader } from "accept-language-parser";
 
 const COOKIE_NAME = "NEXT_LOCALE";
 
@@ -20,10 +21,18 @@ async function getBrowserLocale(): Promise<Locale | undefined> {
   const acceptLanguage = (await headers()).get("accept-language");
   if (!acceptLanguage) return undefined;
 
-  const locale = acceptLanguage.split(",")[0]?.split("-")[0];
-  if (!locale) return undefined;
-  if (!isValidLocale(locale)) return undefined;
-  return locale;
+  // find the first valid locale (has highest quality))
+  const parsed = parseAcceptLanguageHeader(acceptLanguage).sort(
+    (a, b) => b.quality - a.quality,
+  );
+
+  for (const lang of parsed) {
+    if (isValidLocale(lang.code)) {
+      return lang.code;
+    }
+  }
+
+  return undefined;
 }
 
 export async function getUserLocale(): Promise<Locale> {
