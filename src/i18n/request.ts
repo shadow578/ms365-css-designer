@@ -18,8 +18,8 @@ export default getRequestConfig(async () => {
   const locale = await getUserLocale();
 
   let messages: MessageCatalog;
-  if (LOCALES.includes(locale as Locale)) {
-    messages = await loadMessageCatalog(locale as Locale);
+  if (LOCALES.includes(locale)) {
+    messages = await loadMessageCatalog(locale);
   }
   if (locale !== DEFAULT_LOCALE) {
     const fallback = await loadMessageCatalog(DEFAULT_LOCALE);

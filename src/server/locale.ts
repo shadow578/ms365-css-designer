@@ -26,12 +26,12 @@ async function getBrowserLocale(): Promise<Locale | undefined> {
   return locale;
 }
 
-export async function getUserLocale() {
+export async function getUserLocale(): Promise<Locale> {
   return (
     (await getCookieLocale()) ?? (await getBrowserLocale()) ?? DEFAULT_LOCALE
   );
 }
 
-export async function setUserLocale(locale: Locale) {
+export async function setUserLocale(locale: Locale): Promise<void> {
   (await cookies()).set(COOKIE_NAME, locale);
 }
