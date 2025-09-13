@@ -9,7 +9,7 @@ on:
 permissions: {}
 
 env:
- BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   lint:
@@ -94,6 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
     needs: build
     steps:
       - uses: actions/checkout@v5
@@ -106,7 +107,18 @@ jobs:
 
       - name: "Deploy to Vercel (Preview)"
         if: env.BRANCH_NAME != 'main'
-        run: vercel deploy --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel deploy --yes --token=${{ secrets.VERCEL_TOKEN }} > url.txt
+          url=$(cat url.txt)
+          echo "Deployment URL: '$url'"
+          echo "PREVIEW_DEPLOYMENT_URL=$url" >> $GITHUB_ENV
+
+      - name: "Post PR comment with deployment URL"
+        if: github.event_name == 'pull_request'
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body "[Preview deployment URL](${{ env.PREVIEW_DEPLOYMENT_URL }})"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Deploy to Vercel (Production)"
         if: env.BRANCH_NAME == 'main'
