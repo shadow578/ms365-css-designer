@@ -21,7 +21,7 @@ async function getBrowserLocale(): Promise<Locale | undefined> {
   const acceptLanguage = (await headers()).get("accept-language");
   if (!acceptLanguage) return undefined;
 
-  // find the first valid locale (has highest quality))
+  // find the first valid locale (has highest quality)
   const parsed = parseAcceptLanguageHeader(acceptLanguage).sort(
     (a, b) => b.quality - a.quality,
   );
