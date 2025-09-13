@@ -22,11 +22,7 @@ async function getBrowserLocale(): Promise<Locale | undefined> {
   if (!acceptLanguage) return undefined;
 
   // find the first valid locale (has highest quality)
-  const parsed = parseAcceptLanguageHeader(acceptLanguage).sort(
-    (a, b) => b.quality - a.quality,
-  );
-
-  for (const lang of parsed) {
+  for (const lang of parseAcceptLanguageHeader(acceptLanguage)) {
     if (isValidLocale(lang.code)) {
       return lang.code;
     }
