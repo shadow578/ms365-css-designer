@@ -19,7 +19,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
@@ -34,7 +34,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
@@ -49,7 +49,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
@@ -65,7 +65,7 @@ jobs:
     needs: [lint, format, typecheck]
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
@@ -81,7 +81,7 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
@@ -98,7 +98,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22.18" # LTS
           cache: "npm"
