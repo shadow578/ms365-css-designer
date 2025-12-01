@@ -25,7 +25,7 @@ const credentialTypeSchema = z.object({
           Favicon: z.string().optional(),
         }),
       )
-      .optional(),
+      .nullable(), // UserTenantBranding may be null if nothing is configured
   }),
 });
 
