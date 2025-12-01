@@ -96,6 +96,8 @@ function MainLayout() {
 
     const dismissed =
       window.localStorage.getItem("warning_dismissed") === "true";
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- needed to avoid SSR issues
     if (!dismissed) setWarningDialogOpen(true);
   }, []);
 
