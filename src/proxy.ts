@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const url = new URL(req.url);
 
   if (url.pathname.startsWith("/converged-signin-page")) {
