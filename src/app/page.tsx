@@ -67,8 +67,10 @@ function MainLayout() {
   const signinFrame = useRef<HTMLIFrameElement>(null);
 
   const [css, setCSS] = useState("");
+
   const { injectCss: manualInjectCss } = useInjectedCss(
-    signinFrame.current?.contentDocument ??
+    () =>
+      signinFrame.current?.contentDocument ??
       signinFrame.current?.contentWindow?.document,
     css,
   );
@@ -94,6 +96,8 @@ function MainLayout() {
 
     const dismissed =
       window.localStorage.getItem("warning_dismissed") === "true";
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- needed to avoid SSR issues
     if (!dismissed) setWarningDialogOpen(true);
   }, []);
 
