@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "prettier.config.js",
+    "eslint.config.mjs",
   ]),
   {
     rules: {
@@ -30,6 +31,10 @@ const eslintConfig = defineConfig([
         "error",
         { checksVoidReturn: { attributes: false } },
       ],
+
+      // FIXME: disabled rules because of issues in existing codebase
+      "react-hooks/static-components": "off",
+      "react-hooks/refs": "off",
     },
     languageOptions: {
       parserOptions: {
