@@ -449,7 +449,11 @@ export default function MSConvergedSignInPage() {
   const onUsernameSubmit = async () => {
     if (!username) return;
 
-    await branding.mutateAsync({ username });
+    try {
+      await branding.mutateAsync({ username });
+    } catch (error) {
+      console.error("getBranding failed:", error);
+    }
 
     setPage("password");
   };
