@@ -68,9 +68,9 @@ function MainLayout() {
 
   const [css, setCSS] = useState("");
 
-  // FIXME: react-hooks/refs rule disabled for these lines. may cause rendering issues.
   const { injectCss: manualInjectCss } = useInjectedCss(
-    signinFrame.current?.contentDocument ??
+    () =>
+      signinFrame.current?.contentDocument ??
       signinFrame.current?.contentWindow?.document,
     css,
   );

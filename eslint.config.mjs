@@ -32,9 +32,8 @@ const eslintConfig = defineConfig([
         { checksVoidReturn: { attributes: false } },
       ],
 
-      // FIXME: disabled rules because of issues in existing codebase
+      // FIXME: disabled rules, should check at some point
       "react-hooks/static-components": "off",
-      "react-hooks/refs": "off",
     },
     languageOptions: {
       parserOptions: {
