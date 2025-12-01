@@ -50,7 +50,7 @@ export const brandingRouter = createTRPCRouter({
 
       const credentialType = credentialTypeSchema.parse(await response.json());
       const brandingData =
-        credentialType.EstsProperties?.UserTenantBranding?.at(0);
+        credentialType.EstsProperties.UserTenantBranding?.at(0);
 
       return {
         userDisplayName: credentialType.Display,
