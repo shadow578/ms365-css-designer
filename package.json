@@ -45,7 +45,7 @@
     "@eslint/eslintrc": "^3.3.3",
     "@types/accept-language-parser": "^1.5.8",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
