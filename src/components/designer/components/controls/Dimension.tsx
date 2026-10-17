@@ -28,8 +28,7 @@ interface DimensionSliderStyleSettings extends DimensionCommonSettings {
 }
 
 type DimensionStyleSettings =
-  | DimensionInputStyleSettings
-  | DimensionSliderStyleSettings;
+  DimensionInputStyleSettings | DimensionSliderStyleSettings;
 
 const DimensionControl = React.memo((props: PropsFor<"dimension">) => {
   const unitConfig = {
