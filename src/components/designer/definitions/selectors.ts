@@ -25,15 +25,10 @@ const SELECTORS = {
 
   //#region form
   ".ext-sign-in-box": {
-    properties: [
-      "background-color",
-      "border-radius",
-    ],
+    properties: ["background-color", "border-radius"],
   },
   ".ext-banner-logo": {
-    properties: [
-      "background-image",
-    ],
+    properties: ["background-image"],
   },
   ".ext-title": {
     properties: [
@@ -82,10 +77,7 @@ const SELECTORS = {
     ],
   },
   ".ext-promoted-fed-cred-box": {
-    properties: [
-      "background-color",
-      "border-radius",
-    ],
+    properties: ["background-color", "border-radius"],
   },
   //#endregion
 
