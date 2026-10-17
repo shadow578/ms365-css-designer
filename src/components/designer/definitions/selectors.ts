@@ -28,19 +28,11 @@ const SELECTORS = {
     properties: [
       "background-color",
       "border-radius",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
     ],
   },
   ".ext-banner-logo": {
     properties: [
       "background-image",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
     ],
   },
   ".ext-title": {
@@ -50,8 +42,6 @@ const SELECTORS = {
       "font-weight",
       "font-size",
       "color",
-      "margin-top",
-      "margin-bottom",
     ],
   },
   ".ext-input": {
@@ -95,10 +85,6 @@ const SELECTORS = {
     properties: [
       "background-color",
       "border-radius",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
     ],
   },
   //#endregion

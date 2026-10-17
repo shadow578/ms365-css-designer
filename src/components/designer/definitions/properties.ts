@@ -94,30 +94,6 @@ const PROPERTIES = {
     units: ["px", "em", "rem"],
     defaultValue: { value: 1, unit: "rem" },
   },
-  "margin-top": {
-    kind: "dimension",
-    units: ["px", "em", "rem"],
-    negative: true,
-    defaultValue: { value: 0, unit: "px" },
-  },
-  "margin-bottom": {
-    kind: "dimension",
-    units: ["px", "em", "rem"],
-    negative: true,
-    defaultValue: { value: 0, unit: "px" },
-  },
-  "margin-right": {
-    kind: "dimension",
-    units: ["px", "em", "rem"],
-    negative: true,
-    defaultValue: { value: 0, unit: "px" },
-  },
-  "margin-left": {
-    kind: "dimension",
-    units: ["px", "em", "rem"],
-    negative: true,
-    defaultValue: { value: 0, unit: "px" },
-  },
   "background-image": {
     kind: "url",
     defaultValue: "",
