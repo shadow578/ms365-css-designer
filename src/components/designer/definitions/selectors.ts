@@ -25,23 +25,10 @@ const SELECTORS = {
 
   //#region form
   ".ext-sign-in-box": {
-    properties: [
-      "background-color",
-      "border-radius",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
-    ],
+    properties: ["background-color", "border-radius"],
   },
   ".ext-banner-logo": {
-    properties: [
-      "background-image",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
-    ],
+    properties: ["background-image"],
   },
   ".ext-title": {
     properties: [
@@ -50,8 +37,6 @@ const SELECTORS = {
       "font-weight",
       "font-size",
       "color",
-      "margin-top",
-      "margin-bottom",
     ],
   },
   ".ext-input": {
@@ -92,14 +77,7 @@ const SELECTORS = {
     ],
   },
   ".ext-promoted-fed-cred-box": {
-    properties: [
-      "background-color",
-      "border-radius",
-      "margin-top",
-      "margin-bottom",
-      "margin-right",
-      "margin-left",
-    ],
+    properties: ["background-color", "border-radius"],
   },
   //#endregion
 

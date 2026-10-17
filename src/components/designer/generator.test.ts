@@ -9,12 +9,6 @@ describe("generator", () => {
         // kind: color
         color: "#ff0000",
 
-        // kind: dimension
-        "margin-bottom": {
-          unit: "px",
-          value: 10,
-        },
-
         // kind: alignment
         "text-align": "center",
 
@@ -43,7 +37,6 @@ describe("generator", () => {
     const expectedCSS = `
 .ext-boilerplate-text {
   color: #ff0000;
-  margin-bottom: 10px;
   text-align: center;
   font-weight: 600;
   font-size: 1.5em;
