@@ -1,5 +1,10 @@
 # <img src="./.assets/icon.svg" alt="Icon" height="32" style="vertical-align:middle;"> M365 Custom CSS Designer
 
+> [!WARNING]
+> Tenants created after January 5, 2026, don't have custom CSS available for company branding in Microsoft Entra ID.   
+> After July 21, 2026, tenants created before January 6, 2026, that don't already use custom CSS can't configure custom CSS.   
+> Microsoft Entra External ID tenants aren't affected.
+
 the M365 Custom CSS Designer is a small web application that allows you to visually design [custom CSS for Microsoft's sign-in page](https://learn.microsoft.com/en-us/entra/fundamentals/reference-company-branding-css-template).
 
 | ![Screenshot](./.assets/screenshot.png) |
