@@ -9,7 +9,7 @@ const createJestConfig = nextJest({
   dir: "./",
 });
 
-/* * @type {import('jest').Config} */
+/** @type {import("jest").Config} */
 const config = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
