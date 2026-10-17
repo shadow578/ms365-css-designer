@@ -3,8 +3,7 @@ import type { SelectionDetails } from "node_modules/@chakra-ui/react/dist/types/
 import { useCallback, useMemo } from "react";
 
 export type SelectNewButtonChildren =
-  | React.ReactNode
-  | ((optionCount: number) => React.ReactNode);
+  React.ReactNode | ((optionCount: number) => React.ReactNode);
 
 export default function SelectNewButton<T extends string>(props: {
   children: SelectNewButtonChildren;
