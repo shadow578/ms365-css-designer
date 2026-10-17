@@ -1,5 +1,10 @@
-import { Box, For, Menu, Portal } from "@chakra-ui/react";
-import type { SelectionDetails } from "node_modules/@chakra-ui/react/dist/types/components/menu/namespace";
+import {
+  Box,
+  For,
+  Menu,
+  Portal,
+  type MenuSelectionDetails,
+} from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 
 export type SelectNewButtonChildren =
@@ -11,7 +16,7 @@ export default function SelectNewButton<T extends string>(props: {
   onSelect?: (value: T) => void;
 }) {
   const onMenuSelect = useCallback(
-    (details: SelectionDetails) => {
+    (details: MenuSelectionDetails) => {
       const value = details.value;
       if (!(value in props.options)) {
         console.error(`selected invalid value '${value}'`);
